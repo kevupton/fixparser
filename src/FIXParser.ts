@@ -39,14 +39,22 @@ export default class FIXParser extends EventEmitter {
     public fixVersion: string = 'FIX.5.0SP2';
 
     public connect({
-        string: host = 'localhost',
-        number: port = 9878,
-        Protocol: protocol = 'tcp',
-        string: sender = 'SENDER',
-        string: target = 'TARGET',
-        number: heartbeatIntervalMs = 30000,
-        string: fixVersion = this.fixVersion,
-    } = {}) {
+        host = 'localhost',
+        port = 9878,
+        protocol = 'tcp',
+        sender = 'SENDER',
+        target = 'TARGET',
+        heartbeatIntervalMs = 30000,
+        fixVersion = this.fixVersion,
+    }: {
+        host: string;
+        port: number;
+        protocol: Protocol;
+        sender: string;
+        target: string;
+        heartbeatIntervalMs: number;
+        fixVersion: string;
+    }) {
         if (protocol === 'tcp') {
             this.clientHandler = new FIXParserClientSocket(this, this);
         } else if (protocol === 'websocket') {
