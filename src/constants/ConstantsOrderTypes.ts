@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 export const Market: string = '1';
 export const Limit: string = '2';
 export const Stop: string = '3';

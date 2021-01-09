@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 import { DATATYPES, ISpecDatatypes } from '../../../spec/SpecDatatypes';
 import Field from '../Field';
 import { FieldType } from './FieldType';

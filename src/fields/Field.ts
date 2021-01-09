@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 import { EnumType } from '../enums/EnumType';
 import { CategoryType } from './categories/CategoryType';
 import { FieldType } from './datatypes/FieldType';

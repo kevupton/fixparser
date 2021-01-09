@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 import { Transform, TransformCallback, TransformOptions } from 'stream';
 
 export default class FrameDecoder extends Transform {

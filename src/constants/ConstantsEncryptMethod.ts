@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 export const None: string = '0';
 export const PKCS: string = '1';
 export const DES: string = '2';

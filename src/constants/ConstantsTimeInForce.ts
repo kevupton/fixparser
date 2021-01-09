@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 export const Day: string = '0';
 export const GoodTillCancel: string = '1';
 export const AtTheOpening: string = '2';

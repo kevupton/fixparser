@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 import { ISpecMessages, MESSAGES } from '../../spec/SpecMessages';
 import Field from '../fields/Field';
 import Message from '../message/Message';

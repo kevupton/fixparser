@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 import { ISpecMessageContents } from '../../spec/SpecMessageContents';
 import {
     BeginString,

@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 export const Buy: string = '1';
 export const Sell: string = '2';
 export const BuyMinus: string = '3';

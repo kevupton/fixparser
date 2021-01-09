@@ -1,3 +1,10 @@
+/*
+ * fixparser
+ * https://gitlab.com/logotype/fixparser.git
+ *
+ * Copyright 2021 Victor Norgren
+ * Released under the MIT license
+ */
 export const SOH: string = '\x01';
 export const STRING_EQUALS: string = '=';
 export const RE_ESCAPE: RegExp = /[.*+?^${}()|[\]\\]/g; // eslint-disable-line no-useless-escape

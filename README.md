@@ -4,12 +4,6 @@ This is the Javascript framework for working with FIX protocol messages. Complia
 
 The Financial Information eXchange (FIX) protocol is an electronic communications protocol initiated in 1992 for international real-time exchange of information related to the securities transactions and markets.
 
-FIXParser demo
---------
-
-[FIXParser demo page](http://fixparser.sendercompid.com)
-
-
 Quick start
 -----------
 
