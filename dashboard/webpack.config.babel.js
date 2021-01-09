@@ -2,7 +2,7 @@ import path from 'path';
 
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 
 import pkg from './package';
 
@@ -64,7 +64,7 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: './dashboard.css' }),
-        new CopyWebpackPlugin([{ from: 'templates' }]),
+        new CopyPlugin({ patterns: [{ from: 'templates' }] }),
         new webpack.DefinePlugin({
             __PACKAGE_VERSION__: JSON.stringify(pkg.version),
             __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
