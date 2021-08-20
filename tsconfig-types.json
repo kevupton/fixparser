@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "isolatedModules": false,
+    "sourceMap": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "outFile": "types/fixparser.d.ts"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

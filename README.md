@@ -1,89 +1,198 @@
-# fixparser-enterprise
+# fixparser
+
+This is the TypeScript framework for working with FIX protocol messages. Compliant with FIX 5.0 SP2.
+
+The Financial Information eXchange (FIX) protocol is an electronic communications protocol initiated in 1992 for international real-time exchange of information related to the securities transactions and markets.
+
+[![FIXParser Demo](https://gitlab.com/logotype/fixparser/-/raw/master/badges/fixparser-demo.svg)](https://logotype.gitlab.io/fixparser/)
+
+Versions
+------------------
+<table style="border-collapse: collapse; width: 100%;" border="1">
+<tbody>
+<tr>
+<td style="width: 33.3333%;">Feature</td>
+<td style="width: 33.3333%;">FIXParser</td>
+<td style="width: 33.3333%;">FIXParser Enterprise</td>
+</tr>
+<tr>
+<td style="width: 33.3333%;">Parse FIX messages</td>
+<td style="width: 33.3333%;">●</td>
+<td style="width: 33.3333%;">●</td>
+</tr>
+<tr>
+<td style="width: 33.3333%;">Create FIX messages</td>
+<td style="width: 33.3333%;"> </td>
+<td style="width: 33.3333%;">●</td>
+</tr>
+<tr>
+<td style="width: 33.3333%;">Encode FIX messages</td>
+<td style="width: 33.3333%;"> </td>
+<td style="width: 33.3333%;">●</td>
+</tr>
+<tr>
+<td style="width: 33.3333%;">Remote connections</td>
+<td style="width: 33.3333%;"> </td>
+<td style="width: 33.3333%;">●</td>
+</tr>
+<tr>
+<td style="width: 33.3333%;">FIX Server</td>
+<td style="width: 33.3333%;"> </td>
+<td style="width: 33.3333%;">●</td>
+</tr>
+</tbody>
+</table>
+
+[FIXParser Enterprise](https://fixparser.io)
+-----------
+
+The FIXParser Enterprise version can be purchased at [fixparser.io](https://fixparser.io).
+A license is valid for 1 year, includes updates and enables all functionality of the fixparser library.
 
 
+Quick start
+-----------
 
-## Getting started
+Install with `npm install fixparser`.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Parse a FIX message:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+```typescript
+import FIXParser from 'fixparser';
+const fixParser: FIXParser = new FIXParser();
+console.log(fixParser.parse('8=FIX.4.2|9=51|35=0|34=703|49=ABC|52=20100130-10:53:40.830|56=XYZ|10=249|'));
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/logotype/fixparser-enterprise.git
-git branch -M main
-git push -uf origin main
+
+**FIXParser Enterprise** Create a FIX message:
+
+```typescript
+import FIXParser, {
+    Field,
+    Fields,
+    Message,
+    Messages,
+    Side,
+    OrderTypes,
+    HandlInst,
+    TimeInForce,
+    EncryptMethod
+} from 'fixparser';
+const fixParser: FIXParser = new FIXParser();
+const order: Message = fixParser.createMessage(
+    new Field(Fields.MsgType, Messages.NewOrderSingle),
+    new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
+    new Field(Fields.SenderCompID, 'SENDER'),
+    new Field(Fields.SendingTime, fixParser.getTimestamp()),
+    new Field(Fields.TargetCompID, 'TARGET'),
+    new Field(Fields.ClOrdID, '11223344'),
+    new Field(Fields.HandlInst, HandlInst.AutomatedExecutionNoIntervention),
+    new Field(Fields.OrderQty, '123'),
+    new Field(Fields.TransactTime, fixParser.getTimestamp()),
+    new Field(Fields.OrdType, OrderTypes.Market),
+    new Field(Fields.Side, Side.Buy),
+    new Field(Fields.Symbol, '123.HK'),
+    new Field(Fields.TimeInForce, TimeInForce.Day)
+);
+console.log(order.encode('|'));
 ```
 
-## Integrate with your tools
+**FIXParser Enterprise** Connect over TCP socket (as client):
 
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/project/integrations/)
+```typescript
+import FIXParser from 'fixparser';
+const fixParser: FIXParser = new FIXParser();
+fixParser.connect({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });
+fixParser.on('open', () => {
+    // Connection is open... 
+});
+fixParser.on('message', (message) => {
+    // Received FIX message
+});
+fixParser.on('close', () => {
+    // Disconnected...
+});
+```
 
-## Collaborate with your team
+**FIXParser Enterprise** FIX Server:
 
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```typescript
+import FIXServer from 'fixparser/server';
+const fixServer: FIXServer = new FIXServer();
+fixServer.createServer({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'SERVER', target: 'CLIENT' });
+fixServer.on('message', (message) => {
+    console.log('server received message', message.description, message.string);
+});
+```
 
-## Test and Deploy
+**FIXParser Enterprise** Connect over Webocket in a browser (as client):
 
-Use the built-in continuous integration in GitLab.
+```typescript
+import FIXParser from 'fixparser/browser';
+const fixParser: FIXParser = new FIXParser();
+fixParser.connect({ host: 'localhost', port: 9878, sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });
+fixParser.on('open', () => {
+    // Connection is open... 
+});
+fixParser.on('message', (message) => {
+    // Received FIX message
+});
+fixParser.on('close', () => {
+    // Disconnected...
+});
+```
 
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://docs.gitlab.com/ee/user/application_security/sast/)
+Features
+--------
++ Parse and create FIX messages
++ Connect over TCP/Websocket socket as client or server
++ FIX Session support (Logon, Logout, Heartbeat, etc)
++ Fast, single-digit microsecond performance
++ Modern, written in Typescript
++ Validation (checksum and message length), includes FIX specification in parsed message
++ Supports various separators/start of headers (e.g. 0x01, ^ and |)
++ Clean and lightweight code
++ Supports both node.js and browser environments (`import 'fixparser' from 'fixparser/browser';`)
 
-***
+Performance
+-----------
+```bash
+┌─────────────────────────────────┬───────────────┬──────────────┬──────────────┐
+│ FIX Messages                    │ Messages/sec  │ Microseconds │ Milliseconds │
+│ 200,000 iterations (same msg)   │ 156,863 msg/s │ 6.3750 μs    │ 0.0064 ms    │
+│ 200,000 iterations (same msg)   │ 171,233 msg/s │ 5.8400 μs    │ 0.0058 ms    │
+│ 200,000 iterations (random msg) │ 92,039 msg/s  │ 10.8650 μs   │ 0.0109 ms    │
+│ 200,000 iterations (same msg)   │ 168,209 msg/s │ 5.9450 μs    │ 0.0059 ms    │
+│ 200,000 iterations (random msg) │ 86,133 msg/s  │ 11.6100 μs   │ 0.0116 ms    │
+│ 200,000 iterations (same msg)   │ 171,821 msg/s │ 5.8200 μs    │ 0.0058 ms    │
+│ 200,000 iterations (random msg) │ 86,319 msg/s  │ 11.5850 μs   │ 0.0116 ms    │
+│ 200,000 iterations (same msg)   │ 172,265 msg/s │ 5.8050 μs    │ 0.0058 ms    │
+│ 200,000 iterations (same msg)   │ 170,940 msg/s │ 5.8500 μs    │ 0.0059 ms    │
+│ 200,000 iterations (same msg)   │ 171,233 msg/s │ 5.8400 μs    │ 0.0058 ms    │
+└─────────────────────────────────┴───────────────┴──────────────┴──────────────┘
+```
+MacBook Air, 1.7 GHz Intel Core i7 (8 GB 1600 MHz DDR3), run with `npm run perf`.
 
-# Editing this README
+Message format
+--------------
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:079a30a9cb3f67204de674e95eecd336?https://www.makeareadme.com/) for this template.
+The general format of a FIX message is a standard header followed by the message body fields and terminated with a standard trailer.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Each message is constructed of a stream of <tag>=<value> fields with a field delimiter between fields in the stream. Tags are of data type TagNum. All tags must have a value specified. Optional fields without values should simply not be specified in the FIX message. A Reject message is the appropriate response to a tag with no value.
+Except where noted, fields within a message can be defined in any sequence (Relative position of a field within a message is inconsequential.) The exceptions to this rule are:
 
-## Name
-Choose a self-explaining name for your project.
+- General message format is composed of the standard header followed by the body followed by the standard trailer.
+- The first three fields in the standard header are BeginString (tag #8) followed by BodyLength (tag #9) followed by MsgType (tag #35).
+- The last field in the standard trailer is the CheckSum (tag #10).
+- Fields within repeating data groups must be specified in the order that the fields are specified in the message definition within the FIX specification document. The NoXXX field where XXX is the field being counted specifies the number of repeating group instances that must immediately precede the repeating group contents.
+- A tag number (field) should only appear in a message once. If it appears more than once in the message it should be considered an error with the specification document. The error should be pointed out to the FIX Global Technical Committee.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+In addition, certain fields of the data type MultipleCharValue can contain multiple individual values separated by a space within the "value" portion of that field followed by a single "SOH" character (e.g. "18=2 9 C<SOH>" represents 3 individual values: '2', '9', and 'C'). Fields of the data type MultipleStringValue can contain multiple values that consists of string values separated by a space within the "value" portion of that field followed by a single "SOH" character (e.g. "277=AA I AJ<SOH>" represents 3 values: 'AA', 'I', 'AJ').
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+It is also possible for a field to be contained in both the clear text portion and the encrypted data sections of the same message. This is normally used for validation and verification. For example, sending the SenderCompID in the encrypted data section can be used as a rudimentary validation technique. In the cases where the clear text data differs from the encrypted data, the encrypted data should be considered more reliable. (A security warning should be generated).
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Copyright
+-------
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+**fixparser.io**
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-
++ https://fixparser.io
