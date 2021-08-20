@@ -74,6 +74,6 @@
     "Financial Information eXchange"
   ],
   "author": "fixparser.io",
-  "license": "Commercial",
+  "license": "LICENSE.md",
   "types": "./types/fixparser.d.ts"
 }

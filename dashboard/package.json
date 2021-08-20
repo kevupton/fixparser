@@ -9,7 +9,7 @@
     "upgrade-interactive": "npm-check --update"
   },
   "author": "fixparser.io",
-  "license": "MIT",
+  "license": "LICENSE.md",
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
