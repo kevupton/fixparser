@@ -4,7 +4,7 @@ This is the TypeScript framework for working with FIX protocol messages. Complia
 
 The Financial Information eXchange (FIX) protocol is an electronic communications protocol initiated in 1992 for international real-time exchange of information related to the securities transactions and markets.
 
-[![FIXParser Demo](https://gitlab.com/logotype/fixparser/-/raw/master/badges/fixparser-demo.svg)](https://logotype.gitlab.io/fixparser/)
+[![FIXParser Demo](https://gitlab.com/logotype/fixparser/-/raw/main/badges/fixparser-demo.svg)](https://logotype.gitlab.io/fixparser/)
 
 Versions
 ------------------
