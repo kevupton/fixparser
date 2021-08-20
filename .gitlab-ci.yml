@@ -44,22 +44,22 @@ performance:
     - npm run perf
   when: manual
 
-#pages:
-#  stage: deploy
-#  needs: ['build', 'test']
-#  script:
-#    - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
-#    - mkdir .public
-#    - cp dashboard/build/*.woff .public
-#    - cp dashboard/build/*.woff2 .public
-#    - cp dashboard/build/dashboard.* .public
-#    - cp dashboard/build/index.html .public
-#    - mv .public public
-#  artifacts:
-#    paths:
-#      - public
-#  only:
-#    - master
+pages:
+  stage: deploy
+  needs: ['build', 'test']
+  script:
+    - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
+    - mkdir .public
+    - cp dashboard/build/*.woff .public
+    - cp dashboard/build/*.woff2 .public
+    - cp dashboard/build/dashboard.* .public
+    - cp dashboard/build/index.html .public
+    - mv .public public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
 
 npm_fixparser:
   stage: deploy
@@ -87,6 +87,7 @@ npm_fixparser:
         npm run build
         npm run build:types
         npm run prettier
+        npm publish
         echo "Successfully published version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} to the NPM registry."
       else
         echo "Version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} has already been published, so no new version has been published."
@@ -118,6 +119,7 @@ npm_dashboard:
     - |
       if [[ $(npm view "${NPM_PACKAGE_NAME}" versions) != *"'${NPM_PACKAGE_VERSION}'"* ]]; then
         npm ci && npm rebuild node-sass && npm run build
+        npm publish
         echo "Successfully published version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} to the NPM registry."
       else
         echo "Version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} has already been published, so no new version has been published."

@@ -167,13 +167,7 @@ GqHtBQ===YpfV
             '******************************************* License Key Not Found ************************************************',
         );
         console.error(
-            '* All FIXParser Enterprise features are unlocked.                                                                *',
-        );
-        console.error(
-            '* This is an evaluation only version, it is not licensed for development projects intended for production.       *',
-        );
-        console.error(
-            '* If you want to hide the watermark, please email info@fixparser.io for a trial license.                         *',
+            '* Please visit https://fixparser.io to purchase a FIXParser Enterprise license                                   *',
         );
         console.error(
             '******************************************************************************************************************',
