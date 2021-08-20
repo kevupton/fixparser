@@ -59,7 +59,7 @@ pages:
     paths:
       - public
   only:
-    - master
+    - main
 
 npm_fixparser:
   stage: deploy
