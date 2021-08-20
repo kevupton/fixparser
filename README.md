@@ -66,7 +66,8 @@ console.log(fixParser.parse('8=FIX.4.2|9=51|35=0|34=703|49=ABC|52=20100130-10:53
 **FIXParser Enterprise** Create a FIX message:
 
 ```typescript
-import FIXParser, {
+import {
+    FIXParser,
     Field,
     Fields,
     Message,
@@ -75,8 +76,13 @@ import FIXParser, {
     OrderTypes,
     HandlInst,
     TimeInForce,
-    EncryptMethod
+    EncryptMethod,
+    LicenseManager
 } from 'fixparser';
+
+// NOTE: This feature requires a FIXParser Enterprise license
+LicenseManager.setLicenseKey('<your license here>');
+
 const fixParser: FIXParser = new FIXParser();
 const order: Message = fixParser.createMessage(
     new Field(Fields.MsgType, Messages.NewOrderSingle),
@@ -99,7 +105,11 @@ console.log(order.encode('|'));
 **FIXParser Enterprise** Connect over TCP socket (as client):
 
 ```typescript
-import FIXParser from 'fixparser';
+import { FIXParser, LicenseManager } from 'fixparser';
+
+// NOTE: This feature requires a FIXParser Enterprise license
+LicenseManager.setLicenseKey('<your license here>');
+
 const fixParser: FIXParser = new FIXParser();
 fixParser.connect({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });
 fixParser.on('open', () => {
@@ -116,7 +126,11 @@ fixParser.on('close', () => {
 **FIXParser Enterprise** FIX Server:
 
 ```typescript
-import FIXServer from 'fixparser/server';
+import { FIXServer, LicenseManager }  from 'fixparser/server';
+
+// NOTE: This feature requires a FIXParser Enterprise license
+LicenseManager.setLicenseKey('<your license here>');
+
 const fixServer: FIXServer = new FIXServer();
 fixServer.createServer({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'SERVER', target: 'CLIENT' });
 fixServer.on('message', (message) => {
@@ -127,7 +141,11 @@ fixServer.on('message', (message) => {
 **FIXParser Enterprise** Connect over Webocket in a browser (as client):
 
 ```typescript
-import FIXParser from 'fixparser/browser';
+import { FIXParser, LicenseManager } from 'fixparser/browser';
+
+// NOTE: This feature requires a FIXParser Enterprise license
+LicenseManager.setLicenseKey('<your license here>');
+
 const fixParser: FIXParser = new FIXParser();
 fixParser.connect({ host: 'localhost', port: 9878, sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });
 fixParser.on('open', () => {
