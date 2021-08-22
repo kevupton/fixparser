@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FIXServer TCP End-to-end: connect and Logon 1`] = `"8=FIX.5.09=7335=A34=149=CLIENT52=20210815-21:51:47.36556=SERVER141=Y98=0108=6010=200"`;
+exports[`FIXServer TCP End-to-end: connect and Logon 1`] = `"8=FIX.4.79=7335=A34=149=CLIENT52=20210815-21:51:47.36556=SERVER141=Y98=0108=6410=210"`;
 
-exports[`FIXServer TCP End-to-end: connect and Logon 2`] = `"8=FIX.5.09=7335=A34=149=CLIENT52=20210815-21:51:47.36556=SERVER141=Y98=0108=6010=200"`;
+exports[`FIXServer TCP End-to-end: connect and Logon 2`] = `"8=FIX.4.79=7335=A34=149=CLIENT52=20210815-21:51:47.36556=SERVER141=Y98=0108=6410=210"`;
 
 exports[`FIXServer TCP End-to-end: invalid Logon 1`] = `"8=FIX.5.09=8935=A34=149=INVALID_SENDER52=20210815-21:51:47.36556=INVALID_TARGET141=Y98=0108=6010=141"`;
 
 exports[`FIXServer TCP End-to-end: invalid Logon 2`] = `"8=FIX.5.09=10635=534=149=INVALID_SENDER52=20210815-21:51:47.36556=INVALID_TARGET58=Invalid Logon TARGET or SENDER.10=230"`;
 
-exports[`FIXServer Websocket End-to-end: connect and Logon 1`] = `"8=FIX.5.09=7535=A34=149=CLIENT252=20210815-21:51:47.36556=SERVER2141=Y98=0108=3010=043"`;
+exports[`FIXServer Websocket End-to-end: connect and Logon 1`] = `"8=FIX.4.69=7635=A34=149=CLIENT252=20210815-21:51:47.36556=SERVER2141=Y98=0108=12810=105"`;
 
 exports[`FIXServer Websocket End-to-end: invalid Logon 1`] = `"8=FIX.5.09=8935=A34=149=INVALID_SENDER52=20210815-21:51:47.36556=INVALID_TARGET141=Y98=0108=6010=141"`;
 

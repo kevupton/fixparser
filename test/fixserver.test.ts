@@ -44,7 +44,7 @@ describe('FIXServer', () => {
                 protocol: PROTOCOL,
                 sender: 'CLIENT',
                 target: 'SERVER',
-                fixVersion: 'FIX.5.0',
+                fixVersion: 'FIX.4.7',
                 logging: false,
             });
             fixParser.on('open', () => {
@@ -59,7 +59,7 @@ describe('FIXServer', () => {
                     new Field(Fields.TargetCompID, fixParser.target),
                     new Field(Fields.ResetSeqNumFlag, 'Y'),
                     new Field(Fields.EncryptMethod, EncryptMethod.None),
-                    new Field(Fields.HeartBtInt, 60),
+                    new Field(Fields.HeartBtInt, 64),
                 );
                 fixParser.send(logon);
             });
@@ -67,6 +67,8 @@ describe('FIXServer', () => {
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
                 expect(message.messageString).toEqual(message.encode());
+                expect(fixServer.heartBeatInterval).toEqual(64);
+                expect(fixServer.fixVersion).toEqual('FIX.4.7');
                 fixParser.close();
                 fixServer.destroy();
                 done();
@@ -173,6 +175,8 @@ describe('FIXServer', () => {
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
                 expect(message.messageString).toEqual(message.encode());
+                expect(fixServer.heartBeatInterval).toEqual(128);
+                expect(fixServer.fixVersion).toEqual('FIX.4.6');
                 fixParser.close();
                 fixServer.destroy();
                 done();
@@ -188,7 +192,7 @@ describe('FIXServer', () => {
                 protocol: PROTOCOL,
                 sender: 'CLIENT2',
                 target: 'SERVER2',
-                fixVersion: 'FIX.5.0',
+                fixVersion: 'FIX.4.6',
                 logging: false,
             });
             fixParser.on('open', () => {
@@ -203,7 +207,7 @@ describe('FIXServer', () => {
                     new Field(Fields.TargetCompID, fixParser.target),
                     new Field(Fields.ResetSeqNumFlag, 'Y'),
                     new Field(Fields.EncryptMethod, EncryptMethod.None),
-                    new Field(Fields.HeartBtInt, 30),
+                    new Field(Fields.HeartBtInt, 128),
                 );
                 fixParser.send(logon);
             });
