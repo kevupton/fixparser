@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "FIX 5.0SP2 Parser",
   "main": "./fixparser.js",
   "module": "src/FIXParser.ts",
@@ -12,9 +12,7 @@
   "scripts": {
     "lint": "eslint --ext .ts src",
     "prettier": "node_modules/prettier/bin-prettier.js \"**/*.{js,ts,tsx}\" --write",
-    "prebuild": "babel-node --max-old-space-size=4096 prebuild/setup.ts --extensions \\\".ts\\\"",
     "build": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --mode=\"production\" --color",
-    "build:types": "./node_modules/typescript/bin/tsc --project tsconfig-types.json",
     "example:parse_message": "babel-node examples/run-example.ts example_parse_message.ts",
     "example:tcp_client": "babel-node examples/run-example.ts example_tcp_client.ts",
     "example:tcp_server": "babel-node examples/run-example.ts example_tcp_server.ts",
@@ -24,7 +22,9 @@
     "example:quickfix": "babel-node examples/run-example.ts example_quickfix.ts",
     "perf": "node perf/Perf-FIXParser.js",
     "test": "jest --ci --colors --forceExit --verbose",
-    "upgrade-interactive": "npm-check --update"
+    "upgrade-interactive": "npm-check --update",
+    "prebuild": "babel-node --max-old-space-size=4096 prebuild/setup.ts --extensions \\\".ts\\\"",
+    "postbuild": "./node_modules/typescript/bin/tsc --project tsconfig-types.json"
   },
   "dependencies": {
     "https-proxy-agent": "^5.0.0",
@@ -40,7 +40,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@babel/register": "^7.15.3",
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.6.1",
+    "@types/node": "^16.7.1",
     "@types/ws": "^7.4.7",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",

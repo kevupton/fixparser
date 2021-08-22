@@ -1,4 +1,4 @@
-import FIXParser, { EncryptMethod, Field, Fields, Messages, MDEntryType, LicenseManager } from '../src/FIXParser';
+import { FIXParser, EncryptMethod, Field, Fields, Messages, MDEntryType, LicenseManager } from '../src/FIXParser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
 LicenseManager.setLicenseKey('<your license here>');

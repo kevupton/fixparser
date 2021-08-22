@@ -1,4 +1,5 @@
-import FIXParser, {
+import {
+    FIXParser,
     Field,
     Fields,
     Messages,

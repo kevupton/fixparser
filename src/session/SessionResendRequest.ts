@@ -14,9 +14,11 @@ import { Field } from '../fields/Field';
 
 export const handleResendRequest = (parser: IFIXParser, messageBuffer: MessageBuffer, message: Message): void => {
     const from: number | null = message.getField(FieldEnum.BeginSeqNo)
-        ? message.getField(FieldEnum.BeginSeqNo)!.value
+        ? Number(message.getField(FieldEnum.BeginSeqNo)!.value)
         : null;
-    const to: number | null = message.getField(FieldEnum.EndSeqNo) ? message.getField(FieldEnum.EndSeqNo)!.value : null;
+    const to: number | null = message.getField(FieldEnum.EndSeqNo)
+        ? Number(message.getField(FieldEnum.EndSeqNo)!.value)
+        : null;
 
     if (from && to && from < to && from >= 1 && to <= MAX_BUFFER) {
         for (let i: number = from; i <= to; i++) {

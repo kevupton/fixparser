@@ -15,7 +15,16 @@ import { Field } from './fields/Field';
 import FIXParser from './FIXParser';
 import { Protocol, Options as FIXParserOptions } from './FIXParserBase';
 import { Message } from './message/Message';
-import { version, DEFAULT_FIX_VERSION, log, logError, Version, loggingSettings, Parser } from './util/util';
+import {
+    version,
+    log,
+    logError,
+    Version,
+    loggingSettings,
+    Parser,
+    DEFAULT_FIX_VERSION,
+    DEFAULT_HEARTBEAT_SECONDS,
+} from './util/util';
 import { FrameDecoder } from './util/FrameDecoder';
 import { MessageEnum } from './fieldtypes/MessageEnum';
 import { MessageBuffer } from './util/MessageBuffer';
@@ -45,7 +54,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     public connected: boolean = false;
     public sender: string = '';
     public target: string = '';
-    public heartBeatInterval: number | undefined;
+    public heartBeatInterval: number = DEFAULT_HEARTBEAT_SECONDS;
     public fixVersion: string = DEFAULT_FIX_VERSION;
     public nextNumIn: number = 1;
     public heartBeatIntervalId: ReturnType<typeof setInterval> | null = null;
@@ -59,7 +68,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         protocol = this.protocol,
         sender = this.sender,
         target = this.target,
-        heartbeatIntervalSeconds = 30,
+        heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
         fixVersion = this.fixVersion,
         logging = true,
     }: Options = {}): void {
@@ -83,7 +92,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         if (this.protocol === 'tcp') {
             this.server = createNetServer((socket: Socket) => {
                 this.socket = socket;
-                this.socket.pipe(new FrameDecoder()).on('data', (data: any) => {
+                this.socket.pipe(new FrameDecoder()).on('data', (data: string) => {
                     this.connected = true;
                     const messages = this.parse(data.toString());
                     let i: number = 0;
@@ -287,7 +296,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         clearInterval(this.heartBeatIntervalId!);
     }
 
-    public startHeartbeat(heartBeatInterval: number = this.heartBeatInterval!): void {
+    public startHeartbeat(heartBeatInterval: number = this.heartBeatInterval): void {
         this.stopHeartbeat();
         log(`FIXServer (${this.protocol.toUpperCase()}): -- Heartbeat configured to ${heartBeatInterval} seconds`);
         this.heartBeatInterval = heartBeatInterval;

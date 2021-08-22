@@ -12,7 +12,16 @@ import * as Constants from './fieldtypes';
 import { Field } from './fields/Field';
 import { FIXParserBase, Protocol, Options as FIXParserOptions } from './FIXParserBase';
 import { Message } from './message/Message';
-import { version, timestamp, log, logError, DEFAULT_FIX_VERSION, Version, Parser } from './util/util';
+import {
+    version,
+    timestamp,
+    log,
+    logError,
+    Version,
+    Parser,
+    DEFAULT_FIX_VERSION,
+    DEFAULT_HEARTBEAT_SECONDS,
+} from './util/util';
 import { clientProcessMessage } from './util/ClientMessageProcessor';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { heartBeat } from './messagetemplates/MessageTemplates';
@@ -37,7 +46,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
     public protocol: Protocol | null = 'websocket';
     public sender: string | null = null;
     public target: string | null = null;
-    public heartBeatInterval: number | undefined;
+    public heartBeatInterval: number = DEFAULT_HEARTBEAT_SECONDS;
     public fixVersion: string = DEFAULT_FIX_VERSION;
     public messageBuffer: MessageBuffer = new MessageBuffer();
 
@@ -46,7 +55,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
         port = 9878,
         sender = 'SENDER',
         target = 'TARGET',
-        heartbeatIntervalSeconds = 30,
+        heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
         fixVersion = this.fixVersion,
     }: Options = {}): void {
         if (!LicenseManager.validateLicense()) {
@@ -145,7 +154,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
         clearInterval(this.heartBeatIntervalId!);
     }
 
-    public startHeartbeat(heartBeatInterval: number = this.heartBeatInterval!): void {
+    public startHeartbeat(heartBeatInterval: number = this.heartBeatInterval): void {
         this.stopHeartbeat();
         log(`FIXParser (${this.protocol!.toUpperCase()}): -- Heartbeat configured to ${heartBeatInterval} seconds`);
         this.heartBeatInterval = heartBeatInterval;

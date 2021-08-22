@@ -16,7 +16,7 @@ import { MessageBuffer } from '../util/MessageBuffer';
 
 export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, message: Message): void => {
     if (parser.parserName === 'FIXServer') {
-        const fixVersion: string | null = message.getField(FieldEnum.BeginString)!.value;
+        const fixVersion: string | null = String(message.getField(FieldEnum.BeginString)!.value);
         let validSender: boolean = true;
         let validTarget: boolean = true;
 
@@ -27,10 +27,10 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
         }
 
         const target: string | null = message.getField(FieldEnum.TargetCompID)
-            ? message.getField(FieldEnum.TargetCompID)!.value.toString()
+            ? message.getField(FieldEnum.TargetCompID)!.value!.toString()
             : parser.sender;
         const sender: string | null = message.getField(FieldEnum.SenderCompID)
-            ? message.getField(FieldEnum.SenderCompID)!.value.toString()
+            ? message.getField(FieldEnum.SenderCompID)!.value!.toString()
             : parser.target;
         if (target && target !== parser.sender) {
             logWarning(
@@ -62,13 +62,13 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
                     FieldEnum.HeartBtInt,
                     message.getField(FieldEnum.HeartBtInt)
                         ? (message.getField(FieldEnum.HeartBtInt)!.value as number)
-                        : parser.heartBeatInterval!,
+                        : parser.heartBeatInterval,
                 ),
             );
 
             if (
                 message.getField(FieldEnum.ResetSeqNumFlag) &&
-                message.getField(FieldEnum.ResetSeqNumFlag)!.value.toString() === 'Y'
+                message.getField(FieldEnum.ResetSeqNumFlag)!.value!.toString() === 'Y'
             ) {
                 log(
                     `FIXServer (${parser.protocol!.toUpperCase()}): -- Logon contains ResetSeqNumFlag=Y, resetting sequence numbers to 1`,
@@ -80,8 +80,8 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
 
             parser.send(logonAcknowledge);
             log(`FIXServer (${parser.protocol!.toUpperCase()}): >> sent Logon acknowledge`);
-            const heartBeatInterval = message.getField(FieldEnum.HeartBtInt)
-                ? message.getField(FieldEnum.HeartBtInt)!.value
+            const heartBeatInterval: number = message.getField(FieldEnum.HeartBtInt)
+                ? Number(message.getField(FieldEnum.HeartBtInt)!.value!)
                 : parser.heartBeatInterval;
             parser.startHeartbeat(heartBeatInterval);
         } else {
@@ -101,7 +101,7 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
     } else if (parser.parserName === 'FIXParser' || parser.parserName === 'FIXParserBrowser') {
         if (
             message.getField(FieldEnum.ResetSeqNumFlag) &&
-            message.getField(FieldEnum.ResetSeqNumFlag)!.value.toString() === 'Y'
+            message.getField(FieldEnum.ResetSeqNumFlag)!.value!.toString() === 'Y'
         ) {
             log(
                 `FIXParser (${parser.protocol!.toUpperCase()}): -- Logon contains ResetSeqNumFlag=Y, resetting sequence numbers to 1`,
@@ -110,8 +110,8 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
             parser.setNextTargetMsgSeqNum(2);
         }
 
-        const heartBeatInterval = message.getField(FieldEnum.HeartBtInt)
-            ? message.getField(FieldEnum.HeartBtInt)!.value
+        const heartBeatInterval: number = message.getField(FieldEnum.HeartBtInt)
+            ? Number(message.getField(FieldEnum.HeartBtInt)!.value!)
             : parser.heartBeatInterval;
         parser.startHeartbeat(heartBeatInterval);
     }

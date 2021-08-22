@@ -5,7 +5,7 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { readCleartextMessage, readKey, verify, Key } from 'openpgp';
+import { readCleartextMessage, readKey, verify, Key, CleartextMessage, VerifyMessageResult } from 'openpgp';
 import { log } from '../util/util';
 
 const missingOrEmpty = (value?: string | null): boolean => {
@@ -41,7 +41,7 @@ GqHtBQ===YpfV
         }
     }
 
-    private static formatDate(date: any): string {
+    private static formatDate(date: Date): string {
         const monthNames: string[] = [
             'January',
             'February',
@@ -81,17 +81,16 @@ GqHtBQ===YpfV
         } else {
             try {
                 const readPublicKey: Key = await readKey({ armoredKey: LicenseManager.PUBLIC_KEY });
-                const signedMessage: any = await readCleartextMessage({
+                const signedMessage: CleartextMessage = await readCleartextMessage({
                     cleartextMessage: atob(LicenseManager.licenseKey),
                 });
-                const verificationResult: any = await verify({
-                    message: signedMessage,
+                const verificationResult: VerifyMessageResult = await verify({
+                    message: signedMessage as any,
                     verificationKeys: readPublicKey,
                 });
                 const { verified, keyID } = verificationResult.signatures[0];
                 await verified;
-                const [, , expiryTimestamp]: [version: string, email: string, expiryTimestamp: string] =
-                    signedMessage.text.split('|');
+                const [, , expiryTimestamp]: string[] = signedMessage.getText().split('|');
                 LicenseManager.validateKey(keyID.toHex(), Number(expiryTimestamp));
             } catch (e) {
                 LicenseManager.outputInvalidLicenseKey();

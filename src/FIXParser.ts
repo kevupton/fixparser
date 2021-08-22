@@ -20,7 +20,17 @@ import { Message } from './message/Message';
 import { FrameDecoder } from './util/FrameDecoder';
 import { heartBeat } from './messagetemplates/MessageTemplates';
 import { clientProcessMessage } from './util/ClientMessageProcessor';
-import { version, DEFAULT_FIX_VERSION, log, logError, loggingSettings, timestamp, Version, Parser } from './util/util';
+import {
+    version,
+    DEFAULT_FIX_VERSION,
+    log,
+    logError,
+    loggingSettings,
+    timestamp,
+    Version,
+    Parser,
+    DEFAULT_HEARTBEAT_SECONDS,
+} from './util/util';
 import { MessageBuffer } from './util/MessageBuffer';
 import { LicenseManager } from './licensemanager/LicenseManager';
 
@@ -39,7 +49,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
     public protocol: Protocol | null = 'tcp';
     public sender: string | null = null;
     public target: string | null = null;
-    public heartBeatInterval: number | undefined;
+    public heartBeatInterval: number = DEFAULT_HEARTBEAT_SECONDS;
     public fixVersion: string = DEFAULT_FIX_VERSION;
     public messageBuffer: MessageBuffer = new MessageBuffer();
 
@@ -49,7 +59,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
         protocol = 'tcp',
         sender = 'SENDER',
         target = 'TARGET',
-        heartbeatIntervalSeconds = 30,
+        heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
         fixVersion = this.fixVersion,
         tlsKey = null,
         tlsCert = null,
@@ -71,7 +81,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
         if (protocol === 'tcp') {
             this.socket = new Socket();
             this.socket.setEncoding('ascii');
-            this.socket.pipe(new FrameDecoder()).on('data', (data: any) => {
+            this.socket.pipe(new FrameDecoder()).on('data', (data: string) => {
                 const messages: Message[] = this.parse(data.toString());
                 let i: number = 0;
                 for (i; i < messages.length; i++) {
@@ -139,8 +149,8 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
             };
 
             if (tlsKey && tlsCert) {
-                options.key = tlsKey;
-                options.cert = tlsCert;
+                options.key = tlsKey as any;
+                options.cert = tlsCert as any;
             }
 
             if (tlsUseSNI) {
@@ -156,7 +166,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                 process.stdin.resume();
             });
             this.socket.setEncoding('utf8');
-            this.socket.on('data', (data: any) => {
+            this.socket.on('data', (data: string) => {
                 const messages: Message[] = this.parse(data.toString());
                 let i: number = 0;
                 for (i; i < messages.length; i++) {
@@ -164,7 +174,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                     this.emit('message', messages[i]);
                 }
             });
-            this.socket.on('error', (error: any) => {
+            this.socket.on('error', (error: Error) => {
                 this.connected = false;
                 this.emit('error', error);
                 this.stopHeartbeat();
@@ -275,7 +285,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
         clearInterval(this.heartBeatIntervalId!);
     }
 
-    public startHeartbeat(heartBeatInterval: number = this.heartBeatInterval!): void {
+    public startHeartbeat(heartBeatInterval: number = this.heartBeatInterval): void {
         this.stopHeartbeat();
         log(`FIXParser (${this.protocol!.toUpperCase()}): -- Heartbeat configured to ${heartBeatInterval} seconds`);
         this.heartBeatInterval = heartBeatInterval;

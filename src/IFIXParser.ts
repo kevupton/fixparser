@@ -19,7 +19,7 @@ export interface IFIXParser {
     protocol: Protocol | null;
     sender: string | null;
     target: string | null;
-    heartBeatInterval: number | undefined;
+    heartBeatInterval: number;
     fixVersion: string;
     parserName: Parser;
     fixParserBase?: FIXParserBase;

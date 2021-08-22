@@ -65,7 +65,9 @@ export function Dashboard(): JSX.Element {
                                 building this library. If this library helps your business and if you'd like to help
                                 support the future of the project, please consider purchasing FIXParser Enterprise.
                             </p>
-                            <a className="enterprise-link" href="https://fixparser.io">Purchase FIXParser Enterprise</a>
+                            <a className="enterprise-link" href="https://fixparser.io">
+                                Purchase FIXParser Enterprise
+                            </a>
                         </div>
                         <p className="uk-margin-remove">
                             This is the TypeScript library for working with FIX protocol messages. Compliant with FIX

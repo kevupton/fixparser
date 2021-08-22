@@ -22,7 +22,6 @@ build:
   needs: []
   script:
     - npm run build
-    - npm run build:types
 
 test:
   stage: test
@@ -85,7 +84,6 @@ npm_fixparser:
     - |
       if [[ $(npm view "${NPM_PACKAGE_NAME}" versions) != *"'${NPM_PACKAGE_VERSION}'"* ]]; then
         npm run build
-        npm run build:types
         npm run prettier
         npm publish
         echo "Successfully published version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} to the NPM registry."

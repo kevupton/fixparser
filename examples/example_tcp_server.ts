@@ -1,4 +1,4 @@
-import FIXServer, { Field, Messages, OrderStatus, ExecType, LicenseManager } from '../src/FIXServer';
+import { FIXServer, Field, Messages, OrderStatus, ExecType, LicenseManager } from '../src/FIXServer';
 import { Fields, Side } from '../src/FIXParser'; // from 'fixparser/server';
 
 // NOTE: This feature requires a FIXParser Enterprise license

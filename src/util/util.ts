@@ -17,6 +17,7 @@ export const version: Version = {
 
 export type Parser = 'FIXServer' | 'FIXParser' | 'FIXParserBrowser';
 export const DEFAULT_FIX_VERSION: string = 'FIX.5.0SP2';
+export const DEFAULT_HEARTBEAT_SECONDS: number = 30;
 export const SOH: string = '\x01';
 export const STRING_EQUALS: string = '=';
 export const RE_BEGINSTRING: RegExp = /(?=8=FIX)/g;
@@ -36,13 +37,13 @@ const logTimestamp = (): string => {
     ).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}.${String(date.getMilliseconds()).padEnd(9, '0')}`;
 };
 
-export const log = (...args: any): void | null =>
+export const log = (...args: unknown[]): void | null =>
     loggingSettings.enabled ? console.log(`[${logTimestamp()}]`, ...args) : null;
-export const logWarning = (...args: any): void | null =>
+export const logWarning = (...args: unknown[]): void | null =>
     loggingSettings.enabled ? console.warn(`[${logTimestamp()}]`, ...args) : null;
-export const logError = (...args: any): void | null =>
+export const logError = (...args: unknown[]): void | null =>
     loggingSettings.enabled ? console.error(`[${logTimestamp()}]`, ...args) : null;
-export const logInfo = (...args: any): void | null =>
+export const logInfo = (...args: unknown[]): void | null =>
     loggingSettings.enabled ? console.info(`[${logTimestamp()}]`, ...args) : null;
 
 export const pad = (value: number, size: number): string => {

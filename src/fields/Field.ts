@@ -12,7 +12,7 @@ import { SectionType } from './sections/SectionType';
 
 export class Field {
     public tag: number;
-    public value: any;
+    public value: number | string | boolean | null;
     public name: string | null = null;
     public description: string | null = null;
     public type: FieldType | null = null;
@@ -21,7 +21,7 @@ export class Field {
     public enumeration: EnumType | null = null;
     public validated: boolean = false;
 
-    constructor(tag: number, value: string | number | null) {
+    constructor(tag: number, value: number | string | boolean | null) {
         this.tag = tag >> 0;
         this.value = value;
         this.name = null;
@@ -37,7 +37,7 @@ export class Field {
         this.tag = tag >> 0;
     }
 
-    public setValue(value: number | string): void {
+    public setValue(value: number | string | boolean | null): void {
         this.value = value;
     }
 

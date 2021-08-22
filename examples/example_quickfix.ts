@@ -8,7 +8,8 @@
  * Upon connection, we send a Logon message. QuickFIX responds to the Logon message.
  * After an interval, we send a NewOrderSingle. QuickFIX responds with a ExecutionReport.
  */
-import FIXParser, {
+import {
+    FIXParser,
     Field,
     Fields,
     Messages,

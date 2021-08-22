@@ -22,8 +22,8 @@ export type Options = {
     target?: string;
     heartbeatIntervalSeconds?: number;
     fixVersion?: string;
-    tlsKey?: any | null;
-    tlsCert?: any | null;
+    tlsKey?: unknown | null;
+    tlsCert?: unknown | null;
     tlsUseSNI?: boolean;
     logging?: boolean;
     proxy?: string | null;

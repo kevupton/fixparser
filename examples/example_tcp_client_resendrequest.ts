@@ -1,4 +1,5 @@
-import FIXParser, {
+import {
+    FIXParser,
     Field,
     Fields,
     Messages,
@@ -26,7 +27,7 @@ function sendLogon() {
         new Field(Fields.TargetCompID, TARGET),
         new Field(Fields.ResetSeqNumFlag, 'Y'),
         new Field(Fields.EncryptMethod, EncryptMethod.None),
-        new Field(Fields.HeartBtInt, 600),
+        new Field(Fields.HeartBtInt, 60),
     );
     const messages = fixParser.parse(logon.encode());
     console.log('sending message', messages[0].description, messages[0].messageString);

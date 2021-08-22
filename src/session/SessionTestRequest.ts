@@ -15,7 +15,7 @@ import { heartBeat } from '../messagetemplates/MessageTemplates';
 export const handleTestRequest = (parser: IFIXParser, message: Message): void => {
     let heartBeatMessage: Message = heartBeat(parser);
     const testReqIdValue: string | null = message.getField(FieldEnum.TestReqID)
-        ? message.getField(FieldEnum.TestReqID)!.value
+        ? String(message.getField(FieldEnum.TestReqID)!.value)
         : null;
     if (testReqIdValue) {
         const testReqId: Field = new Field(FieldEnum.TestReqID, testReqIdValue);

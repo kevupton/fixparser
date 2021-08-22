@@ -19,7 +19,7 @@ export class Enums {
         });
     }
 
-    public getEnum(tag: string, value: string | number): ISpecEnums | undefined {
+    public getEnum(tag: string, value: number | string | boolean | null): ISpecEnums | undefined {
         return this.cacheMap.get(`${tag}|${value}`);
     }
 

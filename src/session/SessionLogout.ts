@@ -19,14 +19,14 @@ export const handleLogout = (parser: IFIXParser, message: Message): void => {
         new Field(
             FieldEnum.SenderCompID,
             message.getField(FieldEnum.SenderCompID)
-                ? message.getField(FieldEnum.SenderCompID)!.value.toString()
+                ? message.getField(FieldEnum.SenderCompID)!.value!.toString()
                 : parser.sender,
         ),
         new Field(FieldEnum.SendingTime, parser.getTimestamp(new Date())),
         new Field(
             FieldEnum.TargetCompID,
             message.getField(FieldEnum.TargetCompID)
-                ? message.getField(FieldEnum.TargetCompID)!.value.toString()
+                ? message.getField(FieldEnum.TargetCompID)!.value!.toString()
                 : parser.target,
         ),
         new Field(FieldEnum.Text, 'Logout acknowledgement'),

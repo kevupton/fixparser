@@ -291,7 +291,7 @@ export class Message {
         this.messageContents = messageContents;
     }
 
-    public getEnum(tag: number, value: string): ISpecEnums | undefined | null {
+    public getEnum(tag: number, value: number | string | boolean | null): ISpecEnums | undefined | null {
         if (!this.getField(Fields.MsgType) || !this.getField(Fields.MsgType)!.tag) {
             return null;
         }
@@ -314,27 +314,27 @@ export class Message {
         }
 
         if (this.getField(Fields.LeavesQty) !== undefined) {
-            let quantity = null;
+            let quantity: string = '';
 
             if (this.getField(Fields.ContraTradeQty)) {
-                quantity = this.getField(Fields.ContraTradeQty)!.value;
+                quantity = String(this.getField(Fields.ContraTradeQty)!.value);
             } else {
-                quantity = this.getField(Fields.OrderQty) ? this.getField(Fields.OrderQty)!.value : '';
+                quantity = this.getField(Fields.OrderQty) ? String(this.getField(Fields.OrderQty)!.value) : '';
             }
-            const leavesQuantity = this.getField(Fields.LeavesQty)!.value;
-            const lastPrice = this.getField(Fields.LastPx) ? this.getField(Fields.LastPx)!.value : '';
+            const leavesQuantity: string = String(this.getField(Fields.LeavesQty)!.value);
+            const lastPrice: number = this.getField(Fields.LastPx) ? Number(this.getField(Fields.LastPx)!.value) : 0;
             returnValue = this.#nonEmpty`${quantity} @${
-                lastPrice || lastPrice === '0' ? lastPrice.toFixed(2) : '0.00'
+                lastPrice || lastPrice === 0 ? lastPrice.toFixed(2) : '0.00'
             } ${this.getField(Fields.LeavesQty)!.name!.replace('LeavesQty', 'LvsQty')} ${parseInt(
                 leavesQuantity,
                 10,
             ).toString()}`;
         } else if (this.getField(Fields.OrderQty)) {
-            const orderQuantity = this.getField(Fields.OrderQty)!.value;
-            const symbol = this.getField(Fields.Symbol) ? this.getField(Fields.Symbol)!.value : '';
-            const orderType = this.getField(Fields.OrdType)!;
-            let symbolicName: string | null = '';
-            if (orderType && orderType.enumeration!) {
+            const orderQuantity: string = String(this.getField(Fields.OrderQty)!.value);
+            const symbol: string = this.getField(Fields.Symbol) ? String(this.getField(Fields.Symbol)!.value) : '';
+            const orderType: Field = this.getField(Fields.OrdType)!;
+            let symbolicName: string = '';
+            if (orderType && orderType.enumeration! && orderType.enumeration.symbolicName) {
                 symbolicName = orderType.enumeration.symbolicName;
             }
             const timeInForceField = this.getField(Fields.TimeInForce)!;
@@ -344,7 +344,7 @@ export class Message {
             }
 
             if (this.getField(Fields.Price)) {
-                let price = this.getField(Fields.Price)!.value;
+                let price: number | string = Number(this.getField(Fields.Price)!.value);
                 if (price && price >= 1) {
                     price = price.toFixed(2);
                 } else if (price !== undefined && price < 1) {
@@ -352,7 +352,7 @@ export class Message {
                 }
                 returnValue = this.#nonEmpty`${side || ''} ${orderQuantity} ${symbol ? symbol.toUpperCase() : ''} ${
                     symbolicName ? symbolicName.replace('Market', 'MKT').replace('Limit', 'LMT').toUpperCase() : ''
-                } @${price} ${timeInForce ? timeInForce.toUpperCase() : ''}`;
+                } @${price.toString()} ${timeInForce ? timeInForce.toUpperCase() : ''}`;
             } else {
                 returnValue = this.#nonEmpty`${side || ''} ${orderQuantity} ${symbol ? symbol.toUpperCase() : ''} ${
                     symbolicName ? symbolicName.replace('Market', 'MKT').replace('Limit', 'LMT').toUpperCase() : ''
@@ -361,7 +361,7 @@ export class Message {
         } else {
             const messageType = this.getField(Fields.MsgType);
             if (messageType && messageType.tag && messageType.value) {
-                return this.getEnum(messageType.tag, messageType.value)!.SymbolicName;
+                return this.getEnum(messageType.tag, String(messageType.value))!.SymbolicName;
             } else {
                 return null;
             }

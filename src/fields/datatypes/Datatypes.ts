@@ -75,7 +75,7 @@ export class DataTypes {
                 type === 'NumInGroup' ||
                 type === 'DayOfMonth'
             ) {
-                field.setValue(field.value >> 0);
+                field.setValue(Number(field.value!));
             } else if (
                 type === 'float' ||
                 type === 'Qty' ||
@@ -84,7 +84,7 @@ export class DataTypes {
                 type === 'Amt' ||
                 type === 'Percentage'
             ) {
-                field.setValue(parseFloat(field.value));
+                field.setValue(parseFloat(field.value as string));
             }
         }
     }
