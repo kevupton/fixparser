@@ -5,11 +5,11 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { FIXParser } from './FIXParser';
-import { Options as FIXParserBrowserOptions } from './FIXParserBrowser';
 import { Field } from './fields/Field';
-import { Message } from './message/Message';
+import { FIXParser } from './FIXParser';
 import { FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
+import { Options as FIXParserBrowserOptions } from './FIXParserBrowser';
+import { Message } from './message/Message';
 import { MessageBuffer } from './util/MessageBuffer';
 import { Parser } from './util/util';
 

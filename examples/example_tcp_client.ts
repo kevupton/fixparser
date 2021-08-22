@@ -1,14 +1,14 @@
 import {
-    FIXParser,
+    EncryptMethod,
     Field,
     Fields,
-    Messages,
-    Side,
-    OrderTypes,
+    FIXParser,
     HandlInst,
-    TimeInForce,
-    EncryptMethod,
     LicenseManager,
+    Messages,
+    OrderTypes,
+    Side,
+    TimeInForce,
 } from '../src/FIXParser';
 
 const fixParser = new FIXParser();
@@ -16,9 +16,9 @@ const SENDER = 'CLIENT';
 const TARGET = 'SERVER';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
-function sendLogon() {
+const sendLogon = () => {
     const logon = fixParser.createMessage(
         new Field(Fields.MsgType, Messages.Logon),
         new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
@@ -32,7 +32,7 @@ function sendLogon() {
     const messages = fixParser.parse(logon.encode());
     console.log('sending message', messages[0].description, messages[0].messageString);
     fixParser.send(logon);
-}
+};
 
 fixParser.connect({
     host: 'localhost',

@@ -1,19 +1,19 @@
 import {
-    FIXServer,
+    ExecType,
     Field,
     Fields,
-    Messages,
-    Side,
-    OrderTypes,
-    OrderStatus,
+    FIXServer,
     HandlInst,
-    TimeInForce,
-    ExecType,
     LicenseManager,
+    Messages,
+    OrderStatus,
+    OrderTypes,
+    Side,
+    TimeInForce,
 } from '../src/FIXServer';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const SENDER = 'EXEC';
 const TARGET = 'BANZAI';

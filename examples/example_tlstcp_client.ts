@@ -1,25 +1,26 @@
-import {
-    FIXParser,
-    Field,
-    Fields,
-    Messages,
-    Side,
-    OrderTypes,
-    HandlInst,
-    TimeInForce,
-    EncryptMethod,
-    LicenseManager,
-} from '../src/FIXParser'; // from 'fixparser';
 import { readFileSync } from 'fs';
 
+import {
+    EncryptMethod,
+    Field,
+    Fields,
+    FIXParser,
+    HandlInst,
+    LicenseManager,
+    Messages,
+    OrderTypes,
+    Side,
+    TimeInForce,
+} from '../src/FIXParser'; // from 'fixparser';
+
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixParser = new FIXParser();
 const SENDER = 'BANZAI';
 const TARGET = 'EXEC';
 
-function sendLogon() {
+const sendLogon = () => {
     const logon = fixParser.createMessage(
         new Field(Fields.MsgType, Messages.Logon),
         new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
@@ -33,7 +34,7 @@ function sendLogon() {
     const messages = fixParser.parse(logon.encode());
     console.log('sending message', messages[0].description, messages[0].messageString);
     fixParser.send(logon);
-}
+};
 
 fixParser.connect({
     host: 'localhost',

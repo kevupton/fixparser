@@ -5,12 +5,12 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { IFIXParser } from '../IFIXParser';
 import { Field } from '../fields/Field';
 import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { MessageEnum } from '../fieldtypes/MessageEnum';
-import { Message } from '../message/Message';
+import { IFIXParser } from '../IFIXParser';
 import { LicenseManager } from '../licensemanager/LicenseManager';
+import { Message } from '../message/Message';
 
 export const heartBeat = (parser: IFIXParser, testReqId?: Field): Message => {
     if (!LicenseManager.validateLicense()) {

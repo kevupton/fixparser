@@ -5,12 +5,12 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
+import { Field } from '../fields/Field';
+import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { IFIXParser } from '../IFIXParser';
 import { Message } from '../message/Message';
-import { FieldEnum } from '../fieldtypes/FieldEnum';
-import { log, logWarning } from '../util/util';
 import { MAX_BUFFER, MessageBuffer } from '../util/MessageBuffer';
-import { Field } from '../fields/Field';
+import { log, logWarning } from '../util/util';
 
 export const handleResendRequest = (parser: IFIXParser, messageBuffer: MessageBuffer, message: Message): void => {
     const from: number | null = message.getField(FieldEnum.BeginSeqNo)

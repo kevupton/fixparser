@@ -1,7 +1,7 @@
-import { FIXParser, EncryptMethod, Field, Fields, Messages, MDEntryType, LicenseManager } from '../src/FIXParser';
+import { EncryptMethod, Field, Fields, FIXParser, LicenseManager, MDEntryType, Messages } from '../src/FIXParser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixParser = new FIXParser();
 
@@ -13,7 +13,7 @@ const CTRADER_PORT = 5201; // 5211 SSL, 5201 Plain Text
 
 let countReq = 0;
 
-function sendLogon() {
+const sendLogon = () => {
     const logon = fixParser.createMessage(
         new Field(Fields.MsgType, Messages.Logon),
         new Field(Fields.BeginString, 'FIX.4.4'),
@@ -30,10 +30,10 @@ function sendLogon() {
     const messages = fixParser.parse(logon.encode());
     console.log('sending message', messages[0].description, messages[0].messageString);
     fixParser.send(logon);
-}
+};
 
 // for sending market data request to cTrader's FIX API server
-function sendMarketDataRequest() {
+const sendMarketDataRequest = () => {
     const quote = fixParser.createMessage(
         new Field(Fields.MsgType, Messages.MarketDataRequest),
         new Field(Fields.BeginString, 'FIX.4.4'),
@@ -55,7 +55,7 @@ function sendMarketDataRequest() {
     const messages = fixParser.parse(quote.encode());
     console.log('sending message', messages[0].description, messages[0].messageString.replace(/\x01/g, '|'));
     fixParser.send(quote);
-}
+};
 
 fixParser.connect({
     host: CTRADER_SERVER,

@@ -4,7 +4,13 @@
         "es6": true,
         "node": true
     },
-    "plugins": ["eslint-plugin-jsdoc", "eslint-plugin-prefer-arrow", "@typescript-eslint", "security"],
+    "plugins": [
+        "eslint-plugin-jsdoc",
+        "eslint-plugin-prefer-arrow",
+        "@typescript-eslint",
+        "simple-import-sort",
+        "security"
+    ],
     "extends": [
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -143,6 +149,8 @@
         "prefer-const": "error",
         "quotes": ["error", "single"],
         "radix": "error",
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
         "spaced-comment": [
             "error",
             "always",

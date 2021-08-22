@@ -9,26 +9,26 @@
  * After an interval, we send a NewOrderSingle. QuickFIX responds with a ExecutionReport.
  */
 import {
-    FIXParser,
+    EncryptMethod,
     Field,
     Fields,
-    Messages,
-    Side,
-    OrderTypes,
+    FIXParser,
     HandlInst,
-    TimeInForce,
-    EncryptMethod,
     LicenseManager,
+    Messages,
+    OrderTypes,
+    Side,
+    TimeInForce,
 } from '../src/FIXParser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixParser = new FIXParser();
 const SENDER = 'CLIENT2';
 const TARGET = 'EXECUTOR';
 
-function sendLogon() {
+const sendLogon = () => {
     const logon = fixParser.createMessage(
         new Field(Fields.MsgType, Messages.Logon),
         new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
@@ -42,7 +42,7 @@ function sendLogon() {
     const messages = fixParser.parse(logon.encode());
     console.log('sending message', messages[0].description, messages[0].messageString);
     fixParser.send(logon);
-}
+};
 
 fixParser.connect({
     host: '10.0.1.80',

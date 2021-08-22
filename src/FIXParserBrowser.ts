@@ -7,25 +7,25 @@
  */
 import { EventEmitter } from 'events';
 
-import { IFIXParser } from './IFIXParser';
-import * as Constants from './fieldtypes';
 import { Field } from './fields/Field';
-import { FIXParserBase, Protocol, Options as FIXParserOptions } from './FIXParserBase';
+import * as Constants from './fieldtypes';
+import { FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
+import { IFIXParser } from './IFIXParser';
+import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
+import { heartBeat } from './messagetemplates/MessageTemplates';
+import { clientProcessMessage } from './util/ClientMessageProcessor';
+import { MessageBuffer } from './util/MessageBuffer';
 import {
-    version,
-    timestamp,
-    log,
-    logError,
-    Version,
-    Parser,
     DEFAULT_FIX_VERSION,
     DEFAULT_HEARTBEAT_SECONDS,
+    log,
+    logError,
+    Parser,
+    timestamp,
+    Version,
+    version,
 } from './util/util';
-import { clientProcessMessage } from './util/ClientMessageProcessor';
-import { LicenseManager } from './licensemanager/LicenseManager';
-import { heartBeat } from './messagetemplates/MessageTemplates';
-import { MessageBuffer } from './util/MessageBuffer';
 
 export type Options = Pick<
     FIXParserOptions,
@@ -166,17 +166,17 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
     }
 }
 
+export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
 export { EncryptMethodEnum as EncryptMethod } from './fieldtypes/EncryptMethodEnum';
 export { ExecTypeEnum as ExecType } from './fieldtypes/ExecTypeEnum';
 export { FieldEnum as Fields } from './fieldtypes/FieldEnum';
 export { HandlInstEnum as HandlInst } from './fieldtypes/HandlInstEnum';
 export { MarketDepthEnum as MarketDepth } from './fieldtypes/MarketDepthEnum';
-export { MDUpdateTypeEnum as MDUpdateType } from './fieldtypes/MDUpdateTypeEnum';
 export { MDEntryTypeEnum as MDEntryType } from './fieldtypes/MDEntryTypeEnum';
+export { MDUpdateTypeEnum as MDUpdateType } from './fieldtypes/MDUpdateTypeEnum';
 export { MessageEnum as Messages } from './fieldtypes/MessageEnum';
-export { OrderTypesEnum as OrderTypes } from './fieldtypes/OrderTypesEnum';
 export { OrderStatusEnum as OrderStatus } from './fieldtypes/OrderStatusEnum';
-export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
+export { OrderTypesEnum as OrderTypes } from './fieldtypes/OrderTypesEnum';
 export { SideEnum as Side } from './fieldtypes/SideEnum';
 export { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldtypes/SubscriptionRequestTypeEnum';
 export { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';

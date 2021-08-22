@@ -5,7 +5,8 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { readCleartextMessage, readKey, verify, Key, CleartextMessage, VerifyMessageResult } from 'openpgp';
+import { CleartextMessage, Key, readCleartextMessage, readKey, verify, VerifyMessageResult } from 'openpgp';
+
 import { log } from '../util/util';
 
 const missingOrEmpty = (value?: string | null): boolean => {
@@ -98,6 +99,7 @@ GqHtBQ===YpfV
                 return;
             }
         }
+        return Promise.resolve();
     }
 
     private static validateKey(keyId: string, expiryTimestamp: number): boolean {

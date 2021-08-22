@@ -1,8 +1,8 @@
-import { FIXServer, Field, Messages, OrderStatus, ExecType, LicenseManager } from '../src/FIXServer';
 import { Fields, Side } from '../src/FIXParser'; // from 'fixparser/server';
+import { ExecType, Field, FIXServer, LicenseManager, Messages, OrderStatus } from '../src/FIXServer';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixServer = new FIXServer();
 fixServer.createServer({

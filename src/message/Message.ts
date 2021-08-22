@@ -5,13 +5,13 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { FieldEnum as Fields } from '../fieldtypes/FieldEnum';
-import { Enums } from '../enums/Enums';
 import { ISpecEnums } from '../../spec/SpecEnums';
 import { ISpecMessageContents } from '../../spec/SpecMessageContents';
+import { Enums } from '../enums/Enums';
 import { Field } from '../fields/Field';
-import { DEFAULT_FIX_VERSION, pad, SOH } from '../util/util';
+import { FieldEnum as Fields } from '../fieldtypes/FieldEnum';
 import { LicenseManager } from '../licensemanager/LicenseManager';
+import { DEFAULT_FIX_VERSION, pad, SOH } from '../util/util';
 
 const TAG_CHECKSUM: string = '10=';
 const TAG_MSGTYPE: string = '35=';

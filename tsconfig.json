@@ -22,6 +22,7 @@
     "strictPropertyInitialization": true
   },
   "include": [
+    "examples/**/*",
     "src/**/*",
     "spec/**/*",
     "prebuild/**/*"

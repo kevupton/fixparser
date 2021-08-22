@@ -5,9 +5,9 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
+import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { IFIXParser } from '../IFIXParser';
 import { Message } from '../message/Message';
-import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { log } from '../util/util';
 
 export const handleSequenceReset = (parser: IFIXParser, message: Message): void => {

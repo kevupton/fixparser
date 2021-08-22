@@ -6,9 +6,8 @@
  * Released under Commercial license. Check LICENSE.md
  */
 import prebuiltMap from '../../prebuild/MessageContents.prebuilt.json';
-import { Message } from '../message/Message';
-
 import { ISpecMessageContents } from '../../spec/SpecMessageContents';
+import { Message } from '../message/Message';
 
 export class MessageContents {
     public cacheMap: Map<string, ISpecMessageContents[]> = new Map<string, ISpecMessageContents[]>();

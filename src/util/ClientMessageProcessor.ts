@@ -5,15 +5,15 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { Message } from '../message/Message';
-import { log, logWarning } from './util';
-import { FIXParser } from '../FIXParser';
 import { MessageEnum } from '../fieldtypes/MessageEnum';
+import { FIXParser } from '../FIXParser';
 import { FIXParserBrowser } from '../FIXParserBrowser';
-import { handleResendRequest } from '../session/SessionResendRequest';
+import { Message } from '../message/Message';
 import { handleLogon } from '../session/SessionLogon';
-import { handleTestRequest } from '../session/SessionTestRequest';
+import { handleResendRequest } from '../session/SessionResendRequest';
 import { handleSequenceReset } from '../session/SessionSequenceReset';
+import { handleTestRequest } from '../session/SessionTestRequest';
+import { log, logWarning } from './util';
 
 export const clientProcessMessage = (parser: FIXParser | FIXParserBrowser, message: Message): void => {
     if (message.messageSequence !== parser.nextNumIn) {

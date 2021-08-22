@@ -5,12 +5,12 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
+import { Field } from '../fields/Field';
+import { FieldEnum } from '../fieldtypes/FieldEnum';
+import { MessageEnum } from '../fieldtypes/MessageEnum';
 import { IFIXParser } from '../IFIXParser';
 import { Message } from '../message/Message';
-import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { log } from '../util/util';
-import { Field } from '../fields/Field';
-import { MessageEnum } from '../fieldtypes/MessageEnum';
 
 export const handleLogout = (parser: IFIXParser, message: Message): void => {
     const logoutAcknowledge = parser.createMessage(

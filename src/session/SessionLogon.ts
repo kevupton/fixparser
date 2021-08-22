@@ -5,14 +5,14 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
+import { Field } from '../fields/Field';
+import { EncryptMethodEnum } from '../fieldtypes/EncryptMethodEnum';
+import { FieldEnum } from '../fieldtypes/FieldEnum';
+import { MessageEnum } from '../fieldtypes/MessageEnum';
 import { IFIXParser } from '../IFIXParser';
 import { Message } from '../message/Message';
-import { FieldEnum } from '../fieldtypes/FieldEnum';
-import { log, logWarning } from '../util/util';
-import { Field } from '../fields/Field';
-import { MessageEnum } from '../fieldtypes/MessageEnum';
-import { EncryptMethodEnum } from '../fieldtypes/EncryptMethodEnum';
 import { MessageBuffer } from '../util/MessageBuffer';
+import { log, logWarning } from '../util/util';
 
 export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, message: Message): void => {
     if (parser.parserName === 'FIXServer') {

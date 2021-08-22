@@ -6,13 +6,13 @@
  * Released under Commercial license. Check LICENSE.md
  */
 import { FIELDS, ISpecFields } from '../../spec/SpecFields';
+import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { Message } from '../message/Message';
 import { Messages } from '../messages/Messages';
 import { Categories } from './categories/Categories';
 import { DataTypes } from './datatypes/Datatypes';
 import { Field } from './Field';
 import { Sections } from './sections/Sections';
-import { FieldEnum } from '../fieldtypes/FieldEnum';
 
 export class Fields {
     public fields: ISpecFields[] = FIELDS;

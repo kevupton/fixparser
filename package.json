@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "FIX 5.0SP2 Parser",
   "main": "./fixparser.js",
   "module": "src/FIXParser.ts",
@@ -10,7 +10,7 @@
     "url": "https://gitlab.com/logotype/fixparser.git"
   },
   "scripts": {
-    "lint": "eslint --ext .ts src",
+    "lint": "eslint --fix --ext .ts src examples",
     "prettier": "node_modules/prettier/bin-prettier.js \"**/*.{js,ts,tsx}\" --write",
     "build": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --mode=\"production\" --color",
     "example:parse_message": "babel-node examples/run-example.ts example_parse_message.ts",
@@ -50,6 +50,7 @@
     "eslint-plugin-jsdoc": "^36.0.7",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.0.6",
     "jest-junit": "^12.2.0",
     "mockdate": "^3.0.5",

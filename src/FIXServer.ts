@@ -6,36 +6,36 @@
  * Released under Commercial license. Check LICENSE.md
  */
 import { EventEmitter } from 'events';
-import { Server, createServer as createNetServer, Socket } from 'net';
+import { createServer as createNetServer, Server, Socket } from 'net';
 import Websocket, { ServerOptions } from 'ws';
 
-import { IFIXParser } from './IFIXParser';
-import * as Constants from './fieldtypes';
 import { Field } from './fields/Field';
-import FIXParser from './FIXParser';
-import { Protocol, Options as FIXParserOptions } from './FIXParserBase';
-import { Message } from './message/Message';
-import {
-    version,
-    log,
-    logError,
-    Version,
-    loggingSettings,
-    Parser,
-    DEFAULT_FIX_VERSION,
-    DEFAULT_HEARTBEAT_SECONDS,
-} from './util/util';
-import { FrameDecoder } from './util/FrameDecoder';
+import * as Constants from './fieldtypes';
 import { MessageEnum } from './fieldtypes/MessageEnum';
-import { MessageBuffer } from './util/MessageBuffer';
+import FIXParser from './FIXParser';
+import { Options as FIXParserOptions, Protocol } from './FIXParserBase';
+import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
+import { Message } from './message/Message';
 import { heartBeat } from './messagetemplates/MessageTemplates';
 import { handleLogon } from './session/SessionLogon';
 import { handleLogout } from './session/SessionLogout';
-import { handleTestRequest } from './session/SessionTestRequest';
-import { handleSequenceReset } from './session/SessionSequenceReset';
-import { handleSequence } from './session/SessionSequence';
 import { handleResendRequest } from './session/SessionResendRequest';
+import { handleSequence } from './session/SessionSequence';
+import { handleSequenceReset } from './session/SessionSequenceReset';
+import { handleTestRequest } from './session/SessionTestRequest';
+import { FrameDecoder } from './util/FrameDecoder';
+import { MessageBuffer } from './util/MessageBuffer';
+import {
+    DEFAULT_FIX_VERSION,
+    DEFAULT_HEARTBEAT_SECONDS,
+    log,
+    logError,
+    loggingSettings,
+    Parser,
+    Version,
+    version,
+} from './util/util';
 
 type Options = Pick<
     FIXParserOptions,
@@ -329,17 +329,17 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     }
 }
 
+export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
 export { EncryptMethodEnum as EncryptMethod } from './fieldtypes/EncryptMethodEnum';
 export { ExecTypeEnum as ExecType } from './fieldtypes/ExecTypeEnum';
 export { FieldEnum as Fields } from './fieldtypes/FieldEnum';
 export { HandlInstEnum as HandlInst } from './fieldtypes/HandlInstEnum';
 export { MarketDepthEnum as MarketDepth } from './fieldtypes/MarketDepthEnum';
-export { MDUpdateTypeEnum as MDUpdateType } from './fieldtypes/MDUpdateTypeEnum';
 export { MDEntryTypeEnum as MDEntryType } from './fieldtypes/MDEntryTypeEnum';
+export { MDUpdateTypeEnum as MDUpdateType } from './fieldtypes/MDUpdateTypeEnum';
 export { MessageEnum as Messages } from './fieldtypes/MessageEnum';
-export { OrderTypesEnum as OrderTypes } from './fieldtypes/OrderTypesEnum';
 export { OrderStatusEnum as OrderStatus } from './fieldtypes/OrderStatusEnum';
-export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
+export { OrderTypesEnum as OrderTypes } from './fieldtypes/OrderTypesEnum';
 export { SideEnum as Side } from './fieldtypes/SideEnum';
 export { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldtypes/SubscriptionRequestTypeEnum';
 export { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';

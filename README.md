@@ -81,7 +81,7 @@ import {
 } from 'fixparser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixParser: FIXParser = new FIXParser();
 const order: Message = fixParser.createMessage(
@@ -108,7 +108,7 @@ console.log(order.encode('|'));
 import { FIXParser, LicenseManager } from 'fixparser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixParser: FIXParser = new FIXParser();
 fixParser.connect({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });
@@ -129,7 +129,7 @@ fixParser.on('close', () => {
 import { FIXServer, LicenseManager }  from 'fixparser/server';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixServer: FIXServer = new FIXServer();
 fixServer.createServer({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'SERVER', target: 'CLIENT' });
@@ -144,7 +144,7 @@ fixServer.on('message', (message) => {
 import { FIXParser, LicenseManager } from 'fixparser/browser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
-LicenseManager.setLicenseKey('<your license here>');
+void LicenseManager.setLicenseKey('<your license here>');
 
 const fixParser: FIXParser = new FIXParser();
 fixParser.connect({ host: 'localhost', port: 9878, sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });

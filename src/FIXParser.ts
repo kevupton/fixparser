@@ -6,33 +6,33 @@
  * Released under Commercial license. Check LICENSE.md
  */
 import { EventEmitter } from 'events';
-import { Socket } from 'net';
-import WebSocket from 'ws';
-import { URL } from 'url';
-import tls, { TLSSocket, ConnectionOptions } from 'tls';
 import { HttpsProxyAgent } from 'https-proxy-agent';
+import { Socket } from 'net';
+import tls, { ConnectionOptions, TLSSocket } from 'tls';
+import { URL } from 'url';
+import WebSocket from 'ws';
 
-import { IFIXParser } from './IFIXParser';
-import * as Constants from './fieldtypes';
 import { Field } from './fields/Field';
+import * as Constants from './fieldtypes';
 import { FIXParserBase, Options, Protocol } from './FIXParserBase';
+import { IFIXParser } from './IFIXParser';
+import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
-import { FrameDecoder } from './util/FrameDecoder';
 import { heartBeat } from './messagetemplates/MessageTemplates';
 import { clientProcessMessage } from './util/ClientMessageProcessor';
+import { FrameDecoder } from './util/FrameDecoder';
+import { MessageBuffer } from './util/MessageBuffer';
 import {
-    version,
     DEFAULT_FIX_VERSION,
+    DEFAULT_HEARTBEAT_SECONDS,
     log,
     logError,
     loggingSettings,
+    Parser,
     timestamp,
     Version,
-    Parser,
-    DEFAULT_HEARTBEAT_SECONDS,
+    version,
 } from './util/util';
-import { MessageBuffer } from './util/MessageBuffer';
-import { LicenseManager } from './licensemanager/LicenseManager';
 
 export default class FIXParser extends EventEmitter implements IFIXParser {
     public static version: Version = version;
@@ -298,17 +298,17 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
     }
 }
 
+export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
 export { EncryptMethodEnum as EncryptMethod } from './fieldtypes/EncryptMethodEnum';
 export { ExecTypeEnum as ExecType } from './fieldtypes/ExecTypeEnum';
 export { FieldEnum as Fields } from './fieldtypes/FieldEnum';
 export { HandlInstEnum as HandlInst } from './fieldtypes/HandlInstEnum';
 export { MarketDepthEnum as MarketDepth } from './fieldtypes/MarketDepthEnum';
-export { MDUpdateTypeEnum as MDUpdateType } from './fieldtypes/MDUpdateTypeEnum';
 export { MDEntryTypeEnum as MDEntryType } from './fieldtypes/MDEntryTypeEnum';
+export { MDUpdateTypeEnum as MDUpdateType } from './fieldtypes/MDUpdateTypeEnum';
 export { MessageEnum as Messages } from './fieldtypes/MessageEnum';
-export { OrderTypesEnum as OrderTypes } from './fieldtypes/OrderTypesEnum';
 export { OrderStatusEnum as OrderStatus } from './fieldtypes/OrderStatusEnum';
-export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
+export { OrderTypesEnum as OrderTypes } from './fieldtypes/OrderTypesEnum';
 export { SideEnum as Side } from './fieldtypes/SideEnum';
 export { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldtypes/SubscriptionRequestTypeEnum';
 export { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';
