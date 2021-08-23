@@ -1,10 +1,13 @@
 # fixparser
+[![FIXParser Demo](https://gitlab.com/logotype/fixparser/-/raw/main/badges/fixparser-demo.svg)](https://logotype.gitlab.io/fixparser/)
+[![Pipeline](https://gitlab.com/logotype/fixparser/badges/main/pipeline.svg)](https://gitlab.com/logotype/fixparser/-/commits/main)
+[![Coverage](https://gitlab.com/logotype/fixparser/badges/main/coverage.svg?job=test)](https://gitlab.com/logotype/fixparser/-/commits/main)
+[![npm version](https://badge.fury.io/js/fixparser.svg)](https://www.npmjs.com/package/fixparser)
+[![Downloads](https://img.shields.io/npm/dm/fixparser.svg)](https://www.npmjs.com/package/fixparser)
 
 This is the TypeScript framework for working with FIX protocol messages. Compliant with FIX 5.0 SP2.
 
 The Financial Information eXchange (FIX) protocol is an electronic communications protocol initiated in 1992 for international real-time exchange of information related to the securities transactions and markets.
-
-[![FIXParser Demo](https://gitlab.com/logotype/fixparser/-/raw/main/badges/fixparser-demo.svg)](https://logotype.gitlab.io/fixparser/)
 
 Versions
 ------------------
