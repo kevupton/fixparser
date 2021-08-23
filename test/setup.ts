@@ -11,5 +11,5 @@ import { LicenseManager } from '../src/licensemanager/LicenseManager';
 MockDate.set(1629064307365);
 
 jest.mock('../src/licensemanager/LicenseManager');
-const mockLicense = LicenseManager.validateLicense as jest.Mock;
+export const mockLicense = LicenseManager.validateLicense as jest.Mock;
 mockLicense.mockReturnValue(true);

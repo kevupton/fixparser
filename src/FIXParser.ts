@@ -8,7 +8,7 @@
 import { EventEmitter } from 'events';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { Socket } from 'net';
-import tls, { ConnectionOptions, TLSSocket } from 'tls';
+import { connect as TLSConnect, ConnectionOptions, TLSSocket } from 'tls';
 import { URL } from 'url';
 import WebSocket from 'ws';
 
@@ -157,7 +157,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                 options.servername = host;
             }
 
-            this.socket = tls.connect(port, host, options, () => {
+            this.socket = TLSConnect(port, host, options, () => {
                 this.connected = true;
                 this.emit('open');
                 log(`FIXParser (${this.protocol!.toUpperCase()}): -- Connected through TLS`);

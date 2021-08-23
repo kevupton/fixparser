@@ -1,11 +1,29 @@
-import { FIXServer, EncryptMethod, Field, Fields, Message, Messages, Protocol } from '../src/FIXServer';
+import { FIXServer, EncryptMethod, Field, Fields, Message, Messages, Protocol, LicenseManager } from '../src/FIXServer';
 import { FIXParser } from '../src/FIXParser';
+import { mockLicense } from './setup';
 
 jest.setTimeout(30000);
 
 describe('FIXServer', () => {
     let fixServer: FIXServer = new FIXServer();
     let fixParser: FIXParser = new FIXParser();
+
+    describe('FIXServer', () => {
+        it('#connect with no license', () => {
+            mockLicense.mockReturnValue(false);
+            fixServer = new FIXServer();
+            fixParser = new FIXParser();
+            // Connect with a client
+            fixParser.connect({
+                host: 'localhost',
+                port: 9800,
+                protocol: 'tcp',
+            });
+            expect(mockLicense).toHaveBeenCalled();
+            mockLicense.mockReturnValue(true);
+        });
+    });
+
     describe('TCP', () => {
         const PROTOCOL: Protocol = 'tcp';
 
@@ -47,6 +65,9 @@ describe('FIXServer', () => {
                 fixVersion: 'FIX.4.7',
                 logging: false,
             });
+
+            expect(mockLicense).toHaveBeenCalled();
+
             fixParser.on('open', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
 
@@ -116,6 +137,9 @@ describe('FIXServer', () => {
                 fixVersion: 'FIX.5.0',
                 logging: false,
             });
+
+            expect(mockLicense).toHaveBeenCalled();
+
             fixParser.on('open', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
 
@@ -195,6 +219,9 @@ describe('FIXServer', () => {
                 fixVersion: 'FIX.4.6',
                 logging: false,
             });
+
+            expect(mockLicense).toHaveBeenCalled();
+
             fixParser.on('open', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
 
@@ -257,6 +284,9 @@ describe('FIXServer', () => {
                 fixVersion: 'FIX.5.0',
                 logging: false,
             });
+
+            expect(mockLicense).toHaveBeenCalled();
+
             fixParser.on('open', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
 

@@ -5,6 +5,7 @@ const config: Config.InitialOptions = {
         __PACKAGE_VERSION__: true,
         __BUILD_TIME__: true,
     },
+    clearMocks: true,
     collectCoverage: true,
     collectCoverageFrom: ['**/src/**/*.ts', '!**/dashboard/**', '!**/node_modules/**', '!**/spec/**'],
     coverageDirectory: 'test-reports',
