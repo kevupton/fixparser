@@ -1,9 +1,14 @@
 image: node:latest
 
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - .npm/
+
 before_script:
   - node -v
   - npm -v
-  - npm ci
+  - npm ci --cache .npm --prefer-offline
 
 stages:
   - build
