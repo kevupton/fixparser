@@ -25,6 +25,7 @@ build:
 
 test:
   stage: test
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   needs: []
   script:
     - npm test
