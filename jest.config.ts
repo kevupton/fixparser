@@ -6,9 +6,9 @@ const config: Config.InitialOptions = {
         __BUILD_TIME__: true,
     },
     collectCoverage: true,
-    collectCoverageFrom: ['**/src/**/*.{ts}', '!**/dashboard/**', '!**/node_modules/**', '!**/spec/**'],
+    collectCoverageFrom: ['**/src/**/*.ts', '!**/dashboard/**', '!**/node_modules/**', '!**/spec/**'],
     coverageDirectory: 'test-reports',
-    coverageReporters: ['lcov'],
+    coverageReporters: ['text', 'text-summary', 'cobertura'],
     reporters: [
         'default',
         [

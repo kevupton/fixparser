@@ -34,7 +34,7 @@ test:
       junit:
         - test-reports/jest-junit.xml
       cobertura:
-        - test-reports/clover.xml
+        - test-reports/cobertura-coverage.xml
 
 performance:
   stage: test
