@@ -83,6 +83,10 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
             const heartBeatInterval: number = message.getField(FieldEnum.HeartBtInt)
                 ? Number(message.getField(FieldEnum.HeartBtInt)!.value!)
                 : parser.heartBeatInterval;
+            parser.heartBeatInterval = heartBeatInterval;
+            if (parser.fixParser) {
+                parser.fixParser.heartBeatInterval = heartBeatInterval;
+            }
             parser.startHeartbeat(heartBeatInterval);
         } else {
             const logonReject = parser.createMessage(
@@ -113,6 +117,10 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
         const heartBeatInterval: number = message.getField(FieldEnum.HeartBtInt)
             ? Number(message.getField(FieldEnum.HeartBtInt)!.value!)
             : parser.heartBeatInterval;
+        parser.heartBeatInterval = heartBeatInterval;
+        if (parser.fixParser) {
+            parser.fixParser.heartBeatInterval = heartBeatInterval;
+        }
         parser.startHeartbeat(heartBeatInterval);
     }
 };

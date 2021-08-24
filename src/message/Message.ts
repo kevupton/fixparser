@@ -79,6 +79,10 @@ export class Message {
 
         // Add other tags
         fields.forEach((field: Field) => {
+            if (field.tag === Fields.MsgSeqNum) {
+                this.setMessageSequence(Number(field.value));
+            }
+
             if (field.tag === Fields.MsgType) {
                 this.data.splice(0, 0, field);
             } else {
@@ -407,8 +411,8 @@ export class Message {
         if (!LicenseManager.validateLicense()) {
             return '';
         }
-        const fields: any[] = this.data.map((field: Field) => new Field(field.tag, field.value));
-        const data = [];
+        const fields: Field[] = this.data.map((field: Field) => new Field(field.tag, field.value));
+        const data: string[] = [];
 
         let beginString = new Field(Fields.BeginString, this.fixVersion).toString();
         let bodyLength = new Field(Fields.BodyLength, MARKER_BODYLENGTH).toString();

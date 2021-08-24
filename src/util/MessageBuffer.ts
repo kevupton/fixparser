@@ -28,6 +28,10 @@ export class MessageBuffer {
         }
     }
 
+    public size(): number {
+        return this.buffer.length;
+    }
+
     public clear(): void {
         this.buffer = [];
     }
