@@ -59,8 +59,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     public nextNumIn: number = 1;
     public heartBeatIntervalId: ReturnType<typeof setInterval> | null = null;
     public messageBuffer: MessageBuffer = new MessageBuffer();
-
-    private socket: WebSocket | Socket | null = null;
+    public socket: WebSocket | Socket | null = null;
 
     public createServer({
         host = this.host,
