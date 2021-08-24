@@ -95,13 +95,6 @@ export function Dashboard(): JSX.Element {
                             <MessageDetailList parser={fixParser} message={selectedMessage} />
                         </div>
                     </div>
-                    <div className="uk-container">
-                        <h3 className="uk-margin-remove">Serialized parsed data</h3>
-                        <p className="uk-margin-remove">This is the raw output from the parse() function.</p>
-                        <pre className="uk-height-medium uk-overflow-auto">
-                            {JSON.stringify(selectedMessage, null, 2)}
-                        </pre>
-                    </div>
                 </div>
                 <div className="uk-section uk-section-secondary uk-light">
                     <div className="uk-container">

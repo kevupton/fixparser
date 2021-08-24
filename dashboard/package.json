@@ -1,6 +1,6 @@
 {
   "name": "fixparser-dashboard",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Demo dashboard for fixparser",
   "main": "dashboard/build/dashboard.js",
   "scripts": {
@@ -38,6 +38,7 @@
   "dependencies": {
     "classnames": "^2.3.1",
     "moment": "^2.29.1",
+    "react-json-view": "^1.21.3",
     "uikit": "^3.7.2"
   }
 }

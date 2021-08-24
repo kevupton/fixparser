@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import ReactJson from 'react-json-view';
 
 import FIXParser, { Fields, Field, Message } from '../../../src/FIXParserBrowser';
 import { MessageDetailListItem } from './MessageDetailListItem';
@@ -11,6 +12,15 @@ type MessageDetailListProps = {
 
 export function MessageDetailList({ message, parser }: MessageDetailListProps): JSX.Element | null {
     const [requiredFieldsOnly, setRequiredFieldsOnly] = useState(true);
+    const [viewType, setViewType] = useState('grid');
+
+    const toggleView = () => {
+        if (viewType === 'grid') {
+            setViewType('json');
+        } else {
+            setViewType('grid');
+        }
+    };
 
     const renderItems = (): JSX.Element[] => {
         const filteredItems = requiredFieldsOnly
@@ -66,19 +76,36 @@ export function MessageDetailList({ message, parser }: MessageDetailListProps): 
                                 onChange={onChangeCheckbox}
                             />{' '}
                             Validate required fields only
+                            <br />
+                            <br />
+                            <button className="uk-button uk-button-primary uk-button-small" onClick={toggleView}>
+                                {viewType === 'grid' ? 'View Raw Data' : 'View as table'}
+                            </button>
                         </div>
                     </td>
                 </tr>
             </thead>
-            <thead>
-                <tr>
-                    <th>Tag</th>
-                    <th>Name</th>
-                    <th>Value</th>
-                    <th>Enumeration</th>
-                </tr>
-            </thead>
-            <tbody>{renderItems()}</tbody>
+            {viewType === 'grid' ? (
+                <>
+                    <thead>
+                        <tr>
+                            <th>Tag</th>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Enumeration</th>
+                        </tr>
+                    </thead>
+                    <tbody>{renderItems()}</tbody>
+                </>
+            ) : (
+                <tbody>
+                    <tr>
+                        <td colSpan={4} className="no-padding">
+                            <ReactJson src={message} collapsed={1} quotesOnKeys={false} />
+                        </td>
+                    </tr>
+                </tbody>
+            )}
         </table>
     );
 }
