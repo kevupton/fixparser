@@ -10,9 +10,9 @@ import { ISpecSections } from '../../../spec/SpecSections';
 export class SectionType {
     public sectionID: string | null = null;
     public name: string | null = null;
-    public displayOrder: string | null = null;
+    public displayOrder: number | null = null;
     public volume: string | null = null;
-    public notReqXML: string | null = null;
+    public notReqXML: boolean | null = null;
     public fixmlFileName: string | null = null;
     public description: string | null = null;
 
@@ -31,7 +31,7 @@ export class SectionType {
         this.name = section.Name;
         this.displayOrder = section.DisplayOrder;
         this.volume = section.Volume;
-        this.notReqXML = section.NotReqXML;
+        this.notReqXML = section.NotReqXML === 1;
         this.fixmlFileName = section.FIXMLFileName;
         this.description = section.Description;
     }

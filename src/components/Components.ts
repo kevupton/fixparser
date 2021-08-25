@@ -9,7 +9,7 @@ import { COMPONENTS, ISpecComponents } from '../../spec/SpecComponents';
 
 export class Components {
     public components: ISpecComponents[] = COMPONENTS;
-    public cacheMap = new Map<string, ISpecComponents>();
+    public cacheMap = new Map<number, ISpecComponents>();
     public cacheMapByName = new Map<string, ISpecComponents>();
 
     constructor() {
@@ -21,7 +21,7 @@ export class Components {
         });
     }
 
-    public find(componentId: string): ISpecComponents | undefined {
+    public find(componentId: number): ISpecComponents | undefined {
         return this.cacheMap.get(componentId);
     }
 

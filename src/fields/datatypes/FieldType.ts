@@ -28,6 +28,6 @@ export class FieldType {
         this.name = type.Name;
         this.baseType = type.BaseType!;
         this.description = type.Description;
-        this.added = type.Added!;
+        this.added = type.added!;
     }
 }

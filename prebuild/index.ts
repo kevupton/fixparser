@@ -7,7 +7,7 @@ const messageContents: ISpecMessageContents[] = MESSAGE_CONTENTS;
 const components: Components = new Components();
 const mappedComponents: any = {};
 const messageContentsById: any = messageContents.reduce((groups: any, item: ISpecMessageContents) => {
-    const key: string = item.ComponentID;
+    const key: number = item.ComponentID;
     groups[key] = groups[key] || [];
     groups[key].push(item);
     return groups;
@@ -23,13 +23,13 @@ messageContents.forEach((messageContent) => {
         position: component.Position,
         reqd: component.Reqd,
         description: component.Description,
-        added: component.Added,
-        addedEP: component.AddedEP,
-        deprecated: component.Deprecated,
+        added: component.added,
+        addedEP: component.addedEP,
+        deprecated: component.deprecated,
         validated: false,
-        components: components.findByName(component.TagText)
+        components: components.findByName(String(component.TagText))
             ? messageContents
-                  .filter((content) => content.ComponentID === components.findByName(component.TagText)!.ComponentID)
+                  .filter((content) => content.ComponentID === components.findByName(String(component.TagText))!.ComponentID)
                   .map((childComponent) => ({
                       componentID: childComponent.ComponentID,
                       tagText: childComponent.TagText,
@@ -37,9 +37,9 @@ messageContents.forEach((messageContent) => {
                       position: childComponent.Position,
                       reqd: childComponent.Reqd,
                       description: childComponent.Description,
-                      added: childComponent.Added,
-                      addedEP: childComponent.AddedEP,
-                      deprecated: childComponent.Deprecated,
+                      added: childComponent.added,
+                      addedEP: childComponent.addedEP,
+                      deprecated: childComponent.deprecated,
                       validated: false,
                   }))
             : [],

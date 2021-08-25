@@ -39,7 +39,6 @@ export enum MessageEnum {
     MarketDataIncrementalRefresh = 'X',
     MarketDataRequestReject = 'Y',
     QuoteCancel = 'Z',
-
     QuoteStatusRequest = 'a',
     MassQuoteAcknowledgement = 'b',
     SecurityDefinitionRequest = 'c',
@@ -66,7 +65,6 @@ export enum MessageEnum {
     SecurityListRequest = 'x',
     SecurityList = 'y',
     DerivativeSecurityListRequest = 'z',
-
     DerivativeSecurityList = 'AA',
     NewOrderMultileg = 'AB',
     MultilegOrderCancelReplace = 'AC',
