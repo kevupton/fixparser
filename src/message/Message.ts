@@ -79,6 +79,9 @@ export class Message {
 
         // Add other tags
         fields.forEach((field: Field) => {
+            if (field.tag === Fields.BeginString) {
+                this.fixVersion = String(field.value);
+            }
             if (field.tag === Fields.MsgSeqNum) {
                 this.setMessageSequence(Number(field.value));
             }

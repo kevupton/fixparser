@@ -70,7 +70,9 @@ export class FIXParserBase {
             this.fields.processField(this.message!, field);
             this.enums.processEnum(field);
 
-            if (field.tag === FieldEnum.BodyLength) {
+            if (field.tag === FieldEnum.BeginString) {
+                this.message!.fixVersion = String(field.value);
+            } else if (field.tag === FieldEnum.BodyLength) {
                 this.message!.validateBodyLength(value);
             } else if (field.tag === FieldEnum.CheckSum) {
                 this.message!.validateChecksum(value);

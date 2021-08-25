@@ -121,7 +121,7 @@ Message {
     },
   ],
   "description": "",
-  "fixVersion": "FIX.5.0SP2",
+  "fixVersion": "FIX.4.3",
   "messageContents": Array [],
   "messageSequence": 702,
   "messageString": "",
