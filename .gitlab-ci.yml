@@ -85,8 +85,10 @@ pages:
   artifacts:
     paths:
       - public
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^release-\d+.\d+.\d+/
+      changes:
+        - package.json
 
 npm_fixparser:
   stage: deploy
