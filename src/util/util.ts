@@ -67,3 +67,58 @@ export const timestamp = (dateObject: Date): string => {
         2,
     )}:${pad(date.getMinutes(), 2)}:${pad(date.getSeconds(), 2)}.${pad(date.getMilliseconds(), 3)}`;
 };
+
+export const parseUTCTimestamp = (dateString: string): Date | string => {
+    if (!dateString || dateString === '') {
+        logError('Invalid date specified!');
+    }
+    let date: Date | null = null;
+    if (dateString.length === 17) {
+        // 20011217-09:30:47
+        date = new Date(Date.UTC(
+            Number(dateString.substring(0, 4)), // 2001
+            Number(dateString.substring(4, 6)) - 1, // 12
+            Number(dateString.substring(6, 8)), // 17
+            Number(dateString.substring(9, 11)), // 09
+            Number(dateString.substring(12, 14)), // 30
+            Number(dateString.substring(15, 17)), // 47
+        ));
+    } else if (dateString.length === 21) {
+        // 20011217-09:30:47.123
+        date = new Date(Date.UTC(
+            Number(dateString.substring(0, 4)), // 2001
+            Number(dateString.substring(4, 6)) - 1, // 12
+            Number(dateString.substring(6, 8)), // 17
+            Number(dateString.substring(9, 11)), // 09
+            Number(dateString.substring(12, 14)), // 30
+            Number(dateString.substring(15, 17)), // 47
+            Number(dateString.substring(18, 21)), // 123
+        ));
+    } else if (dateString.length === 25) {
+        // 2001-12-17T09:30:47-05:00
+        date = new Date(Date.UTC(
+            Number(dateString.substring(0, 4)), // 2001
+            Number(dateString.substring(5, 7)) - 1, // 12
+            Number(dateString.substring(8, 10)), // 17
+            Number(dateString.substring(11, 13)), // 09
+            Number(dateString.substring(14, 16)), // 30
+            Number(dateString.substring(17, 19)), // 47
+        ));
+    } else if (dateString.length === 29) {
+        // 2001-12-17T09:30:47.123-05:00
+        date = new Date(Date.UTC(
+            Number(dateString.substring(0, 4)), // 2001
+            Number(dateString.substring(5, 7)) - 1, // 12
+            Number(dateString.substring(8, 10)), // 17
+            Number(dateString.substring(11, 13)), // 09
+            Number(dateString.substring(14, 16)), // 30
+            Number(dateString.substring(17, 19)), // 47
+            Number(dateString.substring(20, 23)), // 123
+        ));
+    }
+    if (date !== null && !isNaN(date.getTime())) {
+        return date;
+    } else {
+        return dateString;
+    }
+};
