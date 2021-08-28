@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.0.9",
+  "version": "5.1.0",
   "description": "FIX 5.0SP2 Parser",
   "main": "./fixparser.js",
   "module": "src/FIXParser.ts",
@@ -21,7 +21,7 @@
     "example:tlstcp_client": "babel-node examples/run-example.ts example_tlstcp_client.ts",
     "example:quickfix": "babel-node examples/run-example.ts example_quickfix.ts",
     "perf": "node perf/Perf-FIXParser.js",
-    "test": "jest --ci --colors --forceExit --verbose",
+    "test": "jest --ci --colors",
     "upgrade-interactive": "npm-check --update",
     "prebuild": "babel-node --max-old-space-size=4096 prebuild/setup.ts --extensions \\\".ts\\\"",
     "postbuild": "./node_modules/typescript/bin/tsc --project tsconfig-types.json"

@@ -18,6 +18,7 @@ import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
 import { heartBeat } from './messagetemplates/MessageTemplates';
+import { handleFirstMessage } from './session/SessionFirstMessage';
 import { handleLogon } from './session/SessionLogon';
 import { handleLogout } from './session/SessionLogout';
 import { handleResendRequest } from './session/SessionResendRequest';
@@ -57,6 +58,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     public heartBeatInterval: number = DEFAULT_HEARTBEAT_SECONDS;
     public fixVersion: string = DEFAULT_FIX_VERSION;
     public nextNumIn: number = 1;
+    public messageCounter: number = 0;
     public heartBeatIntervalId: ReturnType<typeof setInterval> | null = null;
     public messageBuffer: MessageBuffer = new MessageBuffer();
     public socket: WebSocket | Socket | null = null;
@@ -88,6 +90,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     }
 
     private initialize() {
+        this.messageCounter = 0;
         if (this.protocol === 'tcp') {
             this.server = createNetServer((socket: Socket) => {
                 this.socket = socket;
@@ -242,6 +245,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
 
     private resetSession() {
         this.nextNumIn = 1;
+        this.messageCounter = 0;
     }
 
     public close(): void {
@@ -313,7 +317,10 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         }
         log(`FIXServer (${this.protocol.toUpperCase()}): << received ${message.description}`);
         handleSequence(this, message);
-        if (message.messageType === MessageEnum.SequenceReset) {
+        if (this.messageCounter === 0 && !handleFirstMessage(this, message)) {
+            logError(`FIXServer (${this.protocol.toUpperCase()}): First message not a logon!`);
+            return;
+        } else if (message.messageType === MessageEnum.SequenceReset) {
             handleSequenceReset(this, message);
         } else if (message.messageType === MessageEnum.TestRequest) {
             handleTestRequest(this, message);
@@ -325,6 +332,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
             handleResendRequest(this, this.messageBuffer, message);
         }
         this.nextNumIn++;
+        this.messageCounter++;
     }
 }
 

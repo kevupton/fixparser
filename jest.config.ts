@@ -22,5 +22,8 @@ const config: Config.InitialOptions = {
     ],
     roots: ['<rootDir>/test'],
     setupFiles: ['<rootDir>/test/setup.ts'],
+    maxWorkers: 1,
+    verbose: true,
+    forceExit: true,
 };
 export default config;

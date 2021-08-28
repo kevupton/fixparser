@@ -45,6 +45,7 @@ describe('FIXParser', () => {
             mockFIXServerInstance.protocol = 'tcp';
             mockFIXServerInstance.sender = TARGET;
             mockFIXServerInstance.target = SENDER;
+            mockFIXServerInstance.nextNumIn = 1;
 
             const hb1: Message = new Message(
                 TEST_FIX_VERSION,
@@ -93,7 +94,8 @@ describe('FIXParser', () => {
                 new Field(FieldEnum.EncryptMethod, EncryptMethodEnum.None),
                 new Field(FieldEnum.HeartBtInt, 112233),
             );
-            handleLogon(mockFIXServerInstance, mb, message);
+            const result: boolean = handleLogon(mockFIXServerInstance, mb, message);
+            expect(result).toBeTruthy();
             expect(mockFIXServerInstance.send).toHaveBeenCalled();
             expect(mockFIXServerInstance.fixVersion).toEqual(TEST_FIX_VERSION);
             expect(mockFIXServerInstance.fixParser.fixVersion).toEqual(TEST_FIX_VERSION);

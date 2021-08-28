@@ -13,8 +13,9 @@ import { IFIXParser } from '../IFIXParser';
 import { Message } from '../message/Message';
 import { MessageBuffer } from '../util/MessageBuffer';
 import { log, logWarning } from '../util/util';
+import { handleSequence } from './SessionSequence';
 
-export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, message: Message): void => {
+export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, message: Message): boolean => {
     if (parser.parserName === 'FIXServer') {
         const fixVersion: string | null = String(message.getField(FieldEnum.BeginString)!.value);
         let validSender: boolean = true;
@@ -50,6 +51,22 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
         }
 
         if (validSender && validTarget) {
+            if (!handleSequence(parser, message)) {
+                // Message has wrong sequence, respond with ResendRequest
+                const resendRequest = parser.createMessage(
+                    new Field(FieldEnum.MsgType, MessageEnum.ResendRequest),
+                    new Field(FieldEnum.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
+                    new Field(FieldEnum.SenderCompID, sender),
+                    new Field(FieldEnum.SendingTime, parser.getTimestamp(new Date())),
+                    new Field(FieldEnum.TargetCompID, target),
+                    new Field(FieldEnum.BeginSeqNo, parser.getNextTargetMsgSeqNum()),
+                    new Field(FieldEnum.EndSeqNo, 0),
+                );
+
+                parser.send(resendRequest);
+                return false;
+            }
+
             const logonAcknowledge = parser.createMessage(
                 new Field(FieldEnum.MsgType, MessageEnum.Logon),
                 new Field(FieldEnum.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
@@ -88,6 +105,7 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
                 parser.fixParser.heartBeatInterval = heartBeatInterval;
             }
             parser.startHeartbeat(heartBeatInterval);
+            return true;
         } else {
             const logonReject = parser.createMessage(
                 new Field(FieldEnum.MsgType, MessageEnum.Logout),
@@ -101,6 +119,7 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
             logWarning(`FIXServer (${parser.protocol!.toUpperCase()}): >> sent Logout due to invalid Logon`);
             parser.stopHeartbeat();
             parser.close();
+            return false;
         }
     } else if (parser.parserName === 'FIXParser' || parser.parserName === 'FIXParserBrowser') {
         if (
@@ -122,5 +141,7 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
             parser.fixParser.heartBeatInterval = heartBeatInterval;
         }
         parser.startHeartbeat(heartBeatInterval);
+        return true;
     }
+    return false;
 };

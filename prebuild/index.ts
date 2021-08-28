@@ -29,7 +29,10 @@ messageContents.forEach((messageContent) => {
         validated: false,
         components: components.findByName(String(component.TagText))
             ? messageContents
-                  .filter((content) => content.ComponentID === components.findByName(String(component.TagText))!.ComponentID)
+                  .filter(
+                      (content) =>
+                          content.ComponentID === components.findByName(String(component.TagText))!.ComponentID,
+                  )
                   .map((childComponent) => ({
                       componentID: childComponent.ComponentID,
                       tagText: childComponent.TagText,

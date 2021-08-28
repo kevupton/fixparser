@@ -25,6 +25,7 @@ export interface IFIXParser {
     fixParserBase?: FIXParserBase;
     nextNumIn: number;
     nextNumOut?: number;
+    messageCounter?: number;
     heartBeatIntervalId: ReturnType<typeof setInterval> | null;
     connected: boolean;
     messageBuffer: MessageBuffer;

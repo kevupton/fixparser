@@ -28189,7 +28189,7 @@ export const MESSAGE_CONTENTS: ISpecMessageContents[] = [
         Reqd: 0,
         Indent: 0,
         TagText: 996,
-        Description: "0",
+        Description: '0',
         added: 'FIX.4.4',
         Position: 29.2,
         addedEP: -1,
