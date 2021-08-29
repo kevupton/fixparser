@@ -71,6 +71,9 @@
     "FIX Server",
     "FIX5.0SP2",
     "FIX",
+    "FIXParser",
+    "FIXEncoder",
+    "FIXServer",
     "Websocket",
     "Financial Information eXchange"
   ],
