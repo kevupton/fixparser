@@ -52,7 +52,6 @@ describe('FIXServer', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
             });
 
             expect(fixServer.isConnected()).toBeFalsy();
@@ -90,7 +89,6 @@ describe('FIXServer', () => {
             fixParser.on('message', (message: Message) => {
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 expect(fixServer.heartBeatInterval).toEqual(64);
                 expect(fixServer.fixVersion).toEqual('FIX.4.7');
                 fixParser.close();
@@ -125,7 +123,6 @@ describe('FIXServer', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
             });
 
             expect(fixServer.isConnected()).toBeFalsy();
@@ -163,7 +160,6 @@ describe('FIXServer', () => {
             fixParser.on('message', (message: Message) => {
                 expect(message.description).toEqual('Logout');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 fixParser.close();
                 fixServer.destroy();
                 done();
@@ -196,7 +192,6 @@ describe('FIXServer', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
             });
 
             expect(fixServer.isConnected()).toBeFalsy();
@@ -234,7 +229,6 @@ describe('FIXServer', () => {
             fixParser.on('message', (message: Message) => {
                 expect(message.description).toEqual('ResendRequest');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 expect(fixServer.heartBeatInterval).toEqual(30);
                 expect(fixServer.fixVersion).toEqual('FIX.4.7');
                 fixParser.close();
@@ -269,7 +263,6 @@ describe('FIXServer', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
                 expect(message.description).toEqual('NewOrderSingle');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
             });
 
             expect(fixServer.isConnected()).toBeFalsy();
@@ -312,7 +305,6 @@ describe('FIXServer', () => {
             fixParser.on('message', (message: Message) => {
                 expect(message.description).toEqual('Logout');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 expect(message.getField(FieldEnum.Text)!.value).toEqual('First message not a Logon');
                 expect(fixServer.heartBeatInterval).toEqual(30);
                 expect(fixServer.fixVersion).toEqual('FIX.5.0SP2');
@@ -355,7 +347,6 @@ describe('FIXServer', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 expect(fixServer.heartBeatInterval).toEqual(128);
                 expect(fixServer.fixVersion).toEqual('FIX.4.6');
                 fixParser.close();
@@ -426,7 +417,6 @@ describe('FIXServer', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
             });
 
             expect(fixServer.isConnected()).toBeFalsy();
@@ -464,7 +454,6 @@ describe('FIXServer', () => {
             fixParser.on('message', (message: Message) => {
                 expect(message.description).toEqual('Logout');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 fixParser.close();
                 fixServer.destroy();
                 done();
@@ -500,7 +489,6 @@ describe('FIXServer', () => {
                 expect(fixParser.isConnected()).toBeTruthy();
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 expect(fixServer.heartBeatInterval).toEqual(30);
                 expect(fixServer.fixVersion).toEqual('FIX.4.6');
                 fixParser.close();
@@ -543,7 +531,6 @@ describe('FIXServer', () => {
             fixParser.on('message', (message: Message) => {
                 expect(message.description).toEqual('ResendRequest');
                 expect(message.messageString).toMatchSnapshot();
-                expect(message.messageString).toEqual(message.encode());
                 expect(fixServer.heartBeatInterval).toEqual(30);
                 expect(fixServer.fixVersion).toEqual('FIX.4.6');
                 fixParser.close();
