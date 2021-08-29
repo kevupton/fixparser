@@ -30,7 +30,7 @@ describe('FIXServer', () => {
         const PROTOCOL: Protocol = 'tcp';
 
         it('End-to-end: connect and Logon', (done) => {
-            port += 2;
+            port += 1;
 
             fixServer = new FIXServer();
             fixParser = new FIXParser();
@@ -101,7 +101,7 @@ describe('FIXServer', () => {
         });
 
         it('End-to-end: invalid Logon', (done) => {
-            port += 2;
+            port += 1;
 
             fixServer = new FIXServer();
             fixParser = new FIXParser();
@@ -170,7 +170,7 @@ describe('FIXServer', () => {
         });
 
         it('End-to-end: invalid MsgSeqNum', (done) => {
-            port += 2;
+            port += 1;
 
             fixServer = new FIXServer();
             fixParser = new FIXParser();
@@ -241,7 +241,7 @@ describe('FIXServer', () => {
         });
 
         it('End-to-end: first message not a Logon', (done) => {
-            port += 2;
+            port += 1;
 
             fixServer = new FIXServer();
             fixParser = new FIXParser();
@@ -322,7 +322,7 @@ describe('FIXServer', () => {
         const PROTOCOL: Protocol = 'websocket';
 
         it('End-to-end: connect and Logon', (done) => {
-            port += 2;
+            port += 1;
 
             fixServer = new FIXServer();
             fixParser = new FIXParser();
@@ -392,7 +392,7 @@ describe('FIXServer', () => {
         });
 
         it('End-to-end: invalid Logon', (done) => {
-            port += 2;
+            port += 1;
 
             fixServer = new FIXServer();
             fixParser = new FIXParser();
@@ -464,7 +464,7 @@ describe('FIXServer', () => {
         });
 
         it('End-to-end: invalid MsgSeqNum', (done) => {
-            port += 2;
+            port += 1;
 
             fixServer = new FIXServer();
             fixParser = new FIXParser();

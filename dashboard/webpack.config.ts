@@ -83,15 +83,14 @@ const config: Configuration = {
     context: __dirname,
     devServer: {
         host: '0.0.0.0',
-        disableHostCheck: true,
+        allowedHosts: 'all',
         port: 8090,
-        contentBase: __dirname,
-        overlay: {
-            warnings: false,
-            errors: true,
+        static: {
+            directory: __dirname,
         },
-        quiet: false,
-        noInfo: false,
+        client: {
+            overlay: true,
+        },
     },
 };
 
