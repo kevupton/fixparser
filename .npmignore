@@ -3,3 +3,4 @@ dashboard/
 .idea/
 .iml
 .npmrc
+.npm/
