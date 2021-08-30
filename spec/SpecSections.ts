@@ -40,7 +40,7 @@ export const SECTIONS: ISpecSections[] = [
     {
         DisplayOrder: 3,
         Description:
-            'Post trade messages including trade reporting, allocation, collateral, confirmation, position mantemenance, registration instruction, and settlement instructions',
+            'Post trade messages including trade reporting, allocation, collateral, confirmation, position maintenance, registration instruction, and settlement instructions',
         Volume: '5',
         FIXMLFileName: 'posttrade',
         NotReqXML: 0,

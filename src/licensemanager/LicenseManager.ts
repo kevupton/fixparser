@@ -18,6 +18,7 @@ export class LicenseManager {
     private static licenseKey: string;
     private static licenseKeyId: string | null = null;
     private static licenseExpiry: string | null = null;
+    private static licenseIsTrial: boolean | null = false;
     private static licenseProcessing: boolean = false;
     private static PUBLIC_KEY: string = `-----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -91,8 +92,8 @@ GqHtBQ===YpfV
                 });
                 const { verified, keyID } = verificationResult.signatures[0];
                 await verified;
-                const [, , expiryTimestamp]: string[] = signedMessage.getText().split('|');
-                LicenseManager.validateKey(keyID.toHex(), Number(expiryTimestamp));
+                const [, , expiryTimestamp, isTrial]: string[] = signedMessage.getText().split('|');
+                LicenseManager.validateKey(keyID.toHex(), Number(expiryTimestamp), isTrial === 'true');
             } catch (e) {
                 LicenseManager.outputInvalidLicenseKey();
                 LicenseManager.licenseProcessing = false;
@@ -102,7 +103,7 @@ GqHtBQ===YpfV
         return Promise.resolve();
     }
 
-    private static validateKey(keyId: string, expiryTimestamp: number): boolean {
+    private static validateKey(keyId: string, expiryTimestamp: number, isTrial: boolean): boolean {
         const releaseDate: Date = LicenseManager.getReleaseDate();
         const expiry: Date = new Date(expiryTimestamp);
 
@@ -125,12 +126,13 @@ GqHtBQ===YpfV
         LicenseManager.licenseKeyId = keyId;
         LicenseManager.licenseProcessing = false;
         LicenseManager.licenseExpiry = LicenseManager.formatDate(expiry);
+        LicenseManager.licenseIsTrial = isTrial;
         LicenseManager.outputValidLicense();
         return true;
     }
 
     private static outputValidLicense(): void {
-        log(`[FIXParser Enterprise License] - Valid until ${LicenseManager.licenseExpiry}`);
+        log(`[FIXParser Enterprise ${LicenseManager.licenseIsTrial ? 'TRIAL ' : ''}License] - Valid until ${LicenseManager.licenseExpiry}`);
     }
 
     private static outputInvalidLicenseKey(): void {
