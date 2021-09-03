@@ -19,7 +19,7 @@ import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
 import { heartBeat } from './messagetemplates/MessageTemplates';
-import { clientProcessMessage } from './util/ClientMessageProcessor';
+import { clientProcessMessage } from './session/ClientMessageProcessor';
 import { FrameDecoder } from './util/FrameDecoder';
 import { MessageBuffer } from './util/MessageBuffer';
 import {
@@ -313,6 +313,7 @@ export { SideEnum as Side } from './fieldtypes/SideEnum';
 export { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldtypes/SubscriptionRequestTypeEnum';
 export { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';
 export { Protocol } from './FIXParserBase';
+export { Options } from './FIXParserBase';
 export { LicenseManager } from './licensemanager/LicenseManager';
 export { Constants };
 export { Field };

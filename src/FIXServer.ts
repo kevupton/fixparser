@@ -11,20 +11,13 @@ import Websocket, { ServerOptions } from 'ws';
 
 import { Field } from './fields/Field';
 import * as Constants from './fieldtypes';
-import { MessageEnum } from './fieldtypes/MessageEnum';
 import FIXParser from './FIXParser';
 import { Options as FIXParserOptions, Protocol } from './FIXParserBase';
 import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
 import { heartBeat } from './messagetemplates/MessageTemplates';
-import { handleFirstMessage } from './session/SessionFirstMessage';
-import { handleLogon } from './session/SessionLogon';
-import { handleLogout } from './session/SessionLogout';
-import { handleResendRequest } from './session/SessionResendRequest';
-import { handleSequence } from './session/SessionSequence';
-import { handleSequenceReset } from './session/SessionSequenceReset';
-import { handleTestRequest } from './session/SessionTestRequest';
+import { serverProcessMessage } from './session/ServerMessageProcessor';
 import { FrameDecoder } from './util/FrameDecoder';
 import { MessageBuffer } from './util/MessageBuffer';
 import {
@@ -99,7 +92,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     const messages = this.parse(data.toString());
                     let i: number = 0;
                     for (i; i < messages.length; i++) {
-                        this.processMessage(messages[i]);
+                        serverProcessMessage(this, messages[i]);
                         this.emit('message', messages[i]);
                     }
                 });
@@ -151,7 +144,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     const messages = this.parse(data.toString());
                     let i: number = 0;
                     for (i; i < messages.length; i++) {
-                        this.processMessage(messages[i]);
+                        serverProcessMessage(this, messages[i]);
                         this.emit('message', messages[i]);
                     }
                 });
@@ -310,30 +303,6 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
             log(`FIXServer (${this.protocol.toUpperCase()}): >> sent Heartbeat`, encodedMessage.replace(/\x01/g, '|'));
         }, this.heartBeatInterval * 1000);
     }
-
-    private processMessage(message: Message): void {
-        if (!LicenseManager.validateLicense()) {
-            return;
-        }
-        log(`FIXServer (${this.protocol.toUpperCase()}): << received ${message.description}`);
-        handleSequence(this, message);
-        if (this.messageCounter === 0 && !handleFirstMessage(this, message)) {
-            logError(`FIXServer (${this.protocol.toUpperCase()}): First message not a logon!`);
-            return;
-        } else if (message.messageType === MessageEnum.SequenceReset) {
-            handleSequenceReset(this, message);
-        } else if (message.messageType === MessageEnum.TestRequest) {
-            handleTestRequest(this, message);
-        } else if (message.messageType === MessageEnum.Logon) {
-            handleLogon(this, this.messageBuffer, message);
-        } else if (message.messageType === MessageEnum.Logout) {
-            handleLogout(this, message);
-        } else if (message.messageType === MessageEnum.ResendRequest) {
-            handleResendRequest(this, this.messageBuffer, message);
-        }
-        this.nextNumIn++;
-        this.messageCounter++;
-    }
 }
 
 export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
@@ -351,6 +320,7 @@ export { SideEnum as Side } from './fieldtypes/SideEnum';
 export { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldtypes/SubscriptionRequestTypeEnum';
 export { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';
 export { Protocol } from './FIXParserBase';
+export { Options } from './FIXParserBase';
 export { LicenseManager } from './licensemanager/LicenseManager';
 export { Constants };
 export { Field };

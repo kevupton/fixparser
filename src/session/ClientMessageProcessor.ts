@@ -9,11 +9,11 @@ import { MessageEnum } from '../fieldtypes/MessageEnum';
 import { FIXParser } from '../FIXParser';
 import { FIXParserBrowser } from '../FIXParserBrowser';
 import { Message } from '../message/Message';
-import { handleLogon } from '../session/SessionLogon';
-import { handleResendRequest } from '../session/SessionResendRequest';
-import { handleSequenceReset } from '../session/SessionSequenceReset';
-import { handleTestRequest } from '../session/SessionTestRequest';
-import { log, logWarning } from './util';
+import { log, logWarning } from '../util/util';
+import { handleLogon } from './SessionLogon';
+import { handleResendRequest } from './SessionResendRequest';
+import { handleSequenceReset } from './SessionSequenceReset';
+import { handleTestRequest } from './SessionTestRequest';
 
 export const clientProcessMessage = (parser: FIXParser | FIXParserBrowser, message: Message): void => {
     if (message.messageSequence !== parser.nextNumIn) {
@@ -23,6 +23,7 @@ export const clientProcessMessage = (parser: FIXParser | FIXParserBrowser, messa
             }`,
         );
     }
+    log(`FIXParser (${parser.protocol!.toUpperCase()}): << received ${message.description} ${message.encode('|')}`);
 
     if (message.messageType === MessageEnum.SequenceReset) {
         handleSequenceReset(parser, message);
@@ -34,5 +35,4 @@ export const clientProcessMessage = (parser: FIXParser | FIXParserBrowser, messa
         handleResendRequest(parser, parser.messageBuffer, message);
     }
     parser.nextNumIn++;
-    log(`FIXParser (${parser.protocol!.toUpperCase()}): << received ${message.description}`);
 };

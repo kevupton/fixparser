@@ -16,16 +16,29 @@ export const handleResendRequest = (parser: IFIXParser, messageBuffer: MessageBu
     const from: number | null = message.getField(FieldEnum.BeginSeqNo)
         ? Number(message.getField(FieldEnum.BeginSeqNo)!.value)
         : null;
-    const to: number | null = message.getField(FieldEnum.EndSeqNo)
+    let to: number | null = message.getField(FieldEnum.EndSeqNo)
         ? Number(message.getField(FieldEnum.EndSeqNo)!.value)
-        : null;
+        : messageBuffer.size();
 
-    if (from && to && from < to && from >= 1 && to <= MAX_BUFFER) {
+    if (to === 0) {
+        to = messageBuffer.size();
+    }
+
+    if (from && from >= 1 && to <= MAX_BUFFER) {
         for (let i: number = from; i <= to; i++) {
             const messageBySequence = messageBuffer.getByMsgSequence(i);
             if (messageBySequence) {
+                messageBySequence.removeFieldByTag(FieldEnum.PossDupFlag);
                 messageBySequence.addField(new Field(FieldEnum.PossDupFlag, 'Y'));
-                messageBySequence.removeFieldByTag(FieldEnum.OrigSendingTime);
+
+                if (messageBySequence.getField(FieldEnum.SendingTime)) {
+                    const originalSendingTime: string = `${messageBySequence.getField(FieldEnum.SendingTime)!.value}`;
+                    messageBySequence.removeFieldByTag(FieldEnum.SendingTime);
+                    messageBySequence.addField(new Field(FieldEnum.SendingTime, parser.getTimestamp(new Date())));
+
+                    messageBySequence.removeFieldByTag(FieldEnum.OrigSendingTime);
+                    messageBySequence.addField(new Field(FieldEnum.OrigSendingTime, originalSendingTime));
+                }
                 parser.send(messageBySequence);
             } else {
                 logWarning(

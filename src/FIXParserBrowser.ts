@@ -14,7 +14,7 @@ import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
 import { heartBeat } from './messagetemplates/MessageTemplates';
-import { clientProcessMessage } from './util/ClientMessageProcessor';
+import { clientProcessMessage } from './session/ClientMessageProcessor';
 import { MessageBuffer } from './util/MessageBuffer';
 import {
     DEFAULT_FIX_VERSION,

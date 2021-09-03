@@ -9,7 +9,7 @@ import { ISpecEnums } from '../../spec/SpecEnums';
 import { ISpecMessageContents } from '../../spec/SpecMessageContents';
 import { Enums } from '../enums/Enums';
 import { Field } from '../fields/Field';
-import { FieldEnum as Fields } from '../fieldtypes/FieldEnum';
+import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { LicenseManager } from '../licensemanager/LicenseManager';
 import { DEFAULT_FIX_VERSION, pad, SOH } from '../util/util';
 
@@ -79,14 +79,14 @@ export class Message {
 
         // Add other tags
         fields.forEach((field: Field) => {
-            if (field.tag === Fields.BeginString) {
+            if (field.tag === FieldEnum.BeginString) {
                 this.fixVersion = String(field.value);
             }
-            if (field.tag === Fields.MsgSeqNum) {
+            if (field.tag === FieldEnum.MsgSeqNum) {
                 this.setMessageSequence(Number(field.value));
             }
 
-            if (field.tag === Fields.MsgType) {
+            if (field.tag === FieldEnum.MsgType) {
                 this.data.splice(0, 0, field);
             } else {
                 this.data.push(field);
@@ -113,16 +113,16 @@ export class Message {
     };
 
     #calculatePosition = (spec: any, tag: number): number => {
-        if (spec.tagText === 'StandardHeader' && tag === 8) {
+        if (spec.tagText === 'StandardHeader' && tag === FieldEnum.BeginString) {
             return 0;
-        } else if (spec.tagText === 'StandardHeader' && tag === 9) {
+        } else if (spec.tagText === 'StandardHeader' && tag === FieldEnum.BodyLength) {
             return 1;
-        } else if (spec.tagText === 'StandardHeader' && tag === 35) {
+        } else if (spec.tagText === 'StandardHeader' && tag === FieldEnum.MsgType) {
             return 2;
         } else if (spec.tagText === 'StandardTrailer') {
             return 999999999;
         } else {
-            return Number(spec.position) + 100;
+            return Number(spec.position);
         }
     };
 
@@ -211,7 +211,7 @@ export class Message {
 
     public addFields(...fields: Field[]): void {
         fields.forEach((field: Field) => {
-            if (field.tag === Fields.MsgType) {
+            if (field.tag === FieldEnum.MsgType) {
                 this.data.splice(0, 0, field);
             } else {
                 this.data.push(field);
@@ -299,11 +299,11 @@ export class Message {
     }
 
     public getEnum(tag: number, value: number | string | boolean | null): ISpecEnums | undefined | null {
-        if (!this.getField(Fields.MsgType) || !this.getField(Fields.MsgType)!.tag) {
+        if (!this.getField(FieldEnum.MsgType) || !this.getField(FieldEnum.MsgType)!.tag) {
             return null;
         }
 
-        if (!this.getField(Fields.MsgType) || !this.getField(Fields.MsgType)!.value) {
+        if (!this.getField(FieldEnum.MsgType) || !this.getField(FieldEnum.MsgType)!.value) {
             return null;
         }
 
@@ -313,45 +313,49 @@ export class Message {
 
     public getBriefDescription(): string | null {
         let returnValue: string = '';
-        const sideField: any = this.getField(Fields.Side)!;
+        const sideField: any = this.getField(FieldEnum.Side)!;
         let side: string | null = '';
         if (sideField && sideField.enumeration!) {
             side = sideField.enumeration!.symbolicName;
             side = side ? side.replace('Sell', 'SL').toUpperCase() : null;
         }
 
-        if (this.getField(Fields.LeavesQty) !== undefined) {
+        if (this.getField(FieldEnum.LeavesQty) !== undefined) {
             let quantity: string = '';
 
-            if (this.getField(Fields.ContraTradeQty)) {
-                quantity = String(this.getField(Fields.ContraTradeQty)!.value);
+            if (this.getField(FieldEnum.ContraTradeQty)) {
+                quantity = String(this.getField(FieldEnum.ContraTradeQty)!.value);
             } else {
-                quantity = this.getField(Fields.OrderQty) ? String(this.getField(Fields.OrderQty)!.value) : '';
+                quantity = this.getField(FieldEnum.OrderQty) ? String(this.getField(FieldEnum.OrderQty)!.value) : '';
             }
-            const leavesQuantity: string = String(this.getField(Fields.LeavesQty)!.value);
-            const lastPrice: number = this.getField(Fields.LastPx) ? Number(this.getField(Fields.LastPx)!.value) : 0;
+            const leavesQuantity: string = String(this.getField(FieldEnum.LeavesQty)!.value);
+            const lastPrice: number = this.getField(FieldEnum.LastPx)
+                ? Number(this.getField(FieldEnum.LastPx)!.value)
+                : 0;
             returnValue = this.#nonEmpty`${quantity} @${
                 lastPrice || lastPrice === 0 ? lastPrice.toFixed(2) : '0.00'
-            } ${this.getField(Fields.LeavesQty)!.name!.replace('LeavesQty', 'LvsQty')} ${parseInt(
+            } ${this.getField(FieldEnum.LeavesQty)!.name!.replace('LeavesQty', 'LvsQty')} ${parseInt(
                 leavesQuantity,
                 10,
             ).toString()}`;
-        } else if (this.getField(Fields.OrderQty)) {
-            const orderQuantity: string = String(this.getField(Fields.OrderQty)!.value);
-            const symbol: string = this.getField(Fields.Symbol) ? String(this.getField(Fields.Symbol)!.value) : '';
-            const orderType: Field = this.getField(Fields.OrdType)!;
+        } else if (this.getField(FieldEnum.OrderQty)) {
+            const orderQuantity: string = String(this.getField(FieldEnum.OrderQty)!.value);
+            const symbol: string = this.getField(FieldEnum.Symbol)
+                ? String(this.getField(FieldEnum.Symbol)!.value)
+                : '';
+            const orderType: Field = this.getField(FieldEnum.OrdType)!;
             let symbolicName: string = '';
             if (orderType && orderType.enumeration! && orderType.enumeration.symbolicName) {
                 symbolicName = orderType.enumeration.symbolicName;
             }
-            const timeInForceField = this.getField(Fields.TimeInForce)!;
+            const timeInForceField = this.getField(FieldEnum.TimeInForce)!;
             let timeInForce: string | null = null;
             if (timeInForceField && timeInForceField.enumeration!) {
                 timeInForce = timeInForceField.enumeration.symbolicName;
             }
 
-            if (this.getField(Fields.Price)) {
-                let price: number | string = Number(this.getField(Fields.Price)!.value);
+            if (this.getField(FieldEnum.Price)) {
+                let price: number | string = Number(this.getField(FieldEnum.Price)!.value);
                 if (price && price >= 1) {
                     price = price.toFixed(2);
                 } else if (price !== undefined && price < 1) {
@@ -366,7 +370,7 @@ export class Message {
                 } ${timeInForce ? timeInForce.toUpperCase() : ''}`;
             }
         } else {
-            const messageType = this.getField(Fields.MsgType);
+            const messageType = this.getField(FieldEnum.MsgType);
             if (messageType && messageType.tag && messageType.value) {
                 return this.getEnum(messageType.tag, String(messageType.value))!.SymbolicName;
             } else {
@@ -417,10 +421,10 @@ export class Message {
         const fields: Field[] = this.data.map((field: Field) => new Field(field.tag, field.value));
         const data: string[] = [];
 
-        let beginString = new Field(Fields.BeginString, this.fixVersion).toString();
-        let bodyLength = new Field(Fields.BodyLength, MARKER_BODYLENGTH).toString();
-        let checksum = new Field(Fields.CheckSum, MARKER_CHECKSUM).toString();
-        let index = fields.findIndex((field) => field.tag === Fields.BeginString);
+        let beginString = new Field(FieldEnum.BeginString, this.fixVersion).toString();
+        let bodyLength = new Field(FieldEnum.BodyLength, MARKER_BODYLENGTH).toString();
+        let checksum = new Field(FieldEnum.CheckSum, MARKER_CHECKSUM).toString();
+        let index = fields.findIndex((field) => field.tag === FieldEnum.BeginString);
 
         // Check for header
         if (index > -1) {
@@ -429,14 +433,14 @@ export class Message {
         }
 
         // Check for body length
-        index = fields.findIndex((field) => field.tag === Fields.BodyLength);
+        index = fields.findIndex((field) => field.tag === FieldEnum.BodyLength);
         if (index > -1) {
             bodyLength = fields[index].toString();
             fields.splice(index, 1);
         }
 
         // Check for trailer
-        index = fields.findIndex((field) => field.tag === Fields.CheckSum);
+        index = fields.findIndex((field) => field.tag === FieldEnum.CheckSum);
         if (index > -1) {
             checksum = fields[index].toString();
             fields.splice(index, 1);

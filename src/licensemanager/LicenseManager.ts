@@ -8,6 +8,7 @@
 import { CleartextMessage, Key, readCleartextMessage, readKey, verify, VerifyMessageResult } from 'openpgp';
 
 import { log } from '../util/util';
+import { atob } from './LicenseManagerUtils';
 
 const missingOrEmpty = (value?: string | null): boolean => {
     return value == null || value.length === 0;
@@ -67,7 +68,7 @@ GqHtBQ===YpfV
     }
 
     private static getReleaseDate(): Date {
-        return new Date(parseInt(atob(LicenseManager.RELEASE_INFORMATION), 10));
+        return new Date(parseInt(atob(LicenseManager.RELEASE_INFORMATION)!, 10));
     }
 
     static async setLicenseKey(licenseKey: string): Promise<void> {
@@ -84,7 +85,7 @@ GqHtBQ===YpfV
             try {
                 const readPublicKey: Key = await readKey({ armoredKey: LicenseManager.PUBLIC_KEY });
                 const signedMessage: CleartextMessage = await readCleartextMessage({
-                    cleartextMessage: atob(LicenseManager.licenseKey),
+                    cleartextMessage: atob(LicenseManager.licenseKey)!,
                 });
                 const verificationResult: VerifyMessageResult = await verify({
                     message: signedMessage as any,
@@ -132,7 +133,11 @@ GqHtBQ===YpfV
     }
 
     private static outputValidLicense(): void {
-        log(`[FIXParser Enterprise ${LicenseManager.licenseIsTrial ? 'TRIAL ' : ''}License] - Valid until ${LicenseManager.licenseExpiry}`);
+        log(
+            `[FIXParser Enterprise ${LicenseManager.licenseIsTrial ? 'TRIAL ' : ''}License] - Valid until ${
+                LicenseManager.licenseExpiry
+            }`,
+        );
     }
 
     private static outputInvalidLicenseKey(): void {

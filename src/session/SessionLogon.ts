@@ -127,7 +127,9 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
             message.getField(FieldEnum.ResetSeqNumFlag)!.value!.toString() === 'Y'
         ) {
             log(
-                `FIXParser (${parser.protocol!.toUpperCase()}): -- Logon contains ResetSeqNumFlag=Y, resetting sequence numbers to 1`,
+                `${
+                    parser.parserName
+                } (${parser.protocol!.toUpperCase()}): -- Logon contains ResetSeqNumFlag=Y, resetting sequence numbers to 1`,
             );
             parser.nextNumIn = 1;
             parser.setNextTargetMsgSeqNum(2);
