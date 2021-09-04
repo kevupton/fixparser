@@ -13,6 +13,7 @@ import { Message } from './message/Message';
 import { DEFAULT_FIX_VERSION, RE_BEGINSTRING, RE_ESCAPE, RE_FIND, SOH, STRING_EQUALS } from './util/util';
 
 export type Protocol = 'tcp' | 'ssl-tcp' | 'tls-tcp' | 'websocket';
+export type ConnectionType = 'acceptor' | 'initiator';
 
 export type Options = {
     host?: string;

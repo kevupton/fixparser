@@ -12,7 +12,7 @@ import Websocket, { ServerOptions } from 'ws';
 import { Field } from './fields/Field';
 import * as Constants from './fieldtypes';
 import FIXParser from './FIXParser';
-import { Options as FIXParserOptions, Protocol } from './FIXParserBase';
+import { ConnectionType, Options as FIXParserOptions, Protocol } from './FIXParserBase';
 import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
@@ -53,8 +53,11 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     public nextNumIn: number = 1;
     public messageCounter: number = 0;
     public heartBeatIntervalId: ReturnType<typeof setInterval> | null = null;
-    public messageBuffer: MessageBuffer = new MessageBuffer();
+    public messageBufferIn: MessageBuffer = new MessageBuffer();
+    public messageBufferOut: MessageBuffer = new MessageBuffer();
     public socket: WebSocket | Socket | null = null;
+    public isLoggedIn: boolean = false;
+    public connectionType: ConnectionType = 'acceptor';
 
     public createServer({
         host = this.host,
@@ -69,6 +72,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         if (!LicenseManager.validateLicense()) {
             return;
         }
+        this.connectionType = 'acceptor';
         this.host = host;
         this.port = port;
         this.protocol = protocol;
@@ -93,6 +97,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     let i: number = 0;
                     for (i; i < messages.length; i++) {
                         serverProcessMessage(this, messages[i]);
+                        this.messageBufferIn.add(messages[i]);
                         this.emit('message', messages[i]);
                     }
                 });
@@ -131,6 +136,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                         this.port
                     }...`,
                 );
+                this.emit('ready');
             });
         } else if (this.protocol === 'websocket') {
             const serverOptions: ServerOptions = {
@@ -145,6 +151,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     let i: number = 0;
                     for (i; i < messages.length; i++) {
                         serverProcessMessage(this, messages[i]);
+                        this.messageBufferIn.add(messages[i]);
                         this.emit('message', messages[i]);
                     }
                 });
@@ -168,6 +175,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                         this.port
                     }...`,
                 );
+                this.emit('ready');
             });
         } else {
             logError(`FIXServer: Create server, invalid protocol: ${this.protocol.toUpperCase()}`);
@@ -205,7 +213,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
             if (!socket.write(encodedMessage)) {
                 logError(`FIXServer (${this.protocol.toUpperCase()}): -- Could not send message, socket not open`);
             } else {
-                this.messageBuffer.add(message.clone());
+                this.messageBufferOut.add(message.clone());
                 log(`FIXServer (${this.protocol.toUpperCase()}): >> sent`, encodedMessage.replace(/\x01/g, '|'));
             }
         } else if (this.protocol === 'websocket') {
@@ -216,7 +224,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     if (client.readyState === client.OPEN) {
                         this.fixParser.setNextTargetMsgSeqNum(this.fixParser.getNextTargetMsgSeqNum() + 1);
                         client.send(encodedMessage);
-                        this.messageBuffer.add(message.clone());
+                        this.messageBufferOut.add(message.clone());
                         log(
                             `FIXServer (${this.protocol.toUpperCase()}): >> sent`,
                             encodedMessage.replace(/\x01/g, '|'),
@@ -237,7 +245,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     }
 
     private resetSession() {
-        this.nextNumIn = 1;
+        this.isLoggedIn = false;
         this.messageCounter = 0;
     }
 
@@ -245,14 +253,16 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         if (this.protocol === 'tcp') {
             const socket: Socket = this.socket! as Socket;
             const server: Server = this.server! as Server;
-            socket.end(() => {
-                if (server) {
-                    server.close(() => {
-                        log(`FIXServer (${this.protocol.toUpperCase()}): -- Ended session`);
-                        this.initialize();
-                    });
-                }
-            });
+            if(socket && socket.end) {
+                socket.end(() => {
+                    if (server) {
+                        server.close(() => {
+                            log(`FIXServer (${this.protocol.toUpperCase()}): -- Ended session`);
+                            this.initialize();
+                        });
+                    }
+                });
+            }
         } else if (this.protocol === 'websocket') {
             const server: Websocket.Server = this.server! as Websocket.Server;
             if (server) {

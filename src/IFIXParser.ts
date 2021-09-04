@@ -7,7 +7,7 @@
  */
 import { Field } from './fields/Field';
 import { FIXParser } from './FIXParser';
-import { FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
+import { ConnectionType, FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
 import { Options as FIXParserBrowserOptions } from './FIXParserBrowser';
 import { Message } from './message/Message';
 import { MessageBuffer } from './util/MessageBuffer';
@@ -21,6 +21,7 @@ export interface IFIXParser {
     target: string | null;
     heartBeatInterval: number;
     fixVersion: string;
+    connectionType: ConnectionType;
     parserName: Parser;
     fixParserBase?: FIXParserBase;
     nextNumIn: number;
@@ -28,8 +29,10 @@ export interface IFIXParser {
     messageCounter?: number;
     heartBeatIntervalId: ReturnType<typeof setInterval> | null;
     connected: boolean;
-    messageBuffer: MessageBuffer;
+    messageBufferIn: MessageBuffer;
+    messageBufferOut: MessageBuffer;
     fixParser?: FIXParser;
+    isLoggedIn?: boolean;
 
     connect?(options: FIXParserOptions | FIXParserBrowserOptions): void;
     getNextTargetMsgSeqNum(): number;

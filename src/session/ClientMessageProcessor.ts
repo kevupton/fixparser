@@ -11,12 +11,18 @@ import { FIXParserBrowser } from '../FIXParserBrowser';
 import { Message } from '../message/Message';
 import { log, logWarning } from '../util/util';
 import { handleLogon } from './SessionLogon';
+import { handleLogout } from './SessionLogout';
 import { handleResendRequest } from './SessionResendRequest';
 import { handleSequenceReset } from './SessionSequenceReset';
 import { handleTestRequest } from './SessionTestRequest';
 
 export const clientProcessMessage = (parser: FIXParser | FIXParserBrowser, message: Message): void => {
-    if (message.messageSequence !== parser.nextNumIn) {
+    parser.nextNumIn++;
+    if (
+        message.messageSequence !== parser.nextNumIn &&
+        message.messageType !== MessageEnum.SequenceReset &&
+        message.messageType !== MessageEnum.Logon
+    ) {
         logWarning(
             `FIXParser (${parser.protocol!.toUpperCase()}): -- Expected MsgSeqNum ${parser.nextNumIn}, but got ${
                 message.messageSequence
@@ -30,9 +36,10 @@ export const clientProcessMessage = (parser: FIXParser | FIXParserBrowser, messa
     } else if (message.messageType === MessageEnum.TestRequest) {
         handleTestRequest(parser, message);
     } else if (message.messageType === MessageEnum.Logon) {
-        handleLogon(parser, parser.messageBuffer, message);
+        handleLogon(parser, parser.messageBufferOut, message);
+    } else if (message.messageType === MessageEnum.Logout) {
+        handleLogout(parser, message);
     } else if (message.messageType === MessageEnum.ResendRequest) {
-        handleResendRequest(parser, parser.messageBuffer, message);
+        handleResendRequest(parser, parser.messageBufferOut, message);
     }
-    parser.nextNumIn++;
 };

@@ -26,5 +26,6 @@ const config: Config.InitialOptions = {
     maxConcurrency: 1,
     verbose: true,
     forceExit: true,
+    restoreMocks: true,
 };
 export default config;

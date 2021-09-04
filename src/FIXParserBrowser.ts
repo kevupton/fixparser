@@ -9,7 +9,7 @@ import { EventEmitter } from 'events';
 
 import { Field } from './fields/Field';
 import * as Constants from './fieldtypes';
-import { FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
+import { ConnectionType, FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
 import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
@@ -48,7 +48,9 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
     public target: string | null = null;
     public heartBeatInterval: number = DEFAULT_HEARTBEAT_SECONDS;
     public fixVersion: string = DEFAULT_FIX_VERSION;
-    public messageBuffer: MessageBuffer = new MessageBuffer();
+    public messageBufferIn: MessageBuffer = new MessageBuffer();
+    public messageBufferOut: MessageBuffer = new MessageBuffer();
+    public connectionType: ConnectionType = 'initiator';
 
     public connect({
         host = 'localhost',
@@ -61,6 +63,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
         if (!LicenseManager.validateLicense()) {
             return;
         }
+        this.connectionType = 'initiator';
         this.host = host;
         this.port = port;
         this.protocol = 'websocket';
@@ -99,6 +102,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
             let i: number = 0;
             for (i; i < messages.length; i++) {
                 clientProcessMessage(this, messages[i]);
+                this.messageBufferIn.add(messages[i]);
                 this.emit('message', messages[i]);
             }
         });
@@ -132,7 +136,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
         if (this.socket!.readyState === 1) {
             this.setNextTargetMsgSeqNum(this.getNextTargetMsgSeqNum() + 1);
             this.socket!.send(message.encode());
-            this.messageBuffer.add(message.clone());
+            this.messageBufferOut.add(message.clone());
         } else {
             logError(
                 `FIXParser (${this.protocol!.toUpperCase()}): -- Could not send message, socket not open`,

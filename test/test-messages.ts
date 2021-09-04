@@ -283,6 +283,13 @@ export const testMessages: TestMessage[] = [
         bodyLengthValid: true,
     },
     {
+        description: 'ResendRequest',
+        detail: '',
+        fix: '8=FIX.4.2|9=80|35=2|34=7|49=J79519N|50=LZL|52=20060412-00:08:21.304|56=CME|57=G|142=3|7=6|16=0|10=085|',
+        checksumValid: true,
+        bodyLengthValid: true,
+    },
+    {
         description: 'NewOrderSingle',
         detail: '',
         fix: '8=FIX.4.4|9=122|35=D|34=215|49=CLIENT12|52=20100225-19:41:57.316|56=B|1=Marcel|11=13346|21=1|40=2|44=5|54=1|59=0|60=20100225-19:39:52.020|10=072|',

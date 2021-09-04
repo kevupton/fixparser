@@ -14,7 +14,7 @@ import WebSocket from 'ws';
 
 import { Field } from './fields/Field';
 import * as Constants from './fieldtypes';
-import { FIXParserBase, Options, Protocol } from './FIXParserBase';
+import { ConnectionType, FIXParserBase, Options, Protocol } from './FIXParserBase';
 import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
@@ -51,7 +51,9 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
     public target: string | null = null;
     public heartBeatInterval: number = DEFAULT_HEARTBEAT_SECONDS;
     public fixVersion: string = DEFAULT_FIX_VERSION;
-    public messageBuffer: MessageBuffer = new MessageBuffer();
+    public messageBufferIn: MessageBuffer = new MessageBuffer();
+    public messageBufferOut: MessageBuffer = new MessageBuffer();
+    public connectionType: ConnectionType = 'initiator';
 
     public connect({
         host = 'localhost',
@@ -70,6 +72,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
         if (!LicenseManager.validateLicense()) {
             return;
         }
+        this.connectionType = 'initiator';
         this.fixVersion = fixVersion;
         this.fixParserBase.fixVersion = fixVersion;
         this.protocol = protocol;
@@ -86,6 +89,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                 let i: number = 0;
                 for (i; i < messages.length; i++) {
                     clientProcessMessage(this, messages[i]);
+                    this.messageBufferIn.add(messages[i]);
                     this.emit('message', messages[i]);
                 }
             });
@@ -133,6 +137,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                 let i: number = 0;
                 for (i; i < messages.length; i++) {
                     clientProcessMessage(this, messages[i]);
+                    this.messageBufferIn.add(messages[i]);
                     this.emit('message', messages[i]);
                 }
             });
@@ -171,6 +176,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                 let i: number = 0;
                 for (i; i < messages.length; i++) {
                     clientProcessMessage(this, messages[i]);
+                    this.messageBufferIn.add(messages[i]);
                     this.emit('message', messages[i]);
                 }
             });
@@ -225,17 +231,17 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
         if (this.protocol === 'tcp' && this.connected) {
             this.setNextTargetMsgSeqNum(this.getNextTargetMsgSeqNum() + 1);
             (this.socket! as Socket).write(encodedMessage);
-            this.messageBuffer.add(message.clone());
+            this.messageBufferOut.add(message.clone());
             log(`FIXParser (${this.protocol.toUpperCase()}): >> sent`, encodedMessage.replace(/\x01/g, '|'));
         } else if (this.protocol === 'websocket' && (this.socket! as WebSocket).readyState === WebSocket.OPEN) {
             this.setNextTargetMsgSeqNum(this.getNextTargetMsgSeqNum() + 1);
             (this.socket! as WebSocket).send(encodedMessage);
-            this.messageBuffer.add(message.clone());
+            this.messageBufferOut.add(message.clone());
             log(`FIXParser (${this.protocol.toUpperCase()}): >> sent`, encodedMessage.replace(/\x01/g, '|'));
         } else if ((this.protocol === 'ssl-tcp' || this.protocol === 'tls-tcp') && this.connected) {
             this.setNextTargetMsgSeqNum(this.getNextTargetMsgSeqNum() + 1);
             (this.socket! as TLSSocket).write(encodedMessage);
-            this.messageBuffer.add(message.clone());
+            this.messageBufferOut.add(message.clone());
             log(`FIXParser (${this.protocol.toUpperCase()}): >> sent`, encodedMessage.replace(/\x01/g, '|'));
         } else {
             logError(
