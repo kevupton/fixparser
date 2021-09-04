@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.1.4",
+  "version": "5.1.5",
   "description": "FIX 5.0SP2 Parser",
   "main": "./fixparser.js",
   "module": "src/FIXParser.ts",
@@ -19,7 +19,8 @@
     "example:ws_client": "babel-node examples/run-example.ts example_ws_client.ts",
     "example:ws_server": "babel-node examples/run-example.ts example_ws_server.ts",
     "example:tlstcp_client": "babel-node examples/run-example.ts example_tlstcp_client.ts",
-    "example:quickfix": "babel-node examples/run-example.ts example_quickfix.ts",
+    "example:quickfix_client1": "babel-node examples/run-example.ts example_quickfix_client1.ts",
+    "example:quickfix_executor": "babel-node examples/run-example.ts example_quickfix_executor.ts",
     "perf": "node perf/Perf-FIXParser.js",
     "test": "jest --ci --colors",
     "upgrade-interactive": "npm-check --update",

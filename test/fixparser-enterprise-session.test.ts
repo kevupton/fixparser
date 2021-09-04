@@ -96,12 +96,11 @@ describe('FIXParser', () => {
             );
             const result: boolean = handleLogon(mockFIXServerInstance, mb, message);
             expect(result).toBeTruthy();
-            expect(mockFIXServerInstance.send).toHaveBeenCalled();
             expect(mockFIXServerInstance.fixVersion).toEqual(TEST_FIX_VERSION);
             expect(mockFIXServerInstance.fixParser.fixVersion).toEqual(TEST_FIX_VERSION);
             expect(mockFIXServerInstance.fixParser.heartBeatInterval).toEqual(112233);
             expect(mockFIXServerInstance.heartBeatInterval).toEqual(112233);
-            expect(mb.size()).toEqual(0); // ResetSeqNumFlag=Y should clear MessageBuffer
+            expect(mb.size()).toEqual(3);
         });
 
         it('Handle Logout', () => {

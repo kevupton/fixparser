@@ -22,7 +22,7 @@ export const serverProcessMessage = (parser: FIXServer, message: Message): void 
         return;
     }
     handleSequence(parser, message);
-    log(`FIXServer (${parser.protocol.toUpperCase()}): << received ${message.description}`);
+    log(`FIXServer (${parser.protocol.toUpperCase()}): << received ${message.description} ${message.encode('|')}`);
 
     if (parser.messageCounter === 0 && !handleFirstMessage(parser, message)) {
         logError(`FIXServer (${parser.protocol.toUpperCase()}): First message not a logon!`);
@@ -32,11 +32,11 @@ export const serverProcessMessage = (parser: FIXServer, message: Message): void 
     } else if (message.messageType === MessageEnum.TestRequest) {
         handleTestRequest(parser, message);
     } else if (message.messageType === MessageEnum.Logon) {
-        handleLogon(parser, parser.messageBuffer, message);
+        handleLogon(parser, parser.messageBufferOut, message);
     } else if (message.messageType === MessageEnum.Logout) {
         handleLogout(parser, message);
     } else if (message.messageType === MessageEnum.ResendRequest) {
-        handleResendRequest(parser, parser.messageBuffer, message);
+        handleResendRequest(parser, parser.messageBufferOut, message);
     }
     parser.nextNumIn++;
     parser.messageCounter++;

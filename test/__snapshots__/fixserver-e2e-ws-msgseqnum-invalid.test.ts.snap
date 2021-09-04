@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FIXServer WebSocket End-to-end: invalid MsgSeqNum 1`] = `"8=FIX.4.69=7835=A34=20049=CLIENT252=20210815-21:51:47.36556=SERVER2141=Y98=0108=12810=204"`;
+
+exports[`FIXServer WebSocket End-to-end: invalid MsgSeqNum 2`] = `"8=FIX.4.69=7635=A34=149=SERVER252=20210815-21:51:47.36556=CLIENT2141=Y98=0108=12810=105"`;
+
+exports[`FIXServer WebSocket End-to-end: invalid MsgSeqNum 3`] = `"8=FIX.4.69=6035=D34=100049=CLIENT252=20210815-21:51:47.36556=SERVER210=119"`;
+
+exports[`FIXServer WebSocket End-to-end: invalid MsgSeqNum 4`] = `"8=FIX.4.69=6635=234=249=SERVER252=20210815-21:51:47.36556=CLIENT27=216=010=088"`;

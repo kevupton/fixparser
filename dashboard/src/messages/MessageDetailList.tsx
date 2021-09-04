@@ -63,7 +63,7 @@ export function MessageDetailList({ message, parser }: MessageDetailListProps): 
     }
 
     return (
-        <table className="uk-table uk-table-small uk-table-divider uk-table-middle">
+        <table className="uk-table uk-table-small uk-table-divider uk-table-middle fixed-height-table">
             <thead>
                 <tr>
                     <td colSpan={4} className="no-padding">

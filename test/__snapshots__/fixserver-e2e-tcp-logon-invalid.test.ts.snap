@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FIXServer TCP End-to-end: invalid Logon 1`] = `"8=FIX.5.09=8935=A34=149=INVALID_SENDER52=20210815-21:51:47.36556=INVALID_TARGET141=Y98=0108=6010=141"`;
+
+exports[`FIXServer TCP End-to-end: invalid Logon 2`] = `"8=FIX.5.09=10635=534=149=INVALID_SENDER52=20210815-21:51:47.36556=INVALID_TARGET58=Invalid Logon TARGET or SENDER.10=230"`;

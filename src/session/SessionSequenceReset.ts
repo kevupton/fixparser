@@ -13,7 +13,11 @@ import { log } from '../util/util';
 export const handleSequenceReset = (parser: IFIXParser, message: Message): void => {
     const newSeqNo: number = message.getField(FieldEnum.NewSeqNo)!.value as number;
     if (newSeqNo && Number.isFinite(newSeqNo)) {
-        log(`${parser.parserName} (${parser.protocol!.toUpperCase()}): -- New sequence number ${newSeqNo}`);
+        log(
+            `${
+                parser.parserName
+            } (${parser.protocol!.toUpperCase()}): -- SequenceReset: new sequence number ${newSeqNo}`,
+        );
         if (parser.parserName === 'FIXServer') {
             parser.setNextTargetMsgSeqNum(newSeqNo);
         } else {
