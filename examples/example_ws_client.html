@@ -24,7 +24,6 @@
     console.log(JSON.stringify(message, null, 4));
     console.log(message[0].getBriefDescription());
 
-
     const SENDER = 'BANZAI';
     const TARGET = 'EXEC';
 
@@ -45,44 +44,51 @@
         fixParser.send(logon);
     }
 
-    fixParser.connect({ host: 'localhost', port: 9900, protocol: 'websocket', sender: SENDER, target: TARGET, fixVersion: 'FIX.4.4' });
-
-    fixParser.on('open', () => {
-        const output = 'Open';
+    const sendOrder = () => {
+        const order = fixParser.createMessage(
+            new FIXParser.Field(FIXParser.Fields.MsgType, FIXParser.Messages.NewOrderSingle),
+            new FIXParser.Field(FIXParser.Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
+            new FIXParser.Field(FIXParser.Fields.SenderCompID, SENDER),
+            new FIXParser.Field(FIXParser.Fields.SendingTime, fixParser.getTimestamp()),
+            new FIXParser.Field(FIXParser.Fields.TargetCompID, TARGET),
+            new FIXParser.Field(FIXParser.Fields.ClOrdID, '11223344'),
+            new FIXParser.Field(FIXParser.Fields.HandlInst, FIXParser.HandlInst.AutomatedExecutionNoIntervention),
+            new FIXParser.Field(FIXParser.Fields.OrderQty, '123'),
+            new FIXParser.Field(FIXParser.Fields.TransactTime, fixParser.getTimestamp()),
+            new FIXParser.Field(FIXParser.Fields.OrdType, FIXParser.OrderTypes.Market),
+            new FIXParser.Field(FIXParser.Fields.Side, FIXParser.Side.Buy),
+            new FIXParser.Field(FIXParser.Fields.Symbol, '700.HK'),
+            new FIXParser.Field(FIXParser.Fields.TimeInForce, FIXParser.TimeInForce.Day)
+        );
+        const messages = fixParser.parse(order.encode());
+        const output = `sending message ${messages[0].description}, ${messages[0].messageString.replace(/\x01/g, '|')}`;
         console.log(output);
+        fixParser.send(order);
+    }
 
-        sendLogon();
-
-        setInterval(() => {
-            const order = fixParser.createMessage(
-                new FIXParser.Field(FIXParser.Fields.MsgType, FIXParser.Messages.NewOrderSingle),
-                new FIXParser.Field(FIXParser.Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
-                new FIXParser.Field(FIXParser.Fields.SenderCompID, SENDER),
-                new FIXParser.Field(FIXParser.Fields.SendingTime, fixParser.getTimestamp()),
-                new FIXParser.Field(FIXParser.Fields.TargetCompID, TARGET),
-                new FIXParser.Field(FIXParser.Fields.ClOrdID, '11223344'),
-                new FIXParser.Field(FIXParser.Fields.HandlInst, FIXParser.HandlInst.AutomatedExecutionNoIntervention),
-                new FIXParser.Field(FIXParser.Fields.OrderQty, '123'),
-                new FIXParser.Field(FIXParser.Fields.TransactTime, fixParser.getTimestamp()),
-                new FIXParser.Field(FIXParser.Fields.OrdType, FIXParser.OrderTypes.Market),
-                new FIXParser.Field(FIXParser.Fields.Side, FIXParser.Side.Buy),
-                new FIXParser.Field(FIXParser.Fields.Symbol, '700.HK'),
-                new FIXParser.Field(FIXParser.Fields.TimeInForce, FIXParser.TimeInForce.Day)
-            );
-            const messages = fixParser.parse(order.encode());
-            const output = `sending message ${messages[0].description}, ${messages[0].messageString.replace(/\x01/g, '|')}`;
+    fixParser.connect({
+        host: 'localhost',
+        port: 9900,
+        protocol: 'websocket',
+        sender: SENDER,
+        target: TARGET,
+        fixVersion: 'FIX.4.4',
+        onOpen: () => {
+            const output = 'Open';
             console.log(output);
-            fixParser.send(order);
-        }, 500);
-
-    });
-    fixParser.on('message', (message) => {
-        const output = `received message ${message.description}, ${message.messageString}`;
-        console.log(output);
-    });
-    fixParser.on('close', () => {
-        const output = 'Disconnected (please start server: npm run example:ws_server)';
-        console.log(output);
+            sendLogon();
+            setInterval(() => {
+                sendOrder();
+            }, 500);
+        },
+        onMessage: (message) => {
+            const output = `received message ${message.description}, ${message.messageString}`;
+            console.log(output);
+        },
+        onClose: () => {
+            const output = 'Disconnected (please start server: npm run example:ws_server)';
+            console.log(output);
+        }
     });
 </script>
 </body>

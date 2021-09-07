@@ -15,6 +15,7 @@ import {
     FIXParser,
     HandlInst,
     LicenseManager,
+    Message,
     Messages,
     Options,
     OrderTypes,
@@ -36,6 +37,24 @@ const CONNECT_PARAMS: Options = {
     target: TARGET,
     fixVersion: 'FIX.4.4',
     logging: true,
+    onOpen: () => {
+        console.log('Open');
+        let orderId = 0;
+        sendLogon();
+        setInterval(() => {
+            orderId++;
+            sendOrder(orderId);
+        }, 3000);
+    },
+    onMessage: (message: Message) =>
+        console.log('received message', message.description, message.messageString.replace(/\x01/g, '|')),
+    onClose: () => {
+        console.log('Disconnected');
+        setTimeout(() => {
+            console.log('Reconnecting...');
+            fixParser.connect(CONNECT_PARAMS);
+        }, 3000);
+    },
 };
 
 const sendLogon = () => {
@@ -54,44 +73,27 @@ const sendLogon = () => {
     fixParser.send(logon);
 };
 
+const sendOrder = (orderId: number) => {
+    const newOrderSingle = fixParser.createMessage(
+        new Field(Fields.MsgType, Messages.NewOrderSingle),
+        new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
+        new Field(Fields.SenderCompID, SENDER),
+        new Field(Fields.TargetCompID, TARGET),
+        new Field(Fields.SendingTime, fixParser.getTimestamp()),
+        new Field(Fields.ClOrdID, String(orderId).padStart(4, '0')),
+        new Field(Fields.Side, Side.Buy),
+        new Field(Fields.Symbol, 'MSFT'),
+        new Field(Fields.OrderQty, 10000),
+        new Field(Fields.Price, 100),
+        new Field(Fields.OrdType, OrderTypes.Limit),
+        new Field(Fields.HandlInst, HandlInst.ManualOrder),
+        new Field(Fields.TimeInForce, TimeInForce.Day),
+        new Field(Fields.Text, 'NewOrderSingle'),
+        new Field(Fields.TransactTime, fixParser.getTimestamp()),
+    );
+    const messages = fixParser.parse(newOrderSingle.encode());
+    console.log('sending message', messages[0].description, messages[0].messageString.replace(/\x01/g, '|'));
+    fixParser.send(newOrderSingle);
+};
+
 fixParser.connect(CONNECT_PARAMS);
-
-fixParser.on('open', () => {
-    console.log('Open');
-
-    sendLogon();
-
-    let orderId = 0;
-    setInterval(() => {
-        orderId++;
-        const newOrderSingle = fixParser.createMessage(
-            new Field(Fields.MsgType, Messages.NewOrderSingle),
-            new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
-            new Field(Fields.SenderCompID, SENDER),
-            new Field(Fields.TargetCompID, TARGET),
-            new Field(Fields.SendingTime, fixParser.getTimestamp()),
-            new Field(Fields.ClOrdID, String(orderId).padStart(4, '0')),
-            new Field(Fields.Side, Side.Buy),
-            new Field(Fields.Symbol, 'MSFT'),
-            new Field(Fields.OrderQty, 10000),
-            new Field(Fields.Price, 100),
-            new Field(Fields.OrdType, OrderTypes.Limit),
-            new Field(Fields.HandlInst, HandlInst.ManualOrder),
-            new Field(Fields.TimeInForce, TimeInForce.Day),
-            new Field(Fields.Text, 'NewOrderSingle'),
-            new Field(Fields.TransactTime, fixParser.getTimestamp()),
-        );
-        const messages = fixParser.parse(newOrderSingle.encode());
-        console.log('sending message', messages[0].description, messages[0].messageString.replace(/\x01/g, '|'));
-        fixParser.send(newOrderSingle);
-    }, 3000);
-});
-fixParser.on('message', (message) => {
-    console.log('received message', message.description, message.messageString.replace(/\x01/g, '|'));
-});
-fixParser.on('close', () => {
-    console.log('Disconnected');
-    setTimeout(() => {
-        fixParser.connect(CONNECT_PARAMS);
-    }, 3000);
-});

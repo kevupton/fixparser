@@ -1,12 +1,12 @@
 {
   "name": "fixparser-dashboard",
-  "version": "3.1.6",
+  "version": "3.2.0",
   "description": "FIXParser Demo",
   "main": "dashboard/build/dashboard.js",
   "scripts": {
     "start": "webpack serve --mode=\"development\" --color",
     "build": "webpack --mode=\"production\" --color",
-    "upgrade-interactive": "npm-check --update"
+    "upgrade-interactive": "ncu -u -t latest"
   },
   "author": "fixparser.io",
   "license": "LICENSE.md",
@@ -17,29 +17,29 @@
     "uikit": "^3.7.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.4",
     "@babel/preset-react": "^7.14.5",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/mini-css-extract-plugin": "^2.2.0",
-    "@types/react": "^17.0.18",
+    "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
-    "@types/webpack-dev-server": "^4.0.3",
+    "@types/webpack-dev-server": "^4.1.0",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^6.2.0",
     "file-loader": "^6.2.0",
-    "mini-css-extract-plugin": "^2.2.0",
+    "mini-css-extract-plugin": "^2.2.2",
     "node-sass": "^6.0.1",
-    "npm-check": "^5.9.2",
-    "prop-types": "^15.6.1",
+    "npm-check-updates": "^11.8.5",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sass-loader": "^12.1.0",
     "terser": "^5.7.2",
-    "webpack": "^5.50.0",
+    "webpack": "^5.52.0",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.0.0"
+    "webpack-dev-server": "^4.1.1"
   },
   "keywords": [
     "FIX Parser Dashboard"

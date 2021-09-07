@@ -5,7 +5,6 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { EventEmitter } from 'events';
 import { createServer as createNetServer, Server, Socket } from 'net';
 import Websocket, { ServerOptions } from 'ws';
 
@@ -27,16 +26,29 @@ import {
     logError,
     loggingSettings,
     Parser,
+    READY_MS,
     Version,
     version,
 } from './util/util';
 
 type Options = Pick<
     FIXParserOptions,
-    'host' | 'port' | 'protocol' | 'sender' | 'target' | 'heartbeatIntervalSeconds' | 'fixVersion' | 'logging'
+    | 'host'
+    | 'port'
+    | 'protocol'
+    | 'sender'
+    | 'target'
+    | 'heartbeatIntervalSeconds'
+    | 'fixVersion'
+    | 'logging'
+    | 'onMessage'
+    | 'onOpen'
+    | 'onError'
+    | 'onClose'
+    | 'onReady'
 >;
 
-export default class FIXServer extends EventEmitter implements IFIXParser {
+export default class FIXServer implements IFIXParser {
     public static version: Version = version;
 
     public parserName: Parser = 'FIXServer';
@@ -59,16 +71,35 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
     public isLoggedIn: boolean = false;
     public connectionType: ConnectionType = 'acceptor';
 
-    public createServer({
-        host = this.host,
-        port = this.port,
-        protocol = this.protocol,
-        sender = this.sender,
-        target = this.target,
-        heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
-        fixVersion = this.fixVersion,
-        logging = true,
-    }: Options = {}): void {
+    private static onMessageCallback: Options['onMessage'] = () => {};
+    private static onOpenCallback: Options['onOpen'] = () => {};
+    private static onErrorCallback: Options['onError'] = () => {};
+    private static onCloseCallback: Options['onClose'] = () => {};
+    private static onReadyCallback: Options['onReady'] = () => {};
+
+    public createServer(
+        {
+            host = this.host,
+            port = this.port,
+            protocol = this.protocol,
+            sender = this.sender,
+            target = this.target,
+            heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
+            fixVersion = this.fixVersion,
+            logging = true,
+            onMessage,
+            onOpen,
+            onError,
+            onClose,
+            onReady,
+        }: Options = {
+            onMessage: FIXServer.onMessageCallback,
+            onOpen: FIXServer.onOpenCallback,
+            onError: FIXServer.onErrorCallback,
+            onClose: FIXServer.onCloseCallback,
+            onReady: FIXServer.onReadyCallback,
+        },
+    ): void {
         if (!LicenseManager.validateLicense()) {
             return;
         }
@@ -83,6 +114,27 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         this.heartBeatInterval = heartbeatIntervalSeconds;
         this.fixVersion = fixVersion;
         loggingSettings.enabled = logging;
+
+        if (onMessage !== undefined) {
+            FIXServer.onMessageCallback = onMessage;
+        }
+
+        if (onOpen !== undefined) {
+            FIXServer.onOpenCallback = onOpen;
+        }
+
+        if (onError !== undefined) {
+            FIXServer.onErrorCallback = onError;
+        }
+
+        if (onClose !== undefined) {
+            FIXServer.onCloseCallback = onClose;
+        }
+
+        if (onReady !== undefined) {
+            FIXServer.onReadyCallback = onReady;
+        }
+
         this.initialize();
     }
 
@@ -98,20 +150,20 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     for (i; i < messages.length; i++) {
                         serverProcessMessage(this, messages[i]);
                         this.messageBufferIn.add(messages[i]);
-                        this.emit('message', messages[i]);
+                        FIXServer.onMessageCallback?.(messages[i]);
                     }
                 });
                 this.socket.on('connect', () => {
                     log(`FIXServer (${this.protocol.toUpperCase()}): -- Connection established`);
                     this.connected = true;
-                    this.emit('open');
+                    FIXServer.onOpenCallback?.();
                 });
                 this.socket.on('close', () => {
                     this.connected = false;
                     this.stopHeartbeat();
                     this.resetSession();
                     log(`FIXServer (${this.protocol.toUpperCase()}): -- Closed connection`);
-                    this.emit('close');
+                    FIXServer.onCloseCallback?.();
                 });
                 this.socket.on('timeout', () => {
                     this.connected = false;
@@ -119,7 +171,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     this.close();
                     this.resetSession();
                     logError(`FIXServer (${this.protocol.toUpperCase()}): -- Connection timeout`);
-                    this.emit('close');
+                    FIXServer.onCloseCallback?.();
                 });
                 this.socket.on('error', (error: Error) => {
                     this.connected = false;
@@ -127,7 +179,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     this.close();
                     this.resetSession();
                     logError(`FIXServer (${this.protocol.toUpperCase()}): -- Error`, error);
-                    this.emit('error', error);
+                    FIXServer.onErrorCallback?.(error);
                 });
             });
             this.server.listen(this.port, this.host, () => {
@@ -136,7 +188,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                         this.port
                     }...`,
                 );
-                this.emit('ready');
+                setTimeout(() => FIXServer.onReadyCallback?.(), READY_MS);
             });
         } else if (this.protocol === 'websocket') {
             const serverOptions: ServerOptions = {
@@ -152,21 +204,21 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                     for (i; i < messages.length; i++) {
                         serverProcessMessage(this, messages[i]);
                         this.messageBufferIn.add(messages[i]);
-                        this.emit('message', messages[i]);
+                        FIXServer.onMessageCallback?.(messages[i]);
                     }
                 });
             });
             this.server.on('close', () => {
                 this.connected = false;
                 this.stopHeartbeat();
-                this.emit('close');
+                FIXServer.onCloseCallback?.();
                 log(`FIXServer (${this.protocol.toUpperCase()}): -- Closed connection`);
             });
             this.server.on('error', (error) => {
                 this.connected = false;
                 this.stopHeartbeat();
                 this.close();
-                this.emit('error', error);
+                FIXServer.onErrorCallback?.(error);
                 logError(`FIXServer (${this.protocol.toUpperCase()}): -- Error`);
             });
             this.server.on('listening', () => {
@@ -175,7 +227,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
                         this.port
                     }...`,
                 );
-                this.emit('ready');
+                setTimeout(() => FIXServer.onReadyCallback?.(), READY_MS);
             });
         } else {
             logError(`FIXServer: Create server, invalid protocol: ${this.protocol.toUpperCase()}`);
@@ -253,7 +305,7 @@ export default class FIXServer extends EventEmitter implements IFIXParser {
         if (this.protocol === 'tcp') {
             const socket: Socket = this.socket! as Socket;
             const server: Server = this.server! as Server;
-            if(socket && socket.end) {
+            if (socket && socket.end) {
                 socket.end(() => {
                     if (server) {
                         server.close(() => {

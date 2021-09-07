@@ -5,7 +5,6 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { EventEmitter } from 'events';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { Socket } from 'net';
 import { connect as TLSConnect, ConnectionOptions, TLSSocket } from 'tls';
@@ -29,12 +28,13 @@ import {
     logError,
     loggingSettings,
     Parser,
+    READY_MS,
     timestamp,
     Version,
     version,
 } from './util/util';
 
-export default class FIXParser extends EventEmitter implements IFIXParser {
+export default class FIXParser implements IFIXParser {
     public static version: Version = version;
 
     public parserName: Parser = 'FIXParser';
@@ -55,20 +55,39 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
     public messageBufferOut: MessageBuffer = new MessageBuffer();
     public connectionType: ConnectionType = 'initiator';
 
-    public connect({
-        host = 'localhost',
-        port = 9878,
-        protocol = 'tcp',
-        sender = 'SENDER',
-        target = 'TARGET',
-        heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
-        fixVersion = this.fixVersion,
-        tlsKey = null,
-        tlsCert = null,
-        tlsUseSNI = false,
-        logging = true,
-        proxy = null,
-    }: Options = {}): void {
+    private static onMessageCallback: Options['onMessage'] = () => {};
+    private static onOpenCallback: Options['onOpen'] = () => {};
+    private static onErrorCallback: Options['onError'] = () => {};
+    private static onCloseCallback: Options['onClose'] = () => {};
+    private static onReadyCallback: Options['onReady'] = () => {};
+
+    public connect(
+        {
+            host = 'localhost',
+            port = 9878,
+            protocol = 'tcp',
+            sender = 'SENDER',
+            target = 'TARGET',
+            heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
+            fixVersion = this.fixVersion,
+            tlsKey = null,
+            tlsCert = null,
+            tlsUseSNI = false,
+            logging = true,
+            proxy = null,
+            onMessage,
+            onOpen,
+            onError,
+            onClose,
+            onReady,
+        }: Options = {
+            onMessage: FIXParser.onMessageCallback,
+            onOpen: FIXParser.onOpenCallback,
+            onError: FIXParser.onErrorCallback,
+            onClose: FIXParser.onCloseCallback,
+            onReady: FIXParser.onReadyCallback,
+        },
+    ): void {
         if (!LicenseManager.validateLicense()) {
             return;
         }
@@ -81,6 +100,26 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
         this.heartBeatInterval = heartbeatIntervalSeconds;
         loggingSettings.enabled = logging;
 
+        if (onMessage !== undefined) {
+            FIXParser.onMessageCallback = onMessage;
+        }
+
+        if (onOpen !== undefined) {
+            FIXParser.onOpenCallback = onOpen;
+        }
+
+        if (onError !== undefined) {
+            FIXParser.onErrorCallback = onError;
+        }
+
+        if (onClose !== undefined) {
+            FIXParser.onCloseCallback = onClose;
+        }
+
+        if (onReady !== undefined) {
+            FIXParser.onReadyCallback = onReady;
+        }
+
         if (protocol === 'tcp') {
             this.socket = new Socket();
             this.socket.setEncoding('ascii');
@@ -90,30 +129,33 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                 for (i; i < messages.length; i++) {
                     clientProcessMessage(this, messages[i]);
                     this.messageBufferIn.add(messages[i]);
-                    this.emit('message', messages[i]);
+                    FIXParser.onMessageCallback?.(messages[i]);
                 }
-            });
-            this.socket.on('close', () => {
-                this.connected = false;
-                this.emit('close');
-                this.stopHeartbeat();
-            });
-            this.socket.on('error', (error) => {
-                this.connected = false;
-                this.emit('error', error);
-                this.stopHeartbeat();
-            });
-            this.socket.on('timeout', () => {
-                this.connected = false;
-                const socket: Socket = this.socket! as Socket;
-                this.emit('timeout');
-                socket.end();
-                this.stopHeartbeat();
             });
             this.socket.connect(port, host, () => {
                 this.connected = true;
                 log(`FIXParser (${this.protocol!.toUpperCase()}): -- Connected`);
-                this.emit('open');
+                FIXParser.onOpenCallback?.();
+            });
+            this.socket.on('close', () => {
+                this.connected = false;
+                FIXParser.onCloseCallback?.();
+                this.stopHeartbeat();
+            });
+            this.socket.on('ready', () => {
+                setTimeout(() => FIXParser.onReadyCallback?.(), READY_MS);
+            });
+            this.socket.on('timeout', () => {
+                this.connected = false;
+                const socket: Socket = this.socket! as Socket;
+                FIXParser.onCloseCallback?.();
+                socket.end();
+                this.stopHeartbeat();
+            });
+            this.socket.on('error', (error) => {
+                this.connected = false;
+                FIXParser.onErrorCallback?.(error);
+                this.stopHeartbeat();
             });
         } else if (protocol === 'websocket') {
             const connectionString =
@@ -127,25 +169,31 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
             } else {
                 this.socket = new WebSocket(connectionString);
             }
-            this.socket.on('open', () => {
-                log(`FIXParser (${this.protocol!.toUpperCase()}): -- Connected`);
-                this.connected = true;
-                this.emit('open');
-            });
             this.socket.on('message', (data: string | Buffer) => {
                 const messages = this.parse(data.toString());
                 let i: number = 0;
                 for (i; i < messages.length; i++) {
                     clientProcessMessage(this, messages[i]);
                     this.messageBufferIn.add(messages[i]);
-                    this.emit('message', messages[i]);
+                    FIXParser.onMessageCallback?.(messages[i]);
                 }
+            });
+            this.socket.on('open', () => {
+                log(`FIXParser (${this.protocol!.toUpperCase()}): -- Connected`);
+                this.connected = true;
+                FIXParser.onOpenCallback?.();
             });
             this.socket.on('close', () => {
                 this.connected = false;
-                this.emit('close');
+                FIXParser.onCloseCallback?.();
                 this.stopHeartbeat();
             });
+            if (
+                this.socket.readyState ===
+                (WebSocket.OPEN || WebSocket.CLOSED || WebSocket.CLOSING || WebSocket.CONNECTING)
+            ) {
+                setTimeout(() => FIXParser.onReadyCallback?.(), READY_MS);
+            }
         } else if (protocol === 'ssl-tcp' || protocol === 'tls-tcp') {
             const options: ConnectionOptions = {
                 host,
@@ -164,7 +212,7 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
 
             this.socket = TLSConnect(port, host, options, () => {
                 this.connected = true;
-                this.emit('open');
+                FIXParser.onOpenCallback?.();
                 log(`FIXParser (${this.protocol!.toUpperCase()}): -- Connected through TLS`);
 
                 process.stdin.pipe(this.socket as TLSSocket);
@@ -177,26 +225,27 @@ export default class FIXParser extends EventEmitter implements IFIXParser {
                 for (i; i < messages.length; i++) {
                     clientProcessMessage(this, messages[i]);
                     this.messageBufferIn.add(messages[i]);
-                    this.emit('message', messages[i]);
+                    FIXParser.onMessageCallback?.(messages[i]);
                 }
-            });
-            this.socket.on('error', (error: Error) => {
-                this.connected = false;
-                this.emit('error', error);
-                this.stopHeartbeat();
             });
             this.socket.on('close', () => {
                 this.connected = false;
-                this.emit('close');
+                FIXParser.onCloseCallback?.();
                 this.stopHeartbeat();
             });
             this.socket.on('timeout', () => {
                 const socket: TLSSocket = this.socket! as TLSSocket;
                 this.connected = false;
-                this.emit('timeout');
+                FIXParser.onCloseCallback?.();
                 socket.end();
                 this.stopHeartbeat();
             });
+            this.socket.on('error', (error: Error) => {
+                this.connected = false;
+                FIXParser.onErrorCallback?.(error);
+                this.stopHeartbeat();
+            });
+            setTimeout(() => FIXParser.onReadyCallback?.(), READY_MS);
         }
     }
 

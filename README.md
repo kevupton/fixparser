@@ -46,12 +46,23 @@ Versions
 </tbody>
 </table>
 
+Features
+--------
++ Parse and create FIX messages
++ Connect over TCP/WebSocket socket as client or server
++ FIX Session support (Logon, Logout, Heartbeat, etc)
++ Fast, single-digit microsecond performance
++ Modern, written in Typescript
++ Validation (checksum and body length), includes per-field FIX specification in parsed message
++ Supports various separators/start of headers (e.g. 0x01, ^ and |)
++ Clean and lightweight code
++ Supports both node.js and browser environments (`import 'fixparser' from 'fixparser/browser';`)
+
 [FIXParser Enterprise](https://fixparser.io)
 -----------
 
 The FIXParser Enterprise version can be purchased at [fixparser.io](https://fixparser.io).
 A license is valid for 1 year, includes updates and enables all functionality of the fixparser library.
-
 
 Quick start
 -----------
@@ -63,7 +74,52 @@ Parse a FIX message:
 ```typescript
 import FIXParser from 'fixparser';
 const fixParser: FIXParser = new FIXParser();
-console.log(fixParser.parse('8=FIX.4.2|9=51|35=0|34=703|49=ABC|52=20100130-10:53:40.830|56=XYZ|10=249|'));
+const messages: Message[] = fixParser.parse('8=FIX.4.2|9=51|35=0|34=703|49=ABC|52=20100130-10:53:40.830|56=XYZ|10=249|');
+```
+
+```json
+{
+  "fixVersion": "FIX.4.2",
+  "description": "Heartbeat",
+  "messageType": "0",
+  "messageSequence": 703,
+  "data": [
+    {
+      "tag": 8,
+      "value": "FIX.4.2",
+      "name": "BeginString",
+      "description": "Identifies beginning of new message and protocol version. ALWAYS FIRST FIELD IN MESSAGE. (Always unencrypted)\nValid values:\nFIXT.1.1",
+      "type": {
+        "name": "String",
+        "description": "Alpha-numeric free format strings, can include any character or punctuation except the delimiter. All String fields are case sensitive (i.e. morstatt != Morstatt).",
+        "added": "FIX.4.2"
+      },
+      "category": null,
+      "section": null,
+      "enumeration": null,
+      "validated": false
+    },
+    ... // Rest of tags...
+  ],
+  "messageContents": [
+    {
+      "componentID": 1,
+      "tagText": "StandardHeader",
+      "indent": 0,
+      "position": 1,
+      "reqd": 1,
+      "description": "MsgType = 0",
+      "added": "FIX.2.7",
+      ... // Rest of spec...
+    }
+  ],
+  "bodyLengthValid": true,
+  "checksumValid": true,
+  "checksumValue": "249",
+  "checksumExpected": "249",
+  "bodyLengthValue": 51,
+  "bodyLengthExpected": 51
+}
 ```
 
 **FIXParser Enterprise** Create a FIX message:
@@ -112,17 +168,20 @@ import { FIXParser, LicenseManager } from 'fixparser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
 void LicenseManager.setLicenseKey('<your license here>');
-
 const fixParser: FIXParser = new FIXParser();
-fixParser.connect({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });
-fixParser.on('open', () => {
-    // Connection is open... 
-});
-fixParser.on('message', (message) => {
-    // Received FIX message
-});
-fixParser.on('close', () => {
-    // Disconnected...
+fixParser.connect({
+    host: 'localhost',
+    port: 9878,
+    protocol: 'tcp',
+    sender: 'BANZAI',
+    target: 'EXEC',
+    fixVersion: 'FIX.4.4',
+    logging: true,
+    onReady: () => { /* Client is ready to connect */ },
+    onOpen: () => { /* Connection is now open */ },
+    onMessage: (message: Message) => { /* Received a FIX message */ },
+    onError: (error?: Error) => { /* Some error occurred */ },
+    onClose: () => { /* Disconnected from remote */ },
 });
 ```
 
@@ -135,44 +194,19 @@ import { FIXServer, LicenseManager }  from 'fixparser/server';
 void LicenseManager.setLicenseKey('<your license here>');
 
 const fixServer: FIXServer = new FIXServer();
-fixServer.createServer({ host: 'localhost', port: 9878, protocol: 'tcp', sender: 'SERVER', target: 'CLIENT' });
-fixServer.on('message', (message) => {
-    console.log('server received message', message.description, message.string);
+fixServer.createServer({
+    host: 'localhost',
+    port: 9878,
+    protocol: 'tcp',
+    sender: 'SERVER',
+    target: 'CLIENT',
+    onReady: () => { /* Server is ready */ },
+    onOpen: () => { /* Received connection */ },
+    onMessage: (message: Message) => { /* Received a FIX message */ },
+    onError: (error?: Error) => { /* Some error occurred */ },
+    onClose: () => { /* Client disconnected */ },
 });
 ```
-
-**FIXParser Enterprise** Connect over Webocket in a browser (as client):
-
-```typescript
-import { FIXParser, LicenseManager } from 'fixparser/browser';
-
-// NOTE: This feature requires a FIXParser Enterprise license
-void LicenseManager.setLicenseKey('<your license here>');
-
-const fixParser: FIXParser = new FIXParser();
-fixParser.connect({ host: 'localhost', port: 9878, sender: 'BANZAI', target: 'EXEC', fixVersion: 'FIX.4.4' });
-fixParser.on('open', () => {
-    // Connection is open... 
-});
-fixParser.on('message', (message) => {
-    // Received FIX message
-});
-fixParser.on('close', () => {
-    // Disconnected...
-});
-```
-
-Features
---------
-+ Parse and create FIX messages
-+ Connect over TCP/Websocket socket as client or server
-+ FIX Session support (Logon, Logout, Heartbeat, etc)
-+ Fast, single-digit microsecond performance
-+ Modern, written in Typescript
-+ Validation (checksum and message length), includes FIX specification in parsed message
-+ Supports various separators/start of headers (e.g. 0x01, ^ and |)
-+ Clean and lightweight code
-+ Supports both node.js and browser environments (`import 'fixparser' from 'fixparser/browser';`)
 
 Performance
 -----------

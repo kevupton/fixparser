@@ -1,4 +1,4 @@
-import { FIXParser} from '../src/FIXParser';
+import { FIXParser } from '../src/FIXParser';
 import { mockLicense } from './setup';
 
 jest.setTimeout(30000);
