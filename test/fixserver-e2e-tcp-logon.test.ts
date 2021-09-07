@@ -1,6 +1,5 @@
 import { FIXServer, EncryptMethod, Field, Fields, Message, Messages } from '../src/FIXServer';
 import { FIXParser } from '../src/FIXParser';
-import { mockLicense } from './setup';
 
 jest.setTimeout(30000);
 
@@ -22,54 +21,46 @@ describe('FIXServer TCP', () => {
             sender: 'SERVER',
             target: 'CLIENT',
             logging: false,
-        });
-
-        fixServer.on('ready', () => {
-            // Listen for messages
-            fixServer.on('message', (message: Message) => {
+            onReady: () => {
+                // Connect with a client
+                fixParser.connect({
+                    host: HOST,
+                    port: 9801,
+                    protocol: 'tcp',
+                    sender: 'CLIENT',
+                    target: 'SERVER',
+                    fixVersion: 'FIX.4.7',
+                    logging: false,
+                    onOpen: () => {
+                        // Send a Logon message
+                        const logon: Message = fixParser.createMessage(
+                            new Field(Fields.MsgType, Messages.Logon),
+                            new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
+                            new Field(Fields.SenderCompID, fixParser.sender),
+                            new Field(Fields.SendingTime, fixParser.getTimestamp()),
+                            new Field(Fields.TargetCompID, fixParser.target),
+                            new Field(Fields.ResetSeqNumFlag, 'Y'),
+                            new Field(Fields.EncryptMethod, EncryptMethod.None),
+                            new Field(Fields.HeartBtInt, 64),
+                        );
+                        fixParser.send(logon);
+                    },
+                    onMessage: (message: Message) => {
+                        expect(message.description).toEqual('Logon');
+                        expect(message.messageString).toMatchSnapshot();
+                        expect(fixServer.heartBeatInterval).toEqual(64);
+                        expect(fixServer.fixVersion).toEqual('FIX.4.7');
+                        fixParser.close();
+                        fixServer.destroy();
+                        done();
+                    },
+                    onError: (error?: Error) => console.log('FIXParser: ', error),
+                });
+            },
+            onMessage: (message: Message) => {
                 expect(message.description).toEqual('Logon');
                 expect(message.messageString).toMatchSnapshot();
-            });
-
-            // Connect with a client
-            fixParser.connect({
-                host: HOST,
-                port: 9801,
-                protocol: 'tcp',
-                sender: 'CLIENT',
-                target: 'SERVER',
-                fixVersion: 'FIX.4.7',
-                logging: false,
-            });
-
-            expect(mockLicense).toHaveBeenCalled();
-
-            fixParser.on('open', () => {
-                // Send a Logon message
-                const logon: Message = fixParser.createMessage(
-                    new Field(Fields.MsgType, Messages.Logon),
-                    new Field(Fields.MsgSeqNum, fixParser.getNextTargetMsgSeqNum()),
-                    new Field(Fields.SenderCompID, fixParser.sender),
-                    new Field(Fields.SendingTime, fixParser.getTimestamp()),
-                    new Field(Fields.TargetCompID, fixParser.target),
-                    new Field(Fields.ResetSeqNumFlag, 'Y'),
-                    new Field(Fields.EncryptMethod, EncryptMethod.None),
-                    new Field(Fields.HeartBtInt, 64),
-                );
-                fixParser.send(logon);
-            });
-            fixParser.on('message', (message: Message) => {
-                expect(message.description).toEqual('Logon');
-                expect(message.messageString).toMatchSnapshot();
-                expect(fixServer.heartBeatInterval).toEqual(64);
-                expect(fixServer.fixVersion).toEqual('FIX.4.7');
-                fixParser.close();
-                fixServer.destroy();
-                done();
-            });
-            fixParser.on('error', (error) => {
-                console.log('FIXParser: ', error);
-            });
+            },
         });
     });
 });

@@ -1,4 +1,13 @@
-import { EncryptMethod, Field, Fields, FIXParser, LicenseManager, MDEntryType, Messages } from '../src/FIXParser';
+import {
+    EncryptMethod,
+    Field,
+    Fields,
+    FIXParser,
+    LicenseManager,
+    MDEntryType,
+    Message,
+    Messages,
+} from '../src/FIXParser';
 
 // NOTE: This feature requires a FIXParser Enterprise license
 void LicenseManager.setLicenseKey('<your license here>');
@@ -12,6 +21,23 @@ const CTRADER_SERVER = 'xxxxxxxxxxxx'; // e.g. h47.p.ctrader.com
 const CTRADER_PORT = 5201; // 5211 SSL, 5201 Plain Text
 
 let countReq = 0;
+
+fixParser.connect({
+    host: CTRADER_SERVER,
+    port: CTRADER_PORT,
+    protocol: 'tcp',
+    sender: SENDER,
+    target: TARGET,
+    fixVersion: 'FIX.4.4',
+    onOpen: () => {
+        console.log('Open');
+        sendLogon();
+        sendMarketDataRequest();
+    },
+    onMessage: (message: Message) => console.log('received message', message.description, message.messageString),
+    onError: (error?: Error) => console.log('error', error),
+    onClose: () => console.log('Disconnected'),
+});
 
 const sendLogon = () => {
     const logon = fixParser.createMessage(
@@ -56,27 +82,3 @@ const sendMarketDataRequest = () => {
     console.log('sending message', messages[0].description, messages[0].messageString.replace(/\x01/g, '|'));
     fixParser.send(quote);
 };
-
-fixParser.connect({
-    host: CTRADER_SERVER,
-    port: CTRADER_PORT,
-    protocol: 'tcp',
-    sender: SENDER,
-    target: TARGET,
-    fixVersion: 'FIX.4.4',
-});
-
-fixParser.on('open', () => {
-    console.log('Open');
-    sendLogon();
-    sendMarketDataRequest();
-});
-fixParser.on('message', (message) => {
-    console.log('received message', message.description, message.messageString);
-});
-fixParser.on('error', (error) => {
-    console.log('error', error);
-});
-fixParser.on('close', () => {
-    console.log('Disconnected');
-});

@@ -5,8 +5,6 @@
  * Copyright 2021 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
-import { EventEmitter } from 'events';
-
 import { Field } from './fields/Field';
 import * as Constants from './fieldtypes';
 import { ConnectionType, FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
@@ -29,10 +27,20 @@ import {
 
 export type Options = Pick<
     FIXParserOptions,
-    'host' | 'port' | 'sender' | 'target' | 'heartbeatIntervalSeconds' | 'fixVersion'
+    | 'host'
+    | 'port'
+    | 'sender'
+    | 'target'
+    | 'heartbeatIntervalSeconds'
+    | 'fixVersion'
+    | 'onMessage'
+    | 'onOpen'
+    | 'onError'
+    | 'onClose'
+    | 'onReady'
 >;
 
-export default class FIXParserBrowser extends EventEmitter implements IFIXParser {
+export default class FIXParserBrowser implements IFIXParser {
     public static version: Version = version;
     public parserName: Parser = 'FIXParserBrowser';
     public fixParserBase: FIXParserBase = new FIXParserBase();
@@ -52,14 +60,33 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
     public messageBufferOut: MessageBuffer = new MessageBuffer();
     public connectionType: ConnectionType = 'initiator';
 
-    public connect({
-        host = 'localhost',
-        port = 9878,
-        sender = 'SENDER',
-        target = 'TARGET',
-        heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
-        fixVersion = this.fixVersion,
-    }: Options = {}): void {
+    private static onMessageCallback: Options['onMessage'] = () => {};
+    private static onOpenCallback: Options['onOpen'] = () => {};
+    private static onErrorCallback: Options['onError'] = () => {};
+    private static onCloseCallback: Options['onClose'] = () => {};
+    private static onReadyCallback: Options['onReady'] = () => {};
+
+    public connect(
+        {
+            host = 'localhost',
+            port = 9878,
+            sender = 'SENDER',
+            target = 'TARGET',
+            heartbeatIntervalSeconds = DEFAULT_HEARTBEAT_SECONDS,
+            fixVersion = this.fixVersion,
+            onMessage,
+            onOpen,
+            onError,
+            onClose,
+            onReady,
+        }: Options = {
+            onMessage: FIXParserBrowser.onMessageCallback,
+            onOpen: FIXParserBrowser.onOpenCallback,
+            onError: FIXParserBrowser.onErrorCallback,
+            onClose: FIXParserBrowser.onCloseCallback,
+            onReady: FIXParserBrowser.onReadyCallback,
+        },
+    ): void {
         if (!LicenseManager.validateLicense()) {
             return;
         }
@@ -72,6 +99,27 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
         this.heartBeatInterval = heartbeatIntervalSeconds;
         this.fixVersion = fixVersion;
         this.fixParserBase.fixVersion = fixVersion;
+
+        if (onMessage !== undefined) {
+            FIXParserBrowser.onMessageCallback = onMessage;
+        }
+
+        if (onOpen !== undefined) {
+            FIXParserBrowser.onOpenCallback = onOpen;
+        }
+
+        if (onError !== undefined) {
+            FIXParserBrowser.onErrorCallback = onError;
+        }
+
+        if (onClose !== undefined) {
+            FIXParserBrowser.onCloseCallback = onClose;
+        }
+
+        if (onReady !== undefined) {
+            FIXParserBrowser.onReadyCallback = onReady;
+        }
+
         this.socket = new WebSocket(
             this.host.indexOf('ws://') === -1 && this.host.indexOf('wss://') === -1
                 ? `ws://${this.host}:${this.port}`
@@ -85,7 +133,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
                     this.socket!.readyState
                 }`,
             );
-            this.emit('open');
+            FIXParserBrowser.onOpenCallback?.();
         });
         this.socket.addEventListener('close', (event) => {
             this.connected = false;
@@ -94,7 +142,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
                     this.socket!.readyState
                 }`,
             );
-            this.emit('close');
+            FIXParserBrowser.onCloseCallback?.();
             this.stopHeartbeat();
         });
         this.socket.addEventListener('message', (event) => {
@@ -103,7 +151,7 @@ export default class FIXParserBrowser extends EventEmitter implements IFIXParser
             for (i; i < messages.length; i++) {
                 clientProcessMessage(this, messages[i]);
                 this.messageBufferIn.add(messages[i]);
-                this.emit('message', messages[i]);
+                FIXParserBrowser.onMessageCallback?.(messages[i]);
             }
         });
     }

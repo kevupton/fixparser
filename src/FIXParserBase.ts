@@ -28,6 +28,11 @@ export type Options = {
     tlsUseSNI?: boolean;
     logging?: boolean;
     proxy?: string | null;
+    onReady?: () => void;
+    onMessage?: (message: Message) => void;
+    onOpen?: () => void;
+    onClose?: () => void;
+    onError?: (error?: Error) => void;
 };
 
 export class FIXParserBase {
