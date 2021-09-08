@@ -237,7 +237,7 @@ export { LicenseManager } from './licensemanager/LicenseManager';
 export { Constants };
 export { Field };
 export { Message };
-export { FIXParserBrowser };
+export { FIXParserBrowser as FIXParser };
 
 /**
  * Export FIXParser to the window object.

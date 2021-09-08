@@ -1,6 +1,6 @@
 {
   "name": "fixparser-dashboard",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "FIXParser Demo",
   "main": "dashboard/build/dashboard.js",
   "scripts": {

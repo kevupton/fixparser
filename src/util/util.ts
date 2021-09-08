@@ -20,7 +20,6 @@ export const DEFAULT_FIX_VERSION: string = 'FIX.5.0SP2';
 export const DEFAULT_HEARTBEAT_SECONDS: number = 30;
 export const SOH: string = '\x01';
 export const STRING_EQUALS: string = '=';
-export const RE_BEGINSTRING: RegExp = /(?=8=FIX)/g;
 export const RE_ESCAPE: RegExp = /[.*+?^${}()|[\]\\]/g;
 export const RE_FIND: RegExp = /8=FIXT?\.\d\.\d([^\d]+)/i;
 export const READY_MS: number = 100;

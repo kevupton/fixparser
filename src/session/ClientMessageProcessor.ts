@@ -7,7 +7,7 @@
  */
 import { MessageEnum } from '../fieldtypes/MessageEnum';
 import { FIXParser } from '../FIXParser';
-import { FIXParserBrowser } from '../FIXParserBrowser';
+import { FIXParser as FIXParserBrowser } from '../FIXParserBrowser';
 import { Message } from '../message/Message';
 import { log, logWarning } from '../util/util';
 import { handleLogon } from './SessionLogon';

@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "FIX 5.0SP2 Parser",
   "main": "./fixparser.js",
   "module": "src/FIXParser.ts",
@@ -21,7 +21,7 @@
     "example:tlstcp_client": "babel-node examples/run-example.ts example_tlstcp_client.ts",
     "example:quickfix_client1": "babel-node examples/run-example.ts example_quickfix_client1.ts",
     "example:quickfix_executor": "babel-node examples/run-example.ts example_quickfix_executor.ts",
-    "perf": "node perf/Perf-FIXParser.js",
+    "perf": "node --prof perf/Perf-FIXParser.js && node --prof-process isolate-*.log | cat",
     "test": "jest --ci --colors",
     "upgrade-interactive": "ncu -u -t latest",
     "prebuild": "babel-node --max-old-space-size=4096 prebuild/setup.ts --extensions \\\".ts\\\"",

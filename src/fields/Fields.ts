@@ -28,27 +28,6 @@ export class Fields {
         });
     }
 
-    public getField(field: Field): void {
-        const data = this.cacheMap.get(field.tag);
-        if (data) {
-            field.setName(data.Name);
-            field.setDescription(data.Description);
-
-            if (data.BaseCategory) {
-                this.categories.processCategory(field, data.BaseCategory);
-
-                if (field.category!.sectionID) {
-                    this.sections.processSection(field, field.category!.sectionID);
-                }
-            }
-
-            this.dataTypes.processDatatype(field, data.Type);
-        } else {
-            field.setType(null);
-            field.setValue(field.value);
-        }
-    }
-
     public processField(message: Message, field: Field): void {
         const data = this.cacheMap.get(field.tag);
         if (data) {

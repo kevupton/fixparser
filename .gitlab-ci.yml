@@ -46,8 +46,9 @@ performance:
   stage: test
   needs: ['build', 'test']
   script:
-    - npm run perf
+    - npm run build && npm run perf
   when: manual
+  allow_failure: true
 
 pages:
   stage: deploy

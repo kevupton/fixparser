@@ -684,6 +684,13 @@ describe('FIXParser', () => {
                 expect(messages[15].getBriefDescription()).toBe('Reject');
                 expect(messages).toMatchSnapshot();
             });
+
+            it('Duplicate messages', () => {
+                messages = fixParser.parse(
+                    '8=FIX.4.2|9=109|35=AR|34=2486|49=LSETR|52=20120330-12:14:10.379|56=LSEHub|128=BROKERX|150=H|571=00008661533TRLO1-1-1-0|939=0|10=073|8=FIX.4.2|9=109|35=AR|34=2486|49=LSETR|52=20120330-12:14:10.379|56=LSEHub|128=BROKERX|150=H|571=00008661533TRLO1-1-1-0|939=0|10=073|',
+                );
+                expect(messages.length).toEqual(2);
+            });
         });
     });
 
