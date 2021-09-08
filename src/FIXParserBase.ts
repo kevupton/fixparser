@@ -10,7 +10,7 @@ import { Field } from './fields/Field';
 import { Fields as FieldsCache } from './fields/Fields';
 import { FieldEnum } from './fieldtypes/FieldEnum';
 import { Message } from './message/Message';
-import { DEFAULT_FIX_VERSION, RE_BEGINSTRING, RE_ESCAPE, RE_FIND, SOH, STRING_EQUALS } from './util/util';
+import { DEFAULT_FIX_VERSION, RE_ESCAPE, RE_FIND, SOH, STRING_EQUALS } from './util/util';
 
 export type Protocol = 'tcp' | 'ssl-tcp' | 'tls-tcp' | 'websocket';
 export type ConnectionType = 'acceptor' | 'initiator';
@@ -68,7 +68,7 @@ export class FIXParserBase {
         for (i; i < this.messageTags.length - 1; i++) {
             equalsOperator = this.messageTags[i].indexOf(STRING_EQUALS);
 
-            tag = parseInt(this.messageTags[i].substring(0, equalsOperator), 10);
+            tag = Number(this.messageTags[i].substring(0, equalsOperator));
             value = this.messageTags[i].substring(equalsOperator + 1);
 
             field = new Field(tag, value);
@@ -91,12 +91,12 @@ export class FIXParserBase {
     public parse(data: string): Message[] {
         let i: number = 0;
 
-        const messageStrings = data ? data.split(RE_BEGINSTRING) : [];
+        const messageStrings = data ? data.split('8=FIX') : [];
         const messages = [];
 
         for (i; i < messageStrings.length; i++) {
             this.message = new Message(this.fixVersion);
-            this.messageString = messageStrings[i];
+            this.messageString = `8=FIX${messageStrings[i]}`;
             if (this.messageString.indexOf(SOH) > -1) {
                 this.message.setString(this.messageString);
                 this.messageTags = this.messageString.split(SOH);

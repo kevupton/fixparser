@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import ReactJson from 'react-json-view';
 
-import FIXParser, { Fields, Field, Message } from '../../../src/FIXParserBrowser';
+import { FIXParser, Fields, Field, Message } from '../../../src/FIXParserBrowser';
 import { MessageDetailListItem } from './MessageDetailListItem';
 import { getValue } from '../Dashboard';
 
@@ -38,7 +38,7 @@ export function MessageDetailList({ message, parser }: MessageDetailListProps): 
                 field = item.field;
             } else {
                 field = new Field(item.tagText, '<MISSING VALUE>');
-                parser.fixParserBase.fields.getField(field);
+                parser.fixParserBase.fields.processField(message, field);
             }
             return <MessageDetailListItem key={`data_${index}`} data={item} field={field} message={message} />;
         });

@@ -382,25 +382,21 @@ export class Message {
     }
 
     public validateBodyLength(value: string): boolean {
-        const startLength: number =
-            this.messageString.indexOf(TAG_MSGTYPE) === -1 ? 0 : this.messageString.indexOf(TAG_MSGTYPE);
-        const endLength: number =
-            this.messageString.lastIndexOf(TAG_CHECKSUM) === -1
-                ? this.messageString.length
-                : this.messageString.lastIndexOf(TAG_CHECKSUM);
+        const index: number = this.messageString.indexOf(TAG_MSGTYPE);
+        const lastIndex: number = this.messageString.lastIndexOf(TAG_CHECKSUM);
+        const startLength: number = index === -1 ? 0 : index;
+        const endLength: number = lastIndex === -1 ? this.messageString.length : lastIndex;
         const bodyLength: number = endLength - startLength;
 
-        this.bodyLengthValue = Number(value) >> 0;
+        this.bodyLengthValue = Number(value);
         this.bodyLengthExpected = bodyLength;
-        this.bodyLengthValid = Number(value) >> 0 === bodyLength;
+        this.bodyLengthValid = Number(value) === bodyLength;
         return this.bodyLengthValid;
     }
 
     public validateChecksum(value: string): boolean {
-        const length: number =
-            this.messageString.lastIndexOf(TAG_CHECKSUM) === -1
-                ? this.messageString.length
-                : this.messageString.lastIndexOf(TAG_CHECKSUM);
+        const lastIndex: number = this.messageString.lastIndexOf(TAG_CHECKSUM);
+        const length: number = lastIndex === -1 ? this.messageString.length : lastIndex;
         const data: string = this.messageString.substring(0, length);
         const calculatedChecksum: string = this.#calculateChecksum(data);
 
