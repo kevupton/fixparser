@@ -24,7 +24,7 @@ export class FrameDecoder extends Transform {
         callback();
     }
 
-    public override destroy(error?: Error): this {
+    public override destroy(error?: Error) {
         this.data = null;
         return super.destroy(error);
     }
