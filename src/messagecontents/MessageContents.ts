@@ -2,7 +2,7 @@
  * fixparser
  * https://gitlab.com/logotype/fixparser.git
  *
- * Copyright 2021 fixparser.io
+ * Copyright © 2022 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
 import prebuiltMap from '../../prebuild/MessageContents.prebuilt.json';
@@ -14,8 +14,8 @@ export class MessageContents {
     public validated: boolean = false;
 
     constructor() {
-        Object.entries(prebuiltMap).forEach(
-            (pair) => this.cacheMap.set(Number(pair[0]), pair[1] as any), // ISpecMessageContents[]
+        Object.entries(prebuiltMap).forEach((pair) =>
+            this.cacheMap.set(Number(pair[0]), pair[1] as unknown as ISpecMessageContents[]),
         );
     }
 
