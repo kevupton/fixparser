@@ -2,7 +2,7 @@
  * fixparser
  * https://gitlab.com/logotype/fixparser.git
  *
- * Copyright 2021 fixparser.io
+ * Copyright © 2022 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
 import { Field } from './fields/Field';
@@ -146,7 +146,7 @@ export default class FIXParserBrowser implements IFIXParser {
             this.stopHeartbeat();
         });
         this.socket.addEventListener('message', (event) => {
-            const messages = this.fixParserBase.parse(event.data);
+            const messages = this.fixParserBase.parse(event.data as string);
             let i: number = 0;
             for (i; i < messages.length; i++) {
                 clientProcessMessage(this, messages[i]);

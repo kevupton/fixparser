@@ -2,7 +2,7 @@
  * fixparser
  * https://gitlab.com/logotype/fixparser.git
  *
- * Copyright 2021 fixparser.io
+ * Copyright © 2022 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
 import { ISpecEnums } from '../../spec/SpecEnums';
@@ -193,7 +193,7 @@ export class Message {
                     result.push({
                         field: null,
                         hasValue: false,
-                        position: this.#calculatePosition(spec, spec.tagText),
+                        position: this.#calculatePosition(spec, Number(spec.tagText)),
                         reqd: spec.reqd,
                         spec,
                         tagText: spec.tagText,

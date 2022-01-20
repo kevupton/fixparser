@@ -2,7 +2,7 @@
  * fixparser
  * https://gitlab.com/logotype/fixparser.git
  *
- * Copyright 2021 fixparser.io
+ * Copyright © 2022 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
 import { ISpecSections, SECTIONS } from '../../../spec/SpecSections';

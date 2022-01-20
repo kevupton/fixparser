@@ -2,7 +2,7 @@
  * fixparser
  * https://gitlab.com/logotype/fixparser.git
  *
- * Copyright 2021 fixparser.io
+ * Copyright © 2022 fixparser.io
  * Released under Commercial license. Check LICENSE.md
  */
 import { Transform, TransformCallback, TransformOptions } from 'stream';
@@ -24,7 +24,8 @@ export class FrameDecoder extends Transform {
         callback();
     }
 
-    public override destroy(): void {
+    public override destroy(error?: Error): this {
         this.data = null;
+        return super.destroy(error);
     }
 }
