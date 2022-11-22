@@ -39,8 +39,9 @@ test:
     reports:
       junit:
         - test-reports/jest-junit.xml
-      cobertura:
-        - test-reports/cobertura-coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: test-reports/cobertura-coverage.xml
 
 performance:
   stage: test
