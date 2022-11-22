@@ -16,12 +16,6 @@ stages:
   - performance
   - deploy
 
-lint:
-  stage: build
-  needs: []
-  script:
-    - npm run lint
-
 build:
   stage: build
   needs: []
