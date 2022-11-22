@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import ReactJson from 'react-json-view';
+import { JsonViewer } from '@textea/json-viewer'
 
 import { FIXParser, Fields, Field, Message } from '../../../src/FIXParserBrowser';
 import { MessageDetailListItem } from './MessageDetailListItem';
@@ -101,7 +101,7 @@ export function MessageDetailList({ message, parser }: MessageDetailListProps): 
                 <tbody>
                     <tr>
                         <td colSpan={4} className="no-padding">
-                            <ReactJson src={message} collapsed={1} quotesOnKeys={false} />
+                            <JsonViewer value={message} quotesOnKeys={false} />
                         </td>
                     </tr>
                 </tbody>

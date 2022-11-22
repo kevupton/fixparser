@@ -8,7 +8,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -122,7 +122,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.4.3",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 702,
   "messageString": "",
   "messageType": "",
@@ -139,7 +139,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -253,7 +253,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.5.0SP2",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 702,
   "messageString": "",
   "messageType": "",
@@ -270,7 +270,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -384,7 +384,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.5.0SP2",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 702,
   "messageString": "",
   "messageType": "",
@@ -401,7 +401,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -460,7 +460,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.5.0SP2",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 703,
   "messageString": "",
   "messageType": "",
@@ -477,7 +477,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -580,7 +580,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.5.0SP2",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 702,
   "messageString": "",
   "messageType": "",
@@ -601,7 +601,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -704,7 +704,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.5.0SP2",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 702,
   "messageString": "",
   "messageType": "",
@@ -721,7 +721,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -780,7 +780,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.5.0SP2",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 1,
   "messageString": "",
   "messageType": "",
@@ -795,7 +795,7 @@ Message {
   "checksumExpected": null,
   "checksumValid": false,
   "checksumValue": null,
-  "data": Array [
+  "data": [
     Field {
       "category": null,
       "description": null,
@@ -854,7 +854,7 @@ Message {
   ],
   "description": "",
   "fixVersion": "FIX.5.0SP2",
-  "messageContents": Array [],
+  "messageContents": [],
   "messageSequence": 1,
   "messageString": "",
   "messageType": "",

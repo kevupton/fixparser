@@ -218,6 +218,21 @@ export default class FIXParserBrowser implements IFIXParser {
     }
 }
 
+import { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
+import { EncryptMethodEnum as EncryptMethod } from './fieldtypes/EncryptMethodEnum';
+import { ExecTypeEnum as ExecType } from './fieldtypes/ExecTypeEnum';
+import { FieldEnum as Fields } from './fieldtypes/FieldEnum';
+import { HandlInstEnum as HandlInst } from './fieldtypes/HandlInstEnum';
+import { MarketDepthEnum as MarketDepth } from './fieldtypes/MarketDepthEnum';
+import { MDEntryTypeEnum as MDEntryType } from './fieldtypes/MDEntryTypeEnum';
+import { MDUpdateTypeEnum as MDUpdateType } from './fieldtypes/MDUpdateTypeEnum';
+import { MessageEnum as Messages } from './fieldtypes/MessageEnum';
+import { OrderStatusEnum as OrderStatus } from './fieldtypes/OrderStatusEnum';
+import { OrderTypesEnum as OrderTypes } from './fieldtypes/OrderTypesEnum';
+import { SideEnum as Side } from './fieldtypes/SideEnum';
+import { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldtypes/SubscriptionRequestTypeEnum';
+import { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';
+
 export { AllocPositionEffectEnum as AllocPositionEffect } from './fieldtypes/AllocPositionEffectEnum';
 export { EncryptMethodEnum as EncryptMethod } from './fieldtypes/EncryptMethodEnum';
 export { ExecTypeEnum as ExecType } from './fieldtypes/ExecTypeEnum';
@@ -236,10 +251,29 @@ export { Protocol } from './FIXParserBase';
 export { LicenseManager } from './licensemanager/LicenseManager';
 export { Constants };
 export { Field };
-export { Message };
-export { FIXParserBrowser as FIXParser };
+export { Message };export { FIXParserBrowser as FIXParser };
 
 /**
  * Export FIXParser to the window object.
  */
-(global as any).FIXParser = FIXParserBrowser;
+(window as any).FIXParser = {
+    'default': FIXParserBrowser,
+    AllocPositionEffect: AllocPositionEffect,
+    EncryptMethod: EncryptMethod,
+    ExecType: ExecType,
+    Fields: Fields,
+    HandlInst: HandlInst,
+    MarketDepth: MarketDepth,
+    MDEntryType: MDEntryType,
+    MDUpdateType: MDUpdateType,
+    Messages: Messages,
+    OrderStatus: OrderStatus,
+    OrderTypes: OrderTypes,
+    Side: Side,
+    SubscriptionRequestType: SubscriptionRequestType,
+    TimeInForce: TimeInForce,
+    LicenseManager: LicenseManager,
+    Constants: Constants,
+    Field: Field,
+    Message: Message,
+};

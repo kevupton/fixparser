@@ -375,4 +375,4 @@ export { Field };
 export { Message };
 export { FIXParser };
 
-(global as any).FIXParser = FIXParser;
+(global as any || window as any).FIXParser = FIXParser;
