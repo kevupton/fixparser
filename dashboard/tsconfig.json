@@ -1,9 +1,27 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
+    "incremental": true,
+    "target": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "alwaysStrict": true,
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "isolatedModules": false,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "jsx": "react-jsx",
-    "typeRoots": ["./src/types", "./node_modules/@types"],
-    "types": ["fixparser"]
+    "typeRoots": ["./node_modules/@types"]
   },
   "include": [
     "src/**/*"

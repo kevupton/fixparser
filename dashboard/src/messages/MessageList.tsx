@@ -1,5 +1,5 @@
 import { MessageListItem } from './MessageListItem';
-import { Message } from 'fixparser';
+import { Message } from 'fixparser/FIXParserBrowser';
 
 type MessageListProps = {
     messages: Message[];

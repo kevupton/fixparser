@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import classNames from 'classnames';
 
 import { getValue } from '../Dashboard';
-import { Field, Message } from 'fixparser';
+import { Field, Message } from 'fixparser/FIXParserBrowser';
 
 type MessageDetailListItemProps = {
     message: Message;

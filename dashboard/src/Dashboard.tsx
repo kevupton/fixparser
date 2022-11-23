@@ -1,6 +1,6 @@
 import { Fragment, useState, ChangeEvent } from 'react';
 
-import { FIXParserBrowser as FIXParser, Message } from 'fixparser';
+import { FIXParser, Message } from 'fixparser/FIXParserBrowser';
 import { MessageList } from './messages/MessageList';
 import { MessageDetailList } from './messages/MessageDetailList';
 import { testMessages } from '../../test/test-messages';

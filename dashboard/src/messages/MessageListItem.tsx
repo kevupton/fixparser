@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 
 import { getValue } from '../Dashboard';
-import { Field, Fields, Message } from 'fixparser';
+import { Field, Fields, Message } from 'fixparser/FIXParserBrowser';
 
 type MessageListItemProps = {
     message: Message;
