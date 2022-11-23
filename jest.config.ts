@@ -28,7 +28,7 @@ const config: Config.InitialOptions = {
     forceExit: true,
     restoreMocks: true,
     transform: {
-        '^.+\\.(t|j)sx?$': "@swc/jest",
+        '^.+\\.(t|j)sx?$': '@swc/jest',
     },
 };
 export default config;

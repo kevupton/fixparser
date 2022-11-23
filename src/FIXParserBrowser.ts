@@ -251,13 +251,14 @@ export { Protocol } from './FIXParserBase';
 export { LicenseManager } from './licensemanager/LicenseManager';
 export { Constants };
 export { Field };
-export { Message };export { FIXParserBrowser as FIXParser };
+export { Message };
+export { FIXParserBrowser as FIXParser };
 
 /**
  * Export FIXParser to the window object.
  */
 (window as any).FIXParser = {
-    'default': FIXParserBrowser,
+    default: FIXParserBrowser,
     AllocPositionEffect: AllocPositionEffect,
     EncryptMethod: EncryptMethod,
     ExecType: ExecType,

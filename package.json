@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "description": "FIX 5.0 SP2 Parser",
   "main": "./fixparser.js",
   "module": "src/FIXParser.ts",
@@ -18,10 +18,7 @@
   },
   "scripts": {
     "prettier": "node_modules/prettier/bin-prettier.js \"**/*.{js,ts,tsx}\" --write",
-    "build:node": "./node_modules/.bin/esbuild ./src/FIXParser.ts --platform=node --inject:env-proxy.ts --bundle --outfile=fixparser.js",
-    "build:server": "./node_modules/.bin/esbuild ./src/FIXServer.ts --platform=node --inject:env-proxy.ts --bundle --outfile=server.js",
-    "build:browser": "./node_modules/.bin/esbuild ./src/FIXParserBrowser.ts --platform=browser --bundle --inject:env-proxy.ts --outfile=browser.js",
-    "build": "npm run build:node && npm run build:server && npm run build:browser",
+    "build": "node esbuild.config.js",
     "example:parse_message": "tsx examples/run-example.ts example_parse_message.ts",
     "example:tcp_client": "tsx examples/run-example.ts example_tcp_client.ts",
     "example:tcp_server": "tsx examples/run-example.ts example_tcp_server.ts",

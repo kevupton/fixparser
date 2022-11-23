@@ -14,8 +14,12 @@ const missingOrEmpty = (value?: string | null): boolean => {
     return value == null || value.length === 0;
 };
 
+declare global {
+    var __RELEASE_INFORMATION__: string;
+}
+
 export class LicenseManager {
-    private static RELEASE_INFORMATION: string = process.env.__RELEASE_INFORMATION__!;
+    private static RELEASE_INFORMATION: string = __RELEASE_INFORMATION__;
     private static licenseKey: string;
     private static licenseKeyId: string | null = null;
     private static licenseExpiry: string | null = null;

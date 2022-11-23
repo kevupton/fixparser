@@ -10,9 +10,14 @@ export type Version = {
     build: string;
 };
 
+declare global {
+    var __PACKAGE_VERSION__: string;
+    var __BUILD_TIME__: string;
+}
+
 export const version: Version = {
-    version: process.env.__PACKAGE_VERSION__!,
-    build: process.env.__BUILD_TIME__!,
+    version: __PACKAGE_VERSION__,
+    build: __BUILD_TIME__,
 };
 
 export type Parser = 'FIXServer' | 'FIXParser' | 'FIXParserBrowser';

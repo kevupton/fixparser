@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { JsonViewer } from '@textea/json-viewer'
+import { JsonViewer } from '@textea/json-viewer';
 
 import { FIXParser, Fields, Field, Message } from '../../../src/FIXParserBrowser';
 import { MessageDetailListItem } from './MessageDetailListItem';
