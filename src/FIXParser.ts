@@ -374,6 +374,3 @@ export { Constants };
 export { Field };
 export { Message };
 export { FIXParser };
-export { FIXParser as FIXParserBrowser } from './FIXParserBrowser';
-
-((global as any) || (window as any)).FIXParser = FIXParser;

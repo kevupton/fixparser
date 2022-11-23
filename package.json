@@ -1,11 +1,7 @@
 {
   "name": "fixparser",
-  "version": "5.4.1",
+  "version": "5.4.2",
   "description": "FIX 5.0 SP2 Parser",
-  "main": "./build/cjs/FIXParser.js",
-  "module": "./build/esm/FIXParser.js",
-  "types": "./build/src/FIXParser.d.ts",
-  "browser": "./browser.js",
   "files": [
     "./build/",
     "./examples/"
@@ -76,21 +72,28 @@
   "license": "LICENSE.md",
   "exports": {
     ".": {
-      "import": "./build/esm/FIXParser.js",
+      "import": "./build/esm/FIXParser.mjs",
+      "require": "./build/cjs/FIXParser.js"
+    },
+    "./FIXParser": {
+      "import": "./build/esm/FIXParser.mjs",
       "require": "./build/cjs/FIXParser.js"
     },
     "./FIXParserBrowser": {
-      "import": "./build/esm/FIXParserBrowser.js",
+      "import": "./build/esm/FIXParserBrowser.mjs",
       "require": "./build/cjs/FIXParserBrowser.js"
     },
     "./FIXServer": {
-      "import": "./build/esm/FIXServer.js",
+      "import": "./build/esm/FIXServer.mjs",
       "require": "./build/cjs/FIXServer.js"
     }
   },
   "typesVersions": {
     "*": {
       "*": [
+        "build/src/FIXParser.d.ts"
+      ],
+      "FIXParser": [
         "build/src/FIXParser.d.ts"
       ],
       "FIXParserBrowser": [

@@ -56,7 +56,7 @@ Features
 + Validation (checksum and body length), includes per-field FIX specification in parsed message
 + Supports various separators/start of headers (e.g. 0x01, ^ and |)
 + Clean and lightweight code
-+ Supports both node.js and browser environments (`import 'fixparser' from 'fixparser/browser';`)
++ Supports both node.js and browser environments (`import { FIXParser } from 'fixparser/FIXParserBrowser';`)
 
 [FIXParser Enterprise](https://fixparser.io)
 -----------

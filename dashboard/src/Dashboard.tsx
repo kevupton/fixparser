@@ -124,7 +124,7 @@ export function Dashboard(): JSX.Element {
                             DEALINGS IN THE SOFTWARE.
                         </p>
                         <p>
-                            Version: {process.env.__PACKAGE_VERSION__} built at {process.env.__BUILD_TIME__}.
+                            Version: {__PACKAGE_VERSION__} built at {__BUILD_TIME__}.
                         </p>
                     </div>
                 </div>

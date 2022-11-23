@@ -78,7 +78,7 @@ npm_fixparser:
 
 npm_dashboard:
   stage: deploy
-  needs: ['build', 'test', 'npm_fixparser']
+  needs: ['build', 'test']
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^release-\d+.\d+.\d+/
       changes:
@@ -111,7 +111,7 @@ npm_dashboard:
 
 pages:
   stage: deploy
-  needs: ['build', 'test', 'npm_dashboard']
+  needs: ['build', 'test']
   script:
     - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
     - mkdir .public
