@@ -109,21 +109,21 @@ npm_dashboard:
       fi
   retry: 2
 
-#pages:
-#  stage: deploy
-#  needs: ['build', 'test', 'npm_dashboard']
-#  script:
-#    - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
-#    - mkdir .public
-#    - cp dashboard/build/*.woff .public
-#    - cp dashboard/build/*.woff2 .public
-#    - cp dashboard/build/dashboard.* .public
-#    - cp dashboard/build/index.html .public
-#    - mv .public public
-#  retry: 2
-#  artifacts:
-#    paths:
-#      - public
-#  only:
-#    - main
-#
+pages:
+  stage: deploy
+  needs: ['build', 'test', 'npm_dashboard']
+  script:
+    - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
+    - mkdir .public
+    - cp dashboard/build/*.woff .public
+    - cp dashboard/build/*.woff2 .public
+    - cp dashboard/build/dashboard.* .public
+    - cp dashboard/build/index.html .public
+    - mv .public public
+  retry: 2
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
