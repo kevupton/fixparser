@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.3.8",
+  "version": "5.3.9",
   "description": "FIX 5.0 SP2 Parser",
   "main": "./build/cjs/FIXParser.js",
   "module": "./build/esm/FIXParser.js",
@@ -73,5 +73,32 @@
     "Financial Information eXchange"
   ],
   "author": "fixparser.io",
-  "license": "LICENSE.md"
+  "license": "LICENSE.md",
+  "exports": {
+    ".": {
+      "import": "./build/esm/FIXParser.js",
+      "require": "./build/cjs/FIXParser.js"
+    },
+    "./FIXParserBrowser": {
+      "import": "./build/esm/FIXParserBrowser.js",
+      "require": "./build/cjs/FIXParserBrowser.js"
+    },
+    "./FIXServer": {
+      "import": "./build/esm/FIXServer.js",
+      "require": "./build/cjs/FIXServer.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/src/FIXParser.d.ts"
+      ],
+      "FIXParserBrowser": [
+        "build/src/FIXParserBrowser.d.ts"
+      ],
+      "FIXServer": [
+        "build/src/FIXServer.d.ts"
+      ]
+    }
+  }
 }
