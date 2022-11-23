@@ -28,6 +28,7 @@ const config: Config.InitialOptions = {
     verbose: true,
     forceExit: true,
     restoreMocks: true,
+    testEnvironment: 'jsdom',
     transform: {
         '^.+\\.(t|j)sx?$': '@swc/jest',
     },
