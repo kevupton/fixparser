@@ -4,7 +4,7 @@ import { packageVersion, buildTime, releaseInformation } from './../globals';
 
 const baseConfig: BuildOptions = {
     bundle: true,
-    minify: true,
+    minify: false,
     platform: 'node',
     target: 'esnext',
     format: 'cjs',

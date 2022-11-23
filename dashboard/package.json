@@ -1,6 +1,6 @@
 {
   "name": "fixparser-dashboard",
-  "version": "5.3.6",
+  "version": "5.3.7",
   "description": "FIXParser Dashboard",
   "main": "dashboard/build/dashboard.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "dependencies": {
     "@textea/json-viewer": "2.11.1",
     "classnames": "2.3.2",
+    "fixparser": "5.3.7",
     "moment": "2.29.4",
     "uikit": "3.15.14"
   },
