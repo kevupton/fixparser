@@ -45,23 +45,6 @@ performance:
   when: manual
   allow_failure: true
 
-pages:
-  stage: deploy
-  needs: ['build', 'test']
-  script:
-    - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
-    - mkdir .public
-    - cp dashboard/build/*.woff .public
-    - cp dashboard/build/*.woff2 .public
-    - cp dashboard/build/dashboard.* .public
-    - cp dashboard/build/index.html .public
-    - mv .public public
-  artifacts:
-    paths:
-      - public
-  only:
-    - main
-
 npm_fixparser:
   stage: deploy
   needs: ['build', 'test']
@@ -95,7 +78,7 @@ npm_fixparser:
 
 npm_dashboard:
   stage: deploy
-  needs: ['build', 'test']
+  needs: ['build', 'test', 'npm_fixparser']
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^release-\d+.\d+.\d+/
       changes:
@@ -124,3 +107,23 @@ npm_dashboard:
       else
         echo "Version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} has already been published, so no new version has been published."
       fi
+  retry: 2
+
+pages:
+  stage: deploy
+  needs: ['build', 'test', 'npm_dashboard']
+  script:
+    - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
+    - mkdir .public
+    - cp dashboard/build/*.woff .public
+    - cp dashboard/build/*.woff2 .public
+    - cp dashboard/build/dashboard.* .public
+    - cp dashboard/build/index.html .public
+    - mv .public public
+  retry: 2
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
