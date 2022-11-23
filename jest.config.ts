@@ -4,6 +4,7 @@ const config: Config.InitialOptions = {
     globals: {
         __PACKAGE_VERSION__: true,
         __BUILD_TIME__: true,
+        __RELEASE_INFORMATION__: true,
     },
     clearMocks: true,
     collectCoverage: true,
