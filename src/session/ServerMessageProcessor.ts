@@ -6,7 +6,7 @@
  * Released under Commercial license. Check LICENSE.md
  */
 import { MessageEnum } from '../fieldtypes/MessageEnum';
-import FIXServer, { LicenseManager } from '../FIXServer';
+import { FIXServer, LicenseManager } from '../FIXServer';
 import { Message } from '../message/Message';
 import { log, logError } from '../util/util';
 import { handleFirstMessage } from './SessionFirstMessage';

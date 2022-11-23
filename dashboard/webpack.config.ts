@@ -5,7 +5,7 @@ import 'webpack-dev-server';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 
-import pkg from './package.json';
+import { packageVersion, buildTime, releaseInformation } from './../globals';
 
 const config: Configuration = {
     entry: {
@@ -69,11 +69,9 @@ const config: Configuration = {
             patterns: [{ from: 'templates' }, { from: 'fonts' }],
         }),
         new DefinePlugin({
-            'process.env': {
-                __PACKAGE_VERSION__: JSON.stringify(pkg.version),
-                __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
-                __RELEASE_INFORMATION__: JSON.stringify(btoa(Date.now().toString())),
-            },
+            __PACKAGE_VERSION__: JSON.stringify(packageVersion),
+            __BUILD_TIME__: JSON.stringify(buildTime),
+            __RELEASE_INFORMATION__: JSON.stringify(releaseInformation),
         }),
         new ProvidePlugin({
             process: 'process/browser',

@@ -10,7 +10,7 @@ import Websocket, { ServerOptions } from 'ws';
 
 import { Field } from './fields/Field';
 import * as Constants from './fieldtypes';
-import FIXParser from './FIXParser';
+import { FIXParser } from './FIXParser';
 import { ConnectionType, Options as FIXParserOptions, Protocol } from './FIXParserBase';
 import { IFIXParser } from './IFIXParser';
 import { LicenseManager } from './licensemanager/LicenseManager';
@@ -48,7 +48,7 @@ type Options = Pick<
     | 'onReady'
 >;
 
-export default class FIXServer implements IFIXParser {
+class FIXServer implements IFIXParser {
     public static version: Version = version;
 
     public parserName: Parser = 'FIXServer';

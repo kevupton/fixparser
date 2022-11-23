@@ -1,5 +1,5 @@
 import { TestMessage, testMessages } from './test-messages';
-import FIXParser, { Message, Fields } from '../src/FIXParser';
+import { FIXParser, Message, Fields } from '../src/FIXParser';
 
 describe('FIXParser', () => {
     const fixParser: FIXParser = new FIXParser();

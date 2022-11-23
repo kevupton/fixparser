@@ -40,7 +40,7 @@ export type Options = Pick<
     | 'onReady'
 >;
 
-export default class FIXParserBrowser implements IFIXParser {
+class FIXParserBrowser implements IFIXParser {
     public static version: Version = version;
     public parserName: Parser = 'FIXParserBrowser';
     public fixParserBase: FIXParserBase = new FIXParserBase();

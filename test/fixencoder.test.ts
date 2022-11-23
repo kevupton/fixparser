@@ -1,4 +1,4 @@
-import FIXParser, { Message, Field, Fields, Messages, EncryptMethod } from '../src/FIXParser';
+import { FIXParser, Message, Field, Fields, Messages, EncryptMethod } from '../src/FIXParser';
 
 describe('FIXEncoder', () => {
     const fixParser: FIXParser = new FIXParser();

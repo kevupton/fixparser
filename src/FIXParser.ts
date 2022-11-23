@@ -34,7 +34,7 @@ import {
     version,
 } from './util/util';
 
-export default class FIXParser implements IFIXParser {
+class FIXParser implements IFIXParser {
     public static version: Version = version;
 
     public parserName: Parser = 'FIXParser';

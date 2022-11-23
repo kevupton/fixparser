@@ -3,7 +3,7 @@ import { URL } from 'url';
 import WebSocket from 'ws';
 import { connect, TLSSocket } from 'tls';
 
-import FIXParser from '../src/FIXParser';
+import { FIXParser } from '../src/FIXParser';
 import { mockLicense } from './setup';
 import { Socket } from 'net';
 

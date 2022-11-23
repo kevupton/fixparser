@@ -72,7 +72,7 @@ Install with `npm install fixparser`.
 Parse a FIX message:
 
 ```typescript
-import FIXParser from 'fixparser';
+import { FIXParser } from 'fixparser';
 const fixParser: FIXParser = new FIXParser();
 const messages: Message[] = fixParser.parse('8=FIX.4.2|9=51|35=0|34=703|49=ABC|52=20100130-10:53:40.830|56=XYZ|10=249|');
 ```
