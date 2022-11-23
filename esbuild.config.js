@@ -32,9 +32,9 @@ esbuild
         sourcemap: true,
         target: 'node18',
         define: {
-            __PACKAGE_VERSION__: JSON.stringify(pkg.version),
-            __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
-            __RELEASE_INFORMATION__: JSON.stringify(btoa(Date.now().toString())),
+            __PACKAGE_VERSION__: JSON.stringify(packageVersion),
+            __BUILD_TIME__: JSON.stringify(buildTime),
+            __RELEASE_INFORMATION__: JSON.stringify(releaseInformation),
         },
     })
     .catch(() => process.exit(1));
@@ -48,9 +48,9 @@ esbuild
         platform: 'browser',
         sourcemap: true,
         define: {
-            __PACKAGE_VERSION__: JSON.stringify(pkg.version),
-            __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
-            __RELEASE_INFORMATION__: JSON.stringify(btoa(Date.now().toString())),
+            __PACKAGE_VERSION__: JSON.stringify(packageVersion),
+            __BUILD_TIME__: JSON.stringify(buildTime),
+            __RELEASE_INFORMATION__: JSON.stringify(releaseInformation),
         },
     })
     .catch(() => process.exit(1));
