@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { JsonViewer } from '@textea/json-viewer';
 
-import { FIXParser, Fields, Field, Message } from '../../../src/FIXParserBrowser';
+import { FIXParser, Fields, Field, Message } from 'fixparser';
 import { MessageDetailListItem } from './MessageDetailListItem';
 import { getValue } from '../Dashboard';
 

@@ -1,24 +1,25 @@
 {
   "name": "fixparser",
-  "version": "5.3.4",
+  "version": "5.3.5",
   "description": "FIX 5.0 SP2 Parser",
-  "main": "./fixparser.js",
-  "module": "src/FIXParser.ts",
+  "main": "./build/cjs/index.js",
+  "module": "./build/esm/index.js",
+  "types": "./build/src/FIXParser.d.ts",
   "browser": "./browser.js",
   "files": [
-    "./examples/",
-    "./types/",
-    "./browser.js",
-    "./fixparser.js",
-    "./server.js"
+    "./build/",
+    "./examples/"
   ],
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/logotype/fixparser.git"
   },
   "scripts": {
+    "prebuild": "tsx --max-old-space-size=4096 prebuild/setup.ts --extensions \\\".ts\\\"",
     "prettier": "node_modules/prettier/bin-prettier.js \"**/*.{js,ts,tsx}\" --write",
-    "build": "node esbuild.config.js",
+    "build": "npm run clean && npm run type:dts && npm run build:main",
+    "build:main": "node -r ./esbuild-hook ./scripts/build",
+    "clean": "node -r ./esbuild-hook ./scripts/clean",
     "example:parse_message": "tsx examples/run-example.ts example_parse_message.ts",
     "example:tcp_client": "tsx examples/run-example.ts example_tcp_client.ts",
     "example:tcp_server": "tsx examples/run-example.ts example_tcp_server.ts",
@@ -30,8 +31,8 @@
     "perf": "node --prof perf/Perf-FIXParser.js && node --prof-process isolate-*.log | cat",
     "test": "jest --ci --colors",
     "upgrade-interactive": "ncu -u -t latest",
-    "prebuild": "tsx --max-old-space-size=4096 prebuild/setup.ts --extensions \\\".ts\\\"",
-    "postbuild": "./node_modules/typescript/bin/tsc --project tsconfig-types.json"
+    "type:check": "tsc --noEmit",
+    "type:dts": "tsc --emitDeclarationOnly"
   },
   "dependencies": {
     "@openpgp/web-stream-tools": "0.0.13",
@@ -50,9 +51,10 @@
     "jest": "^29.3.1",
     "jest-junit": "15.0.0",
     "mockdate": "3.0.5",
-    "npm-check-updates": "16.4.2",
-    "prettier": "2.7.1",
+    "npm-check-updates": "16.4.3",
+    "prettier": "2.8.0",
     "process": "0.11.10",
+    "source-map-support": "^0.5.21",
     "tsx": "^3.12.1",
     "typescript": "4.9.3"
   },
@@ -70,6 +72,5 @@
     "Financial Information eXchange"
   ],
   "author": "fixparser.io",
-  "license": "LICENSE.md",
-  "types": "./types/fixparser.d.ts"
+  "license": "LICENSE.md"
 }

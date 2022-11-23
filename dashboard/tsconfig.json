@@ -2,7 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "typeRoots": ["./src/types", "./node_modules/@types"]
+    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "types": ["fixparser"]
   },
   "include": [
     "src/**/*"

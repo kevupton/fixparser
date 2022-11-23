@@ -1,15 +1,23 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "target": "esnext",
-    "moduleResolution": "node",
+    "lib": ["es2020", "dom"],
+    "module": "commonjs",
+    "target": "es2020",
+
+    "rootDir": "./",
+    "outDir": "./build",
+
     "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+
     "alwaysStrict": true,
     "allowJs": false,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
     "isolatedModules": false,
-    "sourceMap": true,
     "noImplicitAny": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -22,9 +30,6 @@
     "strictPropertyInitialization": true
   },
   "include": [
-    "examples/**/*",
-    "src/**/*",
-    "spec/**/*",
-    "prebuild/**/*"
+    "./src/**/*.ts",
   ]
 }

@@ -62,6 +62,9 @@ const config: Configuration = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.json'],
+        alias: {
+            fixparser: path.resolve(__dirname, '../src/FIXParserBrowser.ts'),
+        },
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: './dashboard.css' }),
