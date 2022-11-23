@@ -15,9 +15,9 @@ esbuild
         sourcemap: true,
         target: 'node18',
         define: {
-            'process.env.__PACKAGE_VERSION__': JSON.stringify(packageVersion),
-            'process.env.__BUILD_TIME__': JSON.stringify(buildTime),
-            'process.env.__RELEASE_INFORMATION__': JSON.stringify(releaseInformation),
+            __PACKAGE_VERSION__: JSON.stringify(packageVersion),
+            __BUILD_TIME__: JSON.stringify(buildTime),
+            __RELEASE_INFORMATION__: JSON.stringify(releaseInformation),
         },
     })
     .catch(() => process.exit(1));
