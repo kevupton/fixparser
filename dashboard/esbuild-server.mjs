@@ -1,62 +1,22 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { createServer, request } from 'http';
 import { spawn } from 'child_process';
-import { resolve } from 'path';
 
-import { build, serve } from 'esbuild';
+import { build as esbuild, serve } from 'esbuild';
 import chalk from 'chalk';
 import moment from 'moment';
 import { Command } from 'commander';
-import { copy } from 'esbuild-plugin-copy';
-import { clean } from 'esbuild-plugin-clean';
-import sassPlugin from 'esbuild-plugin-sass';
 
-import { packageVersion, buildTime, releaseInformation } from './../globals.js';
-
-const publicDir = './public';
-const publicOutputDir = './build';
-const publicOutFile = 'dashboard.js';
-const srcHtmlFile = './src/index.html';
-const destinationHTML = `${publicOutputDir}/index.html`;
-
-const prepareFolder = () => {
-    !existsSync(`${publicOutputDir}/`) && mkdirSync(`${publicOutputDir}/`);
-};
-
-const injectJsFile = () => {
-    try {
-        const str = readFileSync(srcHtmlFile)
-            .toString()
-            .replace(/<\/body>/, `\t<script src="${publicOutFile}"></script>\n\t<\/body>`);
-
-        writeFileSync(destinationHTML, str);
-        const message = `injected script based on ${publicOutFile} file into ${destinationHTML}`;
-        console.log(`[${chalk.grey(moment().format('h:mm:ss A'))}] injector: ${chalk.green(message)}`);
-    } catch (error) {
-        const message = `error while injecting script based on ${publicOutFile} file into ${destinationHTML}`;
-        console.log(`[${chalk.grey(moment().format('h:mm:ss A'))}] injector: ${chalk.red(message)}`);
-    }
-};
+import { prepareFolder, injectJsFile, baseConfig, publicOutputDir } from './esbuild-config.mjs';
 
 const createEsBuildServer = async () => {
     const clients = [];
     const NODE_PORT = 8090;
 
-    build({
-        entryPoints: ['./src/ApplicationRenderer.tsx'],
-        platform: 'browser',
-        bundle: true,
+    esbuild({
+        ...baseConfig,
         minify: false,
-        loader: {
-            '.tsx': 'tsx',
-            '.ts': 'ts',
-            '.woff': 'file',
-            '.woff2': 'file',
-        },
-        tsconfig: './tsconfig.json',
         incremental: true,
         sourcemap: true,
-        outfile: `${publicOutputDir}/${publicOutFile}`,
         banner: { js: ' (() => new EventSource("/esbuild").onmessage = () => location.reload())();' },
         watch: {
             onRebuild(error) {
@@ -76,32 +36,6 @@ const createEsBuildServer = async () => {
                     );
             },
         },
-        define: {
-            'process.env.NODE_ENV': '"development"',
-            __PACKAGE_VERSION__: JSON.stringify(packageVersion),
-            __BUILD_TIME__: JSON.stringify(buildTime),
-            __RELEASE_INFORMATION__: JSON.stringify(releaseInformation),
-        },
-        plugins: [
-            sassPlugin({
-                customSassOptions: {
-                    loadPaths: [resolve('./node_modules')],
-                },
-            }),
-            clean({
-                patterns: ['build/*', `!${destinationHTML}`],
-                sync: true,
-                verbose: false,
-            }),
-            copy({
-                resolveFrom: 'cwd',
-                assets: {
-                    from: [`${publicDir}/**/*`],
-                    to: [`${publicOutputDir}`],
-                    keepStructure: true,
-                },
-            }),
-        ],
     }).catch(() => process.exit(1));
 
     const result = await serve({ servedir: publicOutputDir }, {});
