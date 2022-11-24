@@ -101,7 +101,7 @@ npm_dashboard:
     # If the package.json version has not yet been published, run `npm publish`.
     - |
       if [[ $(npm view "${NPM_PACKAGE_NAME}" versions) != *"'${NPM_PACKAGE_VERSION}'"* ]]; then
-        npm ci && npm rebuild node-sass && npm run build
+        npm ci && npm run build
         npm publish
         echo "Successfully published version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} to the NPM registry."
       else
@@ -113,7 +113,7 @@ pages:
   stage: deploy
   needs: ['build', 'test']
   script:
-    - cd dashboard && npm ci && npm rebuild node-sass && npm run build && cd ..
+    - cd dashboard && npm ci && npm run build && cd ..
     - mkdir .public
     - cp dashboard/build/*.woff .public
     - cp dashboard/build/*.woff2 .public
