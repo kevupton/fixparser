@@ -27,7 +27,7 @@ export function MessageList({ messages, selectedMessage, onSelectMessage }: Mess
             <thead>
                 <tr>
                     <td colSpan={5} className="no-padding">
-                        <div className="uk-alert-muted" uk-alert="true">
+                        <div className="uk-alert-muted uk-alert">
                             <h3>Timeline</h3>
                             Click on a list item below to see FIX message details.
                         </div>

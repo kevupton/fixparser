@@ -48,7 +48,7 @@ export function Dashboard(): JSX.Element {
     return (
         <Fragment>
             <div>
-                <div className="uk-section  uk-section-primary uk-section-small uk-light">
+                <div className="uk-section uk-section-primary uk-section-small uk-light">
                     <div className="uk-container">
                         <h3>
                             FIXParser is{' '}
@@ -57,7 +57,7 @@ export function Dashboard(): JSX.Element {
                             </a>{' '}
                             at GitLab
                         </h3>
-                        <div className="uk-alert-warning" data-uk-alert="">
+                        <div className="uk-alert-warning uk-alert" data-uk-alert="">
                             <a className="uk-alert-close" data-uk-close="" />
                             <h3 className="enterprise-header">FIXParser Enterprise version</h3>
                             <p>
@@ -86,7 +86,7 @@ export function Dashboard(): JSX.Element {
                 </div>
                 <div className="uk-section uk-section-default small-fonts">
                     <div className="uk-container">
-                        <div className="uk-grid-large uk-child-width-expand@s" uk-grid="true">
+                        <div className="uk-grid-large uk-child-width-expand@s uk-grid">
                             <MessageList
                                 messages={messages}
                                 selectedMessage={selectedMessage}

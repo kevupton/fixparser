@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.4.4",
+  "version": "5.4.5",
   "description": "FIX 5.0 SP2 Parser",
   "files": [
     "./build/",
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "prebuild": "tsx --max-old-space-size=4096 prebuild/setup.ts --extensions \\\".ts\\\"",
-    "prettier": "node_modules/prettier/bin-prettier.js \"**/*.{js,ts,tsx}\" --write",
+    "prettier": "node_modules/prettier/bin-prettier.js \"**/*.{js,mjs,ts,tsx}\" --write",
     "build": "npm run clean && npm run type:dts && npm run build:main",
     "build:main": "node -r ./esbuild-hook ./scripts/build",
     "clean": "node -r ./esbuild-hook ./scripts/clean",

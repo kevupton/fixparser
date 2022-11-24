@@ -67,7 +67,7 @@ export function MessageDetailList({ message, parser }: MessageDetailListProps): 
             <thead>
                 <tr>
                     <td colSpan={4} className="no-padding">
-                        <div className="uk-alert-primary" uk-alert="true">
+                        <div className="uk-alert-primary uk-alert">
                             <h3>{messageDescription}</h3>
                             <p>{messageElaboration}</p>
                             <input
