@@ -16,65 +16,59 @@ const baseConfig: BuildOptions = {
     },
 };
 
+const nodeConfig: BuildOptions = {
+    ...baseConfig,
+    format: 'cjs',
+    platform: 'node',
+    banner: {
+        js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+    },
+};
+
+const browserConfig: BuildOptions = {
+    ...baseConfig,
+    format: 'cjs',
+    platform: 'browser',
+};
+
 async function main() {
     await esbuild({
-        ...baseConfig,
-        format: 'cjs',
-        platform: 'node',
+        ...nodeConfig,
         outdir: path.join(__dirname, '../build/cjs'),
         entryPoints: [path.join(__dirname, './../src/FIXParser.ts')],
-        banner: {
-            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
-        },
     });
     await esbuild({
-        ...baseConfig,
-        format: 'cjs',
-        platform: 'node',
+        ...nodeConfig,
         outdir: path.join(__dirname, '../build/cjs'),
         entryPoints: [path.join(__dirname, './../src/FIXServer.ts')],
-        banner: {
-            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
-        },
     });
     await esbuild({
-        ...baseConfig,
-        format: 'cjs',
-        platform: 'browser',
+        ...browserConfig,
         outdir: path.join(__dirname, '../build/cjs'),
         entryPoints: [path.join(__dirname, './../src/FIXParserBrowser.ts')],
     });
 
     await esbuild({
-        ...baseConfig,
+        ...nodeConfig,
         format: 'esm',
-        platform: 'node',
         outExtension: {
             '.js': '.mjs',
         },
         outdir: path.join(__dirname, '../build/esm'),
         entryPoints: [path.join(__dirname, './../src/FIXParser.ts')],
-        banner: {
-            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
-        },
     });
     await esbuild({
-        ...baseConfig,
+        ...nodeConfig,
         format: 'esm',
-        platform: 'node',
         outExtension: {
             '.js': '.mjs',
         },
         outdir: path.join(__dirname, '../build/esm'),
         entryPoints: [path.join(__dirname, './../src/FIXServer.ts')],
-        banner: {
-            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
-        },
     });
     await esbuild({
-        ...baseConfig,
+        ...browserConfig,
         format: 'esm',
-        platform: 'browser',
         outExtension: {
             '.js': '.mjs',
         },
