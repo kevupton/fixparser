@@ -9,9 +9,6 @@ const baseConfig: BuildOptions = {
     sourcemap: true,
     nodePaths: [path.join(__dirname, '../src')],
     external: [],
-    banner: {
-        js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
-    },
     define: {
         __PACKAGE_VERSION__: JSON.stringify(packageVersion),
         __BUILD_TIME__: JSON.stringify(buildTime),
@@ -26,6 +23,9 @@ async function main() {
         platform: 'node',
         outdir: path.join(__dirname, '../build/cjs'),
         entryPoints: [path.join(__dirname, './../src/FIXParser.ts')],
+        banner: {
+            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+        },
     });
     await esbuild({
         ...baseConfig,
@@ -33,6 +33,9 @@ async function main() {
         platform: 'node',
         outdir: path.join(__dirname, '../build/cjs'),
         entryPoints: [path.join(__dirname, './../src/FIXServer.ts')],
+        banner: {
+            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+        },
     });
     await esbuild({
         ...baseConfig,
@@ -51,6 +54,9 @@ async function main() {
         },
         outdir: path.join(__dirname, '../build/esm'),
         entryPoints: [path.join(__dirname, './../src/FIXParser.ts')],
+        banner: {
+            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+        },
     });
     await esbuild({
         ...baseConfig,
@@ -61,6 +67,9 @@ async function main() {
         },
         outdir: path.join(__dirname, '../build/esm'),
         entryPoints: [path.join(__dirname, './../src/FIXServer.ts')],
+        banner: {
+            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+        },
     });
     await esbuild({
         ...baseConfig,

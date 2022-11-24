@@ -240,7 +240,9 @@ export { Message };
 export { FIXParserBrowser as FIXParser };
 
 declare global {
-    interface Window { FIXParser: typeof FIXParserBrowser; }
+    interface Window {
+        FIXParser: typeof FIXParserBrowser;
+    }
 }
 
 window.FIXParser = FIXParserBrowser;

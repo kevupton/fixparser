@@ -159,6 +159,7 @@ const order: Message = fixParser.createMessage(
     new Field(Fields.TimeInForce, TimeInForce.Day)
 );
 console.log(order.encode('|'));
+// 8=FIX.5.0SP2|9=129|35=D|34=1|49=SENDER|52=20221123-23:04:59.132|56=TARGET|11=11223344|21=1|38=123|60=20221123-23:04:59.132|40=1|54=1|55=123.HK|59=0|10=061|
 ```
 
 **FIXParser Enterprise** Connect over TCP socket (as client):
