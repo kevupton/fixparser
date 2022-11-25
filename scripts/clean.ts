@@ -1,17 +1,17 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-async function main() {
-    await Promise.all([rmrf('build'), rmrf('test-reports')]);
-}
-
-async function rmrf(pathFromRoot: string): Promise<void> {
+const rmrf = async (pathFromRoot: string): Promise<void> => {
     await fs.rm(path.join(__dirname, '../', pathFromRoot), {
         recursive: true,
         force: true,
     });
-}
+};
+
+const main = async (): Promise<void> => {
+    await Promise.all([rmrf('build'), rmrf('test-reports')]);
+};
 
 if (require.main === module) {
-    main();
+    void main();
 }

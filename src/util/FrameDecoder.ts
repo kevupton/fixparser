@@ -17,7 +17,8 @@ export class FrameDecoder extends Transform {
 
     public override _transform(chunk: string, encoding: string, callback: TransformCallback): void {
         const chunks: string[] = (String(this.data) + chunk).split(/(8=.+?\x0110=\d\d\d\x01)/gs);
-        for (let i: number = 0; i < chunks.length - 1; i++) {
+        let i: number = 0;
+        for (i; i < chunks.length - 1; i++) {
             this.push(chunks[i]);
         }
         this.data = chunks[chunks.length - 1];

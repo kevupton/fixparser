@@ -11,8 +11,8 @@ export type Version = {
 };
 
 declare global {
-    var __PACKAGE_VERSION__: string;
-    var __BUILD_TIME__: string;
+    const __PACKAGE_VERSION__: string;
+    const __BUILD_TIME__: string;
 }
 
 export const version: Version = {
@@ -29,12 +29,16 @@ export const RE_ESCAPE: RegExp = /[.*+?^${}()|[\]\\]/g;
 export const RE_FIND: RegExp = /8=FIXT?\.\d\.\d([^\d]+)/i;
 export const READY_MS: number = 100;
 
-export const loggingSettings = {
+type LoggingSettings = {
+    enabled: boolean;
+};
+
+export const loggingSettings: LoggingSettings = {
     enabled: true,
 };
 
 const logTimestamp = (): string => {
-    const date = new Date();
+    const date: Date = new Date();
     return `${date
         .toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' })
         .replace(/(\d+)\/(\d+)\/(\d+)/, '$3$1$2')}-${String(date.getHours()).padStart(2, '0')}:${String(
@@ -57,7 +61,7 @@ export const pad = (value: number, size: number): string => {
 };
 
 export const adjustForTimezone = (date: Date): Date => {
-    const timeOffsetInMS = date.getTimezoneOffset() * 60000;
+    const timeOffsetInMS: number = date.getTimezoneOffset() * 60000;
     date.setTime(date.getTime() + timeOffsetInMS);
     return date;
 };
@@ -66,7 +70,7 @@ export const timestamp = (dateObject: Date): string => {
     if (isNaN(dateObject.getTime())) {
         logError('Invalid date specified!');
     }
-    const date = adjustForTimezone(dateObject);
+    const date: Date = adjustForTimezone(dateObject);
     return `${date.getFullYear()}${pad(date.getMonth() + 1, 2)}${pad(date.getDate(), 2)}-${pad(
         date.getHours(),
         2,

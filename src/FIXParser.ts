@@ -158,7 +158,7 @@ class FIXParser implements IFIXParser {
                 this.stopHeartbeat();
             });
         } else if (protocol === 'websocket') {
-            const connectionString =
+            const connectionString: string =
                 host.indexOf('ws://') === -1 && host.indexOf('wss://') === -1
                     ? `ws://${host}:${port}`
                     : `${host}:${port}`;
@@ -170,7 +170,7 @@ class FIXParser implements IFIXParser {
                 this.socket = new WebSocket(connectionString);
             }
             this.socket.on('message', (data: string | Buffer) => {
-                const messages = this.parse(data.toString());
+                const messages: Message[] = this.parse(data.toString());
                 let i: number = 0;
                 for (i; i < messages.length; i++) {
                     clientProcessMessage(this, messages[i]);

@@ -22,7 +22,7 @@ export class Messages {
     }
 
     public setMessageType(message: Message, field: Field): void {
-        const messageType = this.cacheMap.get(field.value as string);
+        const messageType: ISpecMessages | undefined = this.cacheMap.get(field.value as string);
         if (messageType) {
             message.setDescription(messageType.Name);
             message.setMessageType(messageType.MsgType);

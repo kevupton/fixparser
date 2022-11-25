@@ -15,7 +15,7 @@ const missingOrEmpty = (value?: string | null): boolean => {
 };
 
 declare global {
-    var __RELEASE_INFORMATION__: string;
+    const __RELEASE_INFORMATION__: string;
 }
 
 export class LicenseManager {

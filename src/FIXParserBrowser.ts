@@ -146,7 +146,7 @@ class FIXParserBrowser implements IFIXParser {
             this.stopHeartbeat();
         });
         this.socket.addEventListener('message', (event) => {
-            const messages = this.fixParserBase.parse(event.data as string);
+            const messages: Message[] = this.fixParserBase.parse(event.data as string);
             let i: number = 0;
             for (i; i < messages.length; i++) {
                 clientProcessMessage(this, messages[i]);

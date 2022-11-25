@@ -1,6 +1,7 @@
-import path from 'path';
 import { build as esbuild, BuildOptions } from 'esbuild';
-import { packageVersion, buildTime, releaseInformation } from './../globals';
+import path from 'path';
+
+import { buildTime, packageVersion, releaseInformation } from './../globals';
 
 const baseConfig: BuildOptions = {
     bundle: true,
@@ -31,7 +32,7 @@ const browserConfig: BuildOptions = {
     platform: 'browser',
 };
 
-async function main() {
+const main = async (): Promise<void> => {
     await esbuild({
         ...nodeConfig,
         outdir: path.join(__dirname, '../build/cjs'),
@@ -75,8 +76,8 @@ async function main() {
         outdir: path.join(__dirname, '../build/esm'),
         entryPoints: [path.join(__dirname, './../src/FIXParserBrowser.ts')],
     });
-}
+};
 
 if (require.main === module) {
-    main();
+    void main();
 }

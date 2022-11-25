@@ -29,7 +29,7 @@ export class Fields {
     }
 
     public processField(message: Message, field: Field): void {
-        const data = this.cacheMap.get(field.tag);
+        const data: ISpecFields | undefined = this.cacheMap.get(field.tag);
         if (data) {
             if (field.tag === FieldEnum.MsgType) {
                 this.messages.setMessageType(message, field);

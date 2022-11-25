@@ -145,7 +145,7 @@ class FIXServer implements IFIXParser {
                 this.socket = socket;
                 this.socket.pipe(new FrameDecoder()).on('data', (data: string) => {
                     this.connected = true;
-                    const messages = this.parse(data.toString());
+                    const messages: Message[] = this.parse(data.toString());
                     let i: number = 0;
                     for (i; i < messages.length; i++) {
                         serverProcessMessage(this, messages[i]);
@@ -199,7 +199,7 @@ class FIXServer implements IFIXParser {
             this.server.on('connection', (socket) => {
                 this.connected = true;
                 socket.on('message', (data: string | Buffer) => {
-                    const messages = this.parse(data.toString());
+                    const messages: Message[] = this.parse(data.toString());
                     let i: number = 0;
                     for (i; i < messages.length; i++) {
                         serverProcessMessage(this, messages[i]);

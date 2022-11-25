@@ -49,8 +49,8 @@ messageContents.forEach((messageContent) => {
     }));
 });
 
-const outputPath = 'prebuild/';
-const outputFilename = `${outputPath}MessageContents.prebuilt.json`;
+const outputPath: string = 'prebuild/';
+const outputFilename: string = `${outputPath}MessageContents.prebuilt.json`;
 console.log(`Built message content cache map, writing to ${outputFilename}.`);
 
 if (!fs.existsSync(outputPath)) {

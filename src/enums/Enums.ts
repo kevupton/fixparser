@@ -24,7 +24,7 @@ export class Enums {
     }
 
     public processEnum(field: Field): void {
-        const enumTypes = new EnumType();
+        const enumTypes: EnumType = new EnumType();
         const foundEnum: ISpecEnums | undefined = this.cacheMap.get(`${field.tag}|${field.value}`);
         if (foundEnum) {
             enumTypes.setEnumeration(foundEnum);

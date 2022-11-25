@@ -105,7 +105,8 @@ export class Message {
     #calculateChecksum = (value: string): string => {
         let integerValues: number = 0;
 
-        for (let i: number = 0; i < value.length; i++) {
+        let i: number = 0;
+        for (i; i < value.length; i++) {
             integerValues += value.charCodeAt(i);
         }
 
@@ -128,7 +129,8 @@ export class Message {
 
     #nonEmpty = (parts: TemplateStringsArray, ...args: string[]): string => {
         let res: string = parts[0];
-        for (let i: number = 1; i < parts.length; i++) {
+        let i: number = 1;
+        for (i; i < parts.length; i++) {
             if (args[i - 1] || args[i - 1] === '0') {
                 res += args[i - 1];
             }
@@ -144,7 +146,7 @@ export class Message {
         const messageContentsCloned: IMessageContents[] = JSON.parse(JSON.stringify(message.messageContents));
 
         messageDataCloned.forEach((field: Field, index: number) => {
-            const spec = messageContentsCloned.find((item: any) => {
+            const spec: IMessageContents | undefined = messageContentsCloned.find((item: any) => {
                 if (item.components!.length > 0) {
                     return item.components!.find((subItem: any) => {
                         const found = Number(subItem.tagText) === field.tag;
@@ -417,10 +419,10 @@ export class Message {
         const fields: Field[] = this.data.map((field: Field) => new Field(field.tag, field.value));
         const data: string[] = [];
 
-        let beginString = new Field(FieldEnum.BeginString, this.fixVersion).toString();
-        let bodyLength = new Field(FieldEnum.BodyLength, MARKER_BODYLENGTH).toString();
-        let checksum = new Field(FieldEnum.CheckSum, MARKER_CHECKSUM).toString();
-        let index = fields.findIndex((field) => field.tag === FieldEnum.BeginString);
+        let beginString: string = new Field(FieldEnum.BeginString, this.fixVersion).toString();
+        let bodyLength: string = new Field(FieldEnum.BodyLength, MARKER_BODYLENGTH).toString();
+        let checksum: string = new Field(FieldEnum.CheckSum, MARKER_CHECKSUM).toString();
+        let index: number = fields.findIndex((field) => field.tag === FieldEnum.BeginString);
 
         // Check for header
         if (index > -1) {
@@ -452,12 +454,12 @@ export class Message {
 
         data.push(checksum);
 
-        let fixMessage = `${data.join(separator)}${separator}`;
+        let fixMessage: string = `${data.join(separator)}${separator}`;
         fixMessage = fixMessage.replace(MARKER_BODYLENGTH, this.#calculateBodyLength(fixMessage).toString());
 
-        const length =
+        const length: number =
             fixMessage.lastIndexOf(TAG_CHECKSUM) === -1 ? fixMessage.length : fixMessage.lastIndexOf(TAG_CHECKSUM);
-        const calculatedChecksum = this.#calculateChecksum(fixMessage.substring(0, length));
+        const calculatedChecksum: string = this.#calculateChecksum(fixMessage.substring(0, length));
         fixMessage = fixMessage.replace(MARKER_CHECKSUM, calculatedChecksum);
 
         return fixMessage;

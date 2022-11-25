@@ -91,8 +91,8 @@ export class FIXParserBase {
     public parse(data: string): Message[] {
         let i: number = 0;
 
-        const messageStrings = data ? data.split('8=FIX') : [];
-        const messages = [];
+        const messageStrings: string[] = data ? data.split('8=FIX') : [];
+        const messages: Message[] = [];
 
         for (i; i < messageStrings.length; i++) {
             this.message = new Message(this.fixVersion);
