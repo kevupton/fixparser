@@ -17,17 +17,17 @@ export class FieldType {
         this.reset();
     }
 
-    public reset(): void {
-        this.name = null;
-        this.baseType = null;
-        this.description = null;
-        this.added = null;
-    }
-
     public setType(type: ISpecDatatypes): void {
         this.name = type.Name;
         this.baseType = type.BaseType!;
         this.description = type.Description;
         this.added = type.added!;
+    }
+
+    public reset(): void {
+        this.name = null;
+        this.baseType = null;
+        this.description = null;
+        this.added = null;
     }
 }

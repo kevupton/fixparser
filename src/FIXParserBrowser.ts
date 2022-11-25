@@ -125,7 +125,6 @@ class FIXParserBrowser implements IFIXParser {
                 ? `ws://${this.host}:${this.port}`
                 : `${this.host}:${this.port}`,
         );
-
         this.socket.addEventListener('open', (event) => {
             this.connected = true;
             log(

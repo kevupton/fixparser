@@ -27,7 +27,7 @@ export const handleResendRequest = (parser: IFIXParser, messageBuffer: MessageBu
     if (from && from >= 1 && to <= MAX_BUFFER) {
         let i: number = from;
         for (from; i <= to; i++) {
-            const messageBySequence = messageBuffer.getByMsgSequence(i);
+            const messageBySequence: Message | null = messageBuffer.getByMsgSequence(i);
             if (messageBySequence) {
                 messageBySequence.removeFieldByTag(FieldEnum.PossDupFlag);
                 messageBySequence.addField(new Field(FieldEnum.PossDupFlag, 'Y'));

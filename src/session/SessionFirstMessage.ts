@@ -16,7 +16,7 @@ export const handleFirstMessage = (parser: IFIXParser, message: Message): boolea
     if (message.getField(FieldEnum.MsgType)!.value! === MessageEnum.Logon) {
         return true;
     } else {
-        const firstMessageNotALogon = parser.createMessage(
+        const firstMessageNotALogon: Message = parser.createMessage(
             new Field(FieldEnum.MsgType, MessageEnum.Logout),
             new Field(FieldEnum.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
             new Field(

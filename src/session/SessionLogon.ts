@@ -70,7 +70,7 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
             parser.nextNumIn = 1;
             parser.setNextTargetMsgSeqNum(1);
 
-            const logonAcknowledge = parser.createMessage(
+            const logonAcknowledge: Message = parser.createMessage(
                 new Field(FieldEnum.MsgType, MessageEnum.Logon),
                 new Field(FieldEnum.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
                 new Field(FieldEnum.SenderCompID, target),
@@ -112,7 +112,7 @@ export const handleLogon = (parser: IFIXParser, messageBuffer: MessageBuffer, me
         parser.startHeartbeat(heartBeatInterval);
         return true;
     } else {
-        const logonReject = parser.createMessage(
+        const logonReject: Message = parser.createMessage(
             new Field(FieldEnum.MsgType, MessageEnum.Logout),
             new Field(FieldEnum.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
             new Field(FieldEnum.SenderCompID, validSender ? sender : 'INVALID_SENDER'),

@@ -17,17 +17,6 @@ export class CategoryType {
     public volume: number | null = null;
     public includeFile: string | null = null;
 
-    public reset(): void {
-        this.categoryID = null;
-        this.fixmlFileName = null;
-        this.notReqXML = null;
-        this.generateImplFile = null;
-        this.componentType = null;
-        this.sectionID = null;
-        this.volume = null;
-        this.includeFile = null;
-    }
-
     public setCategory(category: ISpecCategories): void {
         this.categoryID = category.CategoryID;
         this.fixmlFileName = category.FIXMLFileName;
@@ -37,5 +26,16 @@ export class CategoryType {
         this.sectionID = category.SectionID!;
         this.volume = category.Volume;
         this.includeFile = category.IncludeFile!;
+    }
+
+    public reset(): void {
+        this.categoryID = null;
+        this.fixmlFileName = null;
+        this.notReqXML = null;
+        this.generateImplFile = null;
+        this.componentType = null;
+        this.sectionID = null;
+        this.volume = null;
+        this.includeFile = null;
     }
 }

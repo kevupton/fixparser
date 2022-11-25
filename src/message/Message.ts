@@ -141,14 +141,13 @@ export class Message {
 
     #validateMessage = (message: Message): any[] => {
         const result: any[] = [];
-
         const messageDataCloned: Field[] = JSON.parse(JSON.stringify(message.data));
         const messageContentsCloned: IMessageContents[] = JSON.parse(JSON.stringify(message.messageContents));
 
         messageDataCloned.forEach((field: Field, index: number) => {
-            const spec: IMessageContents | undefined = messageContentsCloned.find((item: any) => {
+            const spec: IMessageContents | undefined = messageContentsCloned.find((item: IMessageContents) => {
                 if (item.components!.length > 0) {
-                    return item.components!.find((subItem: any) => {
+                    return item.components!.find((subItem: IMessageContent) => {
                         const found = Number(subItem.tagText) === field.tag;
                         if (found) {
                             subItem.validated = true;
@@ -173,12 +172,11 @@ export class Message {
         });
 
         messageContentsCloned
-            .filter((item: any) => !item.validated)
-            .forEach((spec: any) => {
-                if (spec.components.length > 0) {
-                    spec.components
-                        .filter((subItem: IMessageContent) => !subItem.validated)
-                        .forEach((subSpec: IMessageContent) => {
+            .filter((item: IMessageContents) => !item.validated)
+            .forEach((spec: IMessageContents) => {
+                if (spec.components!.length > 0) {
+                    spec.components!.filter((subItem: IMessageContent) => !subItem.validated).forEach(
+                        (subSpec: IMessageContent) => {
                             if (!subSpec.validated) {
                                 result.push({
                                     field: null,
@@ -190,7 +188,8 @@ export class Message {
                                     valid: !(subSpec.reqd === '1'),
                                 });
                             }
-                        });
+                        },
+                    );
                 } else if (!spec.validated) {
                     result.push({
                         field: null,
@@ -274,7 +273,7 @@ export class Message {
     }
 
     public setField(field: Field): void {
-        const index = this.data.findIndex((item: Field) => item.tag === field.tag);
+        const index: number = this.data.findIndex((item: Field) => item.tag === field.tag);
         if (index > -1) {
             this.data[index] = field;
         }
@@ -315,10 +314,10 @@ export class Message {
 
     public getBriefDescription(): string | null {
         let returnValue: string = '';
-        const sideField: any = this.getField(FieldEnum.Side)!;
+        const sideField: Field | undefined = this.getField(FieldEnum.Side);
         let side: string | null = '';
-        if (sideField && sideField.enumeration!) {
-            side = sideField.enumeration!.symbolicName;
+        if (sideField && sideField.enumeration) {
+            side = sideField.enumeration.symbolicName;
             side = side ? side.replace('Sell', 'SL').toUpperCase() : null;
         }
 
@@ -477,8 +476,8 @@ export class Message {
         this.messageString = '';
         this.description = '';
         this.messageType = '';
-        this.messageContents = [];
         this.messageSequence = -1;
+        this.messageContents = [];
         this.bodyLengthValid = false;
         this.checksumValid = false;
         this.checksumValue = null;

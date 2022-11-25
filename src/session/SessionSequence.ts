@@ -24,7 +24,7 @@ export const handleSequence = (parser: IFIXParser, message: Message): boolean =>
         );
 
         // Message has wrong sequence, respond with ResendRequest
-        const resendRequest = parser.createMessage(
+        const resendRequest: Message = parser.createMessage(
             new Field(FieldEnum.MsgType, MessageEnum.ResendRequest),
             new Field(FieldEnum.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
             new Field(FieldEnum.SenderCompID, parser.sender),

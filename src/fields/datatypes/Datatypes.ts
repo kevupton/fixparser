@@ -12,11 +12,11 @@ import { FieldType } from './FieldType';
 export class DataTypes {
     public dataTypes: ISpecDatatypes[] = DATATYPES;
     public cacheMap: Map<string, ISpecDatatypes> = new Map<string, ISpecDatatypes>();
-    public cacheTypeMap: Map<string, any> = new Map<string, any>();
+    public cacheTypeMap: Map<string, typeof parseInt | typeof parseFloat | StringConstructor> = new Map<string, any>();
     public fieldType: FieldType = new FieldType();
 
     constructor() {
-        this.dataTypes.forEach((item) => {
+        this.dataTypes.forEach((item: ISpecDatatypes) => {
             this.cacheMap.set(item.Name, item);
         });
 

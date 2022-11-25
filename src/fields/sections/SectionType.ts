@@ -16,16 +16,6 @@ export class SectionType {
     public fixmlFileName: string | null = null;
     public description: string | null = null;
 
-    public reset(): void {
-        this.sectionID = null;
-        this.name = null;
-        this.displayOrder = null;
-        this.volume = null;
-        this.notReqXML = null;
-        this.fixmlFileName = null;
-        this.description = null;
-    }
-
     public setSection(section: ISpecSections): void {
         this.sectionID = section.SectionID;
         this.name = section.Name;
@@ -34,5 +24,15 @@ export class SectionType {
         this.notReqXML = section.NotReqXML === 1;
         this.fixmlFileName = section.FIXMLFileName;
         this.description = section.Description;
+    }
+
+    public reset(): void {
+        this.sectionID = null;
+        this.name = null;
+        this.displayOrder = null;
+        this.volume = null;
+        this.notReqXML = null;
+        this.fixmlFileName = null;
+        this.description = null;
     }
 }

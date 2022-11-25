@@ -1,6 +1,6 @@
 'use strict';
 
-require('./../fixparser');
+const FIXParser = require('./../build/cjs/FIXParser').FIXParser;
 console.log('Running performance tests...');
 
 let i = null,

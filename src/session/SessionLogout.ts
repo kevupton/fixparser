@@ -15,7 +15,7 @@ import { log } from '../util/util';
 export const handleLogout = (parser: IFIXParser, message: Message): void => {
     parser.isLoggedIn = false;
 
-    const logoutAcknowledge = parser.createMessage(
+    const logoutAcknowledge: Message = parser.createMessage(
         new Field(FieldEnum.MsgType, MessageEnum.Logout),
         new Field(FieldEnum.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
         new Field(

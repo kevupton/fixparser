@@ -21,9 +21,6 @@ const nodeConfig: BuildOptions = {
     ...baseConfig,
     format: 'cjs',
     platform: 'node',
-    banner: {
-        js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
-    },
 };
 
 const browserConfig: BuildOptions = {
@@ -57,6 +54,9 @@ const main = async (): Promise<void> => {
         },
         outdir: path.join(__dirname, '../build/esm'),
         entryPoints: [path.join(__dirname, './../src/FIXParser.ts')],
+        banner: {
+            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+        },
     });
     await esbuild({
         ...nodeConfig,
@@ -66,6 +66,9 @@ const main = async (): Promise<void> => {
         },
         outdir: path.join(__dirname, '../build/esm'),
         entryPoints: [path.join(__dirname, './../src/FIXServer.ts')],
+        banner: {
+            js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);",
+        },
     });
     await esbuild({
         ...browserConfig,
