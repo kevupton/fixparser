@@ -26,6 +26,7 @@ export class LicenseManager {
     private static licenseIsTrial: boolean | null = false;
     private static licenseProcessing: boolean = false;
     private static PUBLIC_KEY: string = `-----BEGIN PGP PUBLIC KEY BLOCK-----
+
 xjMEYSAlmRYJKwYBBAHaRw8BAQdATxsL8ZGu79iIXGoMwAGxis0Ot6zN+c+H
 FiEfymdU5QHNIGZpeHBhcnNlci5pbyA8aW5mb0BmaXhwYXJzZXIuaW8+wowE
 EBYKAB0FAmEgJZkECwkHCAMVCAoEFgACAQIZAQIbAwIeAQAhCRDpKZsYDAPF
