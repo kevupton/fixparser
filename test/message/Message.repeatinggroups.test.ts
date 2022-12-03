@@ -21,9 +21,12 @@ describe('Message', () => {
         new Field(Fields.Symbol, 2),
         new Field(Fields.MDReqID, 1),
         new Field(Fields.SubscriptionRequestType, 1),
-        new Field(Fields.NoMDEntryTypes, 2),
+        new Field(Fields.NoMDEntryTypes, 5),
         new Field(Fields.MDEntryType, MDEntryType.Bid),
         new Field(Fields.MDEntryType, MDEntryType.Offer),
+        new Field(Fields.MDEntryType, MDEntryType.MarketBid),
+        new Field(Fields.MDEntryType, MDEntryType.MarketOffer),
+        new Field(Fields.MDEntryType, MDEntryType.TradeVolume),
     ];
     const newMessage: Message = new Message(fixVersion, ...fields);
     const encoded: string = newMessage.encode();
@@ -47,29 +50,29 @@ describe('Message', () => {
     it('#getFieldValues()', () => {
         expect(message.getFieldValues()).toEqual({
             8: 'FIX4.49',
-            10: '013',
-            146: 2,
-            262: '1',
-            263: '1',
-            264: 0,
-            265: 0,
-            267: 2,
-            269: ['0', '1'],
+            10: '180',
             34: 1,
             35: 'V',
             49: 'SENDER',
-            52: '20090323-15:40:29',
-            55: ['1', '2'],
             56: 'TARGET',
-            9: 109,
+            52: '20090323-15:40:29',
+            264: 0,
+            265: 0,
+            146: 2,
+            262: '1',
+            263: '1',
+            267: 5,
+            269: ['0', '1', 'b', 'c', 'B'],
+            55: ['1', '2'],
+            9: 127,
         });
     });
 
     it('#getFieldNameValues()', () => {
         expect(message.getFieldNameValues()).toEqual({
             BeginString: 'FIX4.49',
-            BodyLength: 109,
-            CheckSum: '013',
+            BodyLength: 127,
+            CheckSum: '180',
             MsgSeqNum: 1,
             MsgType: 'V',
             SenderCompID: 'SENDER',
@@ -80,8 +83,8 @@ describe('Message', () => {
             MarketDepth: 0,
             MDReqID: '1',
             MDUpdateType: 0,
-            NoMDEntryTypes: 2,
-            MDEntryType: ['0', '1'],
+            NoMDEntryTypes: 5,
+            MDEntryType: ['0', '1', 'b', 'c', 'B'],
             Symbol: ['1', '2'],
         });
     });
@@ -89,8 +92,8 @@ describe('Message', () => {
     it('#getFieldExplains()', () => {
         expect(message.getFieldExplains()).toEqual({
             BeginString: 'FIX4.49',
-            BodyLength: 109,
-            CheckSum: '013',
+            BodyLength: 127,
+            CheckSum: '180',
             MsgSeqNum: 1,
             MsgType: 'MarketDataRequest',
             SenderCompID: 'SENDER',
@@ -101,8 +104,8 @@ describe('Message', () => {
             MarketDepth: 0,
             MDReqID: '1',
             MDUpdateType: 'FullRefresh',
-            NoMDEntryTypes: 2,
-            MDEntryType: ['Bid', 'Offer'],
+            NoMDEntryTypes: 5,
+            MDEntryType: ['Bid', 'Offer', 'b', 'c', 'TradeVolume'],
             Symbol: ['1', '2'],
         });
     });

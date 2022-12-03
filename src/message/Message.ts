@@ -239,7 +239,11 @@ export class Message {
         const values: FieldValues = {};
         this.data.forEach((field: Field) => {
             if (values[field.tag]) {
-                values[field.tag] = [values[field.tag], field.value];
+                if (Array.isArray(values[field.tag])) {
+                    values[field.tag] = [...values[field.tag], field.value];
+                } else {
+                    values[field.tag] = [values[field.tag], field.value];
+                }
             } else {
                 values[field.tag] = field.value;
             }
@@ -251,7 +255,11 @@ export class Message {
         const values: FieldValues = {};
         this.data.forEach((field: Field) => {
             if (values[field.name!]) {
-                values[field.name!] = [values[field.name!], field.value];
+                if (Array.isArray(values[field.name!])) {
+                    values[field.name!] = [...values[field.name!], field.value];
+                } else {
+                    values[field.name!] = [values[field.name!], field.value];
+                }
             } else {
                 values[field.name!] = field.value;
             }
@@ -264,7 +272,11 @@ export class Message {
         this.data.forEach((field: Field) => {
             const explain = field.enumeration?.symbolicName || field.value;
             if (values[field.name!]) {
-                values[field.name!] = [values[field.name!], explain];
+                if (Array.isArray(values[field.name!])) {
+                    values[field.name!] = [...values[field.name!], explain];
+                } else {
+                    values[field.name!] = [values[field.name!], explain];
+                }
             } else {
                 values[field.name!] = explain;
             }
