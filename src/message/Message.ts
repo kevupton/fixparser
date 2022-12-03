@@ -231,6 +231,10 @@ export class Message {
         return this.data.find((field: Field) => field.tag === tag);
     }
 
+    public getFields(tag: number): Field[] | undefined {
+        return this.data.filter((field: Field) => field.tag === tag);
+    }
+
     public getFieldValues(): FieldValues {
         const values: FieldValues = {};
         this.data.forEach((field: Field) => {
@@ -268,10 +272,6 @@ export class Message {
         return values;
     }
 
-    public getFields(tag: number): Field[] | undefined {
-        return this.data.filter((field: Field) => field.tag === tag);
-    }
-
     public setField(field: Field): void {
         const index: number = this.data.findIndex((item: Field) => item.tag === field.tag);
         if (index > -1) {
@@ -299,13 +299,13 @@ export class Message {
         this.messageContents = messageContents;
     }
 
-    public getEnum(tag: number, value: number | string | boolean | null): ISpecEnums | undefined | null {
+    public getEnum(tag: number, value: number | string | boolean | null): ISpecEnums | undefined {
         if (!this.getField(FieldEnum.MsgType) || !this.getField(FieldEnum.MsgType)!.tag) {
-            return null;
+            return;
         }
 
         if (!this.getField(FieldEnum.MsgType) || !this.getField(FieldEnum.MsgType)!.value) {
-            return null;
+            return;
         }
 
         const enums = new Enums();
