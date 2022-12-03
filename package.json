@@ -1,6 +1,6 @@
 {
   "name": "fixparser",
-  "version": "5.6.0",
+  "version": "5.6.1",
   "description": "FIX 5.0 SP2 Parser",
   "files": [
     "./build/",

@@ -54,8 +54,17 @@ type FieldValues = {
     [tag: string]: any;
 };
 
-type FieldExplains = {
-    [tag: string]: any;
+const explain = (field: Field) => field.enumeration?.symbolicName || field.value;
+const setFieldValue = (field: Field, values: FieldValues, useSymbolicName: boolean = false): void => {
+    if (values[field.name!]) {
+        if (Array.isArray(values[field.name!])) {
+            values[field.name!] = [...values[field.name!], useSymbolicName ? explain(field) : field.value];
+        } else {
+            values[field.name!] = [values[field.name!], useSymbolicName ? explain(field) : field.value];
+        }
+    } else {
+        values[field.name!] = useSymbolicName ? explain(field) : field.value;
+    }
 };
 
 export class Message {
@@ -254,34 +263,96 @@ export class Message {
     public getFieldNameValues(): FieldValues {
         const values: FieldValues = {};
         this.data.forEach((field: Field) => {
-            if (values[field.name!]) {
-                if (Array.isArray(values[field.name!])) {
-                    values[field.name!] = [...values[field.name!], field.value];
-                } else {
-                    values[field.name!] = [values[field.name!], field.value];
-                }
-            } else {
-                values[field.name!] = field.value;
-            }
+            setFieldValue(field, values, false);
         });
         return values;
     }
 
-    public getFieldExplains(): FieldExplains {
+    public getFieldExplains(): FieldValues {
         const values: FieldValues = {};
         this.data.forEach((field: Field) => {
-            const explain = field.enumeration?.symbolicName || field.value;
-            if (values[field.name!]) {
-                if (Array.isArray(values[field.name!])) {
-                    values[field.name!] = [...values[field.name!], explain];
-                } else {
-                    values[field.name!] = [values[field.name!], explain];
-                }
-            } else {
-                values[field.name!] = explain;
-            }
+            setFieldValue(field, values, true);
         });
         return values;
+    }
+
+    public getGroup(tag: number): FieldValues {
+        const values: FieldValues = {};
+        const instanceFields: number[] = [];
+        let foundGroup: boolean = false;
+        let instanceIndex: number = 1;
+        let instanceTag: number;
+        this.data.forEach((field: Field) => {
+            if (instanceTag && instanceTag === field.tag) {
+                instanceIndex++;
+            }
+            if (field.tag === tag && !foundGroup) {
+                foundGroup = true;
+                return;
+            } else if (!foundGroup) {
+                return;
+            }
+
+            if (!instanceTag) {
+                instanceTag = field.tag;
+                instanceFields.push(field.tag);
+            } else if (instanceTag && instanceTag !== field.tag && instanceIndex === 1) {
+                instanceFields.push(field.tag);
+            }
+
+            if (instanceIndex > 0 && !instanceFields.includes(field.tag)) {
+                return;
+            }
+
+            setFieldValue(field, values, true);
+        });
+        return values;
+    }
+
+    public getGroupAsArray(tag: number): FieldValues[] {
+        const arrayValues: FieldValues[] = [];
+        const instanceFields: number[] = [];
+        let values: FieldValues = {};
+        let foundGroup: boolean = false;
+        let instanceIndex: number = 1;
+        let instanceTag: number;
+        this.data.forEach((field: Field) => {
+            if (instanceTag && instanceTag === field.tag) {
+                instanceIndex++;
+                arrayValues.push(values);
+                values = {};
+            }
+            if (field.tag === tag && !foundGroup) {
+                foundGroup = true;
+                return;
+            } else if (!foundGroup) {
+                return;
+            }
+
+            if (!instanceTag) {
+                instanceTag = field.tag;
+                instanceFields.push(field.tag);
+            } else if (instanceTag && instanceTag !== field.tag && instanceIndex === 1) {
+                instanceFields.push(field.tag);
+            }
+
+            if (instanceIndex > 0 && !instanceFields.includes(field.tag)) {
+                arrayValues.push(values);
+                values = {};
+                return;
+            }
+
+            if (values[field.name!]) {
+                if (Array.isArray(values[field.name!])) {
+                    values[field.name!] = [...values[field.name!], explain(field)];
+                } else {
+                    values[field.name!] = [values[field.name!], explain(field)];
+                }
+            } else {
+                values[field.name!] = explain(field);
+            }
+        });
+        return arrayValues;
     }
 
     public setField(field: Field): void {
