@@ -1,15 +1,10 @@
 {
-  "name": "fixparser",
-  "version": "5.6.1",
-  "description": "FIX 5.0 SP2 Parser",
+  "name": "free-fx",
+  "version": "1.0.0",
   "files": [
     "./build/",
     "./examples/"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/logotype/fixparser.git"
-  },
   "scripts": {
     "lint": "npm run lint:chk:src && npm run lint:chk:scripts && npm run lint:chk:prebuild && npm run lint:chk:spec",
     "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
