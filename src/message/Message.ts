@@ -10,7 +10,6 @@ import { ISpecMessageContents } from '../../spec/SpecMessageContents';
 import { Enums } from '../enums/Enums';
 import { Field } from '../fields/Field';
 import { FieldEnum } from '../fieldtypes/FieldEnum';
-import { LicenseManager } from '../licensemanager/LicenseManager';
 import { DEFAULT_FIX_VERSION, pad, SOH } from '../util/util';
 
 const TAG_CHECKSUM: string = '10=';
@@ -495,9 +494,6 @@ export class Message {
     }
 
     public encode(separator: string = SOH): string {
-        if (!LicenseManager.validateLicense()) {
-            return '';
-        }
         const fields: Field[] = this.data.map((field: Field) => new Field(field.tag, field.value));
         const data: string[] = [];
 

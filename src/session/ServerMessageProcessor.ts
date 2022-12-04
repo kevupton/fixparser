@@ -6,7 +6,7 @@
  * Released under Commercial license. Check LICENSE.md
  */
 import { MessageEnum } from '../fieldtypes/MessageEnum';
-import { FIXServer, LicenseManager } from '../FIXServer';
+import { FIXServer } from '../FIXServer';
 import { Message } from '../message/Message';
 import { log, logError } from '../util/util';
 import { handleFirstMessage } from './SessionFirstMessage';
@@ -18,9 +18,6 @@ import { handleSequenceReset } from './SessionSequenceReset';
 import { handleTestRequest } from './SessionTestRequest';
 
 export const serverProcessMessage = (parser: FIXServer, message: Message): void => {
-    if (!LicenseManager.validateLicense()) {
-        return;
-    }
     handleSequence(parser, message);
     log(`FIXServer (${parser.protocol.toUpperCase()}): << received ${message.description} ${message.encode('|')}`);
 

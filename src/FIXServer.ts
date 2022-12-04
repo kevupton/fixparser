@@ -13,7 +13,6 @@ import * as Constants from './fieldtypes';
 import { FIXParser } from './FIXParser';
 import { ConnectionType, Options as FIXParserOptions, Protocol } from './FIXParserBase';
 import { IFIXParser } from './IFIXParser';
-import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
 import { heartBeat } from './messagetemplates/MessageTemplates';
 import { serverProcessMessage } from './session/ServerMessageProcessor';
@@ -100,9 +99,6 @@ class FIXServer implements IFIXParser {
             onReady: FIXServer.onReadyCallback,
         },
     ): void {
-        if (!LicenseManager.validateLicense()) {
-            return;
-        }
         this.connectionType = 'acceptor';
         this.host = host;
         this.port = port;
@@ -255,9 +251,6 @@ class FIXServer implements IFIXParser {
     }
 
     public send(message: Message): void {
-        if (!LicenseManager.validateLicense()) {
-            return;
-        }
         if (this.protocol === 'tcp') {
             const socket: Socket = this.socket! as Socket;
             const encodedMessage: string = message.encode();
@@ -383,7 +376,6 @@ export { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldt
 export { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';
 export { Protocol } from './FIXParserBase';
 export { Options } from './FIXParserBase';
-export { LicenseManager } from './licensemanager/LicenseManager';
 export { Constants };
 export { Field };
 export { Message };

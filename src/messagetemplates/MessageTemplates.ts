@@ -9,13 +9,9 @@ import { Field } from '../fields/Field';
 import { FieldEnum } from '../fieldtypes/FieldEnum';
 import { MessageEnum } from '../fieldtypes/MessageEnum';
 import { IFIXParser } from '../IFIXParser';
-import { LicenseManager } from '../licensemanager/LicenseManager';
 import { Message } from '../message/Message';
 
 export const heartBeat = (parser: IFIXParser, testReqId?: Field): Message => {
-    if (!LicenseManager.validateLicense()) {
-        return new Message();
-    }
     const fields: Field[] = [
         new Field(FieldEnum.BeginString, parser.fixVersion),
         new Field(FieldEnum.MsgType, MessageEnum.Heartbeat),

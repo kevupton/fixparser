@@ -9,7 +9,6 @@ import { Field } from './fields/Field';
 import * as Constants from './fieldtypes';
 import { ConnectionType, FIXParserBase, Options as FIXParserOptions, Protocol } from './FIXParserBase';
 import { IFIXParser } from './IFIXParser';
-import { LicenseManager } from './licensemanager/LicenseManager';
 import { Message } from './message/Message';
 import { heartBeat } from './messagetemplates/MessageTemplates';
 import { clientProcessMessage } from './session/ClientMessageProcessor';
@@ -87,9 +86,6 @@ class FIXParserBrowser implements IFIXParser {
             onReady: FIXParserBrowser.onReadyCallback,
         },
     ): void {
-        if (!LicenseManager.validateLicense()) {
-            return;
-        }
         this.connectionType = 'initiator';
         this.host = host;
         this.port = port;
@@ -177,9 +173,6 @@ class FIXParserBrowser implements IFIXParser {
     }
 
     public send(message: Message): void {
-        if (!LicenseManager.validateLicense()) {
-            return;
-        }
         if (this.socket!.readyState === 1) {
             this.setNextTargetMsgSeqNum(this.getNextTargetMsgSeqNum() + 1);
             this.socket!.send(message.encode());
@@ -232,7 +225,6 @@ export { SideEnum as Side } from './fieldtypes/SideEnum';
 export { SubscriptionRequestTypeEnum as SubscriptionRequestType } from './fieldtypes/SubscriptionRequestTypeEnum';
 export { TimeInForceEnum as TimeInForce } from './fieldtypes/TimeInForceEnum';
 export { Protocol } from './FIXParserBase';
-export { LicenseManager } from './licensemanager/LicenseManager';
 export { Constants };
 export { Field };
 export { Message };
